@@ -9,7 +9,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Xamarin.Forms;
 
 namespace TourPlanner
 {
@@ -21,10 +20,6 @@ namespace TourPlanner
         public MainWindow()
         {
             InitializeComponent();
-
-            var viewModel = new ViewModel();
-            viewModel.Tours();
-            DataContext = viewModel;
         }
 
     }
@@ -46,9 +41,9 @@ namespace TourPlanner
     public class Tour
     {
         public string Name { get; set; }
-        public ObservableCollection<Log> LogList { get; set; }
+        public List<Log> LogList { get; set; }
 
-        public Tour(string name, ObservableCollection<Log> logList)
+        public Tour(string name, List<Log> logList)
         {
             Name = name;
             LogList = logList;

@@ -7,75 +7,33 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
-        <local:ViewModel></local:ViewModel>
+        <local:ViewModel/>
     </Window.DataContext>
     <Grid Margin="2,2,2,2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="lstTours" Grid.Column="0" ItemsSource="{Binding TourList}" HorizontalContentAlignment="Stretch">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Focusable" Value="False"/>
+        <ListBox x:Name="lstTours" Grid.Column="0" ItemsSource="{Binding TourList}" DisplayMemberPath="Name" HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedTour}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="BorderBrush" Value="Black" />
                 </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}">
-                        <TextBlock.InputBindings>
-                            <MouseBinding Command="{Binding ElementName=lstTours, Path=DataContext.LoadTourLogs}" CommandParameter="{Binding}" MouseAction="LeftClick"/>
-                        </TextBlock.InputBindings>
-                    </TextBlock>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="1" Visibility="Hidden" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" x:Name="helperFieldGrdLogs1"/>
-                <Grid Grid.Column="1" x:Name="helperFieldGrdLogs2"/>
-            </Grid>
-            <ListView x:Name="lstLogs" Grid.Row="1" ItemsSource="{Binding LogList}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.View>
-                    <GridView x:Name="grdLogs">
-                        <GridViewColumn Header="Date" Width="{Binding ElementName=helperFieldGrdLogs1,Path=ActualWidth}" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Date}" TextAlignment="Right" Margin="0,0,5,0"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Duration" Width="{Binding ElementName=helperFieldGrdLogs2,Path=ActualWidth}" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Duration}" TextAlignment="Right" Margin="0,0,5,0"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Distance" Width="{Binding ElementName=helperFieldGrdLogs2,Path=ActualWidth}" >
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Distance}" TextAlignment="Right" Margin="0,0,5,0"/>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <DataGrid x:Name="lstLogs" Grid.Row="1" ItemsSource="{Binding LogList, Mode=OneWay}" AutoGenerateColumns="False" ColumnWidth="*" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" IsReadOnly="True" HeadersVisibility="Column">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
+                    <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" />
+                    <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" />
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </Grid>
 </Window>

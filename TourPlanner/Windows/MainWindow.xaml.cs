@@ -41,12 +41,21 @@ namespace TourPlanner
     public class Tour
     {
         public string Name { get; set; }
+        public string Description { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
+        public string TransportType { get; set; }
+        public float Distance { get; set; }
+        public float Estimation { get; set; }
         public List<Log> LogList { get; set; }
 
         public Tour(string name, List<Log> logList)
         {
             Name = name;
             LogList = logList;
+        }
+        public Tour()
+        {
         }
     }
 

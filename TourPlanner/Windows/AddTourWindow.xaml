@@ -1,0 +1,82 @@
+﻿<Window x:Class="TourPlanner.AddTourWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TourPlanner.ViewModels"
+        mc:Ignorable="d"
+        Title="AddTourWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <local:ViewModelAddNewTour/>
+    </Window.DataContext>
+    <Grid Margin="2,2,2,2">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="12*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" FontSize="18" HorizontalContentAlignment="Center">Add a new Tour!</Label>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" HorizontalContentAlignment="Center">Name:</Label>
+                <TextBox Grid.Row="1" Text="{Binding CreateTourName}"/>
+                <Label Grid.Row="2" HorizontalContentAlignment="Center">Description:</Label>
+                <TextBox Grid.Row="3" Text="{Binding CreateTourDescr}"/>
+                <Label Grid.Row="4" HorizontalContentAlignment="Center">From:</Label>
+                <TextBox Grid.Row="5" Text="{Binding CreateTourFrom}"/>
+                <Label Grid.Row="6" HorizontalContentAlignment="Center">To:</Label>
+                <TextBox Grid.Row="7" Text="{Binding CreateTourTo}"/>
+                <Label Grid.Row="8" HorizontalContentAlignment="Center">Transport type:</Label>
+                <TextBox Grid.Row="9" Text="{Binding CreateTourTransportType}"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <Image Grid.Row="0" Margin="2" Source="/Images/exampleImage.png"/>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Label HorizontalContentAlignment="Center" VerticalAlignment="Center">Distance:</Label>
+                        <TextBlock Text="{Binding CreateTourDist, Mode=OneWay}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Label HorizontalContentAlignment="Center" VerticalAlignment="Center">Estimation:</Label>
+                        <TextBlock Text="{Binding CreateTourEst, Mode=OneWay}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2" Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1">Load Information</Button>
+            <Button Grid.Column="3" Command="{Binding CreateTourCommand}">Save Tour</Button>
+        </Grid>
+    </Grid>
+</Window>

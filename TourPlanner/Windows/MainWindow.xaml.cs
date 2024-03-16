@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TourPlanner.Windows;
 
 namespace TourPlanner
 {
@@ -20,6 +21,8 @@ namespace TourPlanner
         public MainWindow()
         {
             InitializeComponent();
+            var page = new MainPage();
+            MainFrame.Navigate(page);
         }
 
     }

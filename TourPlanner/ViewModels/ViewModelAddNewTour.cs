@@ -88,7 +88,7 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
-        public int CreateTourDist
+        public float CreateTourDist
         {
             get
             {
@@ -101,7 +101,7 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
-        public int CreateTourEst
+        public float CreateTourEst
         {
             get
             {

@@ -23,6 +23,7 @@ namespace TourPlanner
         }
 
         private Tour selectedTour;
+        public Page DisplayPage { get; set; }
         public ObservableCollection<Log> LogList { get; set; }
         public ObservableCollection<Tour> TourList { get; set; }
 

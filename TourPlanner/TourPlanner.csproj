@@ -13,11 +13,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Images\exampleImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Commands\" />
-	<Folder Include="Images\" />
 	<Folder Include="Windows\" />
 	<Folder Include="ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\exampleImage.png" />
   </ItemGroup>
 
 </Project>

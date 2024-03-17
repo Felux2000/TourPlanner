@@ -20,7 +20,7 @@ namespace TourPlanner.ViewModels
         private float createTourDist { get; set; }
         private float createTourEst { get; set; }
 
-        public ICommand CreateTourCommand { get; set; }
+     
 
 
         public string CreateTourName
@@ -116,7 +116,7 @@ namespace TourPlanner.ViewModels
         }
         public ViewModelAddNewTour()
         {
-            CreateTourCommand = new RelayCommand(o => CreateTour() );
+            
         }
 
         public Tour CreateTour()

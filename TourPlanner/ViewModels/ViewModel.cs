@@ -10,15 +10,19 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TourPlanner.Commands;
+using TourPlanner.ViewModels;
 
 namespace TourPlanner
 {
     public class ViewModel : INotifyPropertyChanged
     {
-
-        public ViewModel()
+        private readonly ViewModelAddNewTour addNewTourView;
+        public ViewModel(ViewModelAddNewTour addNewTourView)
         {
+            this.addNewTourView = addNewTourView;
             LoadTourLogs = new RelayCommand(o => Logs());
+            AddNewTour = new RelayCommand(o => OpenAddNewTour());
+            CreateTourCommand = new RelayCommand(o => CreateTour());
             Tours();
         }
 
@@ -28,6 +32,8 @@ namespace TourPlanner
         public ObservableCollection<Tour> TourList { get; set; }
 
         public ICommand LoadTourLogs { get; set; }
+        public ICommand AddNewTour { get; set; }
+        public ICommand CreateTourCommand { get; set; }
 
         public Tour SelectedTour
         {
@@ -62,6 +68,16 @@ namespace TourPlanner
                 LogList.Add(log);
             }
             //LogList.Add(new Log(DateTime.Now, 2.5f, 215.7f));
+        }
+
+        public void OpenAddNewTour()
+        {
+            AddTourWindow win2 = new AddTourWindow(); 
+        }
+
+        public void CreateTour()
+        {
+            TourList.Add(this.addNewTourView.CreateTour());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

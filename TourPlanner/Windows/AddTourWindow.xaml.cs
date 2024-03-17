@@ -17,7 +17,7 @@ namespace TourPlanner
     /// <summary>
     /// Interaction logic for AddTourWindow.xaml
     /// </summary>
-    public partial class AddTourWindow : Window
+    public partial class AddTourWindow : UserControl
     {
         public AddTourWindow()
         {

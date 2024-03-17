@@ -1,14 +1,14 @@
-﻿<Window x:Class="TourPlanner.AddTourWindow"
+﻿<UserControl x:Class="TourPlanner.AddTourWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TourPlanner.ViewModels"
         mc:Ignorable="d"
-        Title="AddTourWindow" Height="450" Width="800">
-    <Window.DataContext>
+        Height="450" Width="800">
+    <UserControl.DataContext>
         <local:ViewModelAddNewTour/>
-    </Window.DataContext>
+    </UserControl.DataContext>
     <Grid Margin="2,2,2,2">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -50,7 +50,9 @@
                     <RowDefinition Height="10*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Image Grid.Row="0" Margin="2" Source="/Images/exampleImage.png"/>
+                <Border BorderBrush="Black" BorderThickness="2">
+                    <Image Grid.Row="0" Margin="2" Source="/Images/exampleImage.png"/>
+                </Border>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -76,7 +78,7 @@
                 <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="1">Load Information</Button>
-            <Button Grid.Column="3" Command="{Binding CreateTourCommand}">Save Tour</Button>
+            <Button Grid.Column="3" Command="{Binding DataContext.CreateTourCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">Save Tour</Button>
         </Grid>
     </Grid>
-</Window>
+</UserControl>

@@ -21,8 +21,8 @@ namespace TourPlanner
         public MainWindow()
         {
             InitializeComponent();
-            var page = new MainPage();
-            MainFrame.Navigate(page);
+            //var page = new MainPage();
+            //MainFrame.Navigate(page);
         }
 
     }

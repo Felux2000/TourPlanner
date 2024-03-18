@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -9,22 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <EmbeddedResource Remove="**\*.xaml" />
+    <None Remove="Resources\exampleImage.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Images\exampleImage.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Commands\" />
-	<Folder Include="Windows\" />
-	<Folder Include="ViewModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Images\exampleImage.png" />
+    <Resource Include="Resources\exampleImage.png" />
   </ItemGroup>
 
 </Project>

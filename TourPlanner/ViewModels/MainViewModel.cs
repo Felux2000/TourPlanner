@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -10,30 +9,24 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TourPlanner.Commands;
-using TourPlanner.ViewModels;
+using TourPlanner.Models;
 
-namespace TourPlanner
+namespace TourPlanner.ViewModels
 {
-    public class ViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly ViewModelAddNewTour addNewTourView;
-        public ViewModel(ViewModelAddNewTour addNewTourView)
+        public MainViewModel()
         {
-            this.addNewTourView = addNewTourView;
-            LoadTourLogs = new RelayCommand(o => Logs());
-            AddNewTour = new RelayCommand(o => OpenAddNewTour());
-            CreateTourCommand = new RelayCommand(o => CreateTour());
-            Tours();
+            LoadTourLogs = new RelayCommand(o => LoadLogs());
+            LoadTours();
         }
 
         private Tour selectedTour;
         public Page DisplayPage { get; set; }
-        public ObservableCollection<Log> LogList { get; set; }
+        public ObservableCollection<TourLog> LogList { get; set; }
         public ObservableCollection<Tour> TourList { get; set; }
 
         public ICommand LoadTourLogs { get; set; }
-        public ICommand AddNewTour { get; set; }
-        public ICommand CreateTourCommand { get; set; }
 
         public Tour SelectedTour
         {
@@ -46,38 +39,27 @@ namespace TourPlanner
             {
                 selectedTour = value;
                 OnPropertyChanged();
-                Logs();
+                LoadLogs();
             }
         }
 
-        public void Tours()
+        public void LoadTours()
         {
             TourList = new ObservableCollection<Tour>();
-            TourList.Add(new Tour("Test1", new List<Log> { new(DateTime.Today, 2.5f, 215.7f) }));
-            TourList.Add(new Tour("Test2", new List<Log> { new(DateTime.Today.AddDays(-1), 1.7f, 135.9f) }));
+            TourList.Add(new Tour("Test1", new List<TourLog> { new(DateTime.Today, 2.5f, 215.7f) }));
+            TourList.Add(new Tour("Test2", new List<TourLog> { new(DateTime.Today.AddDays(-1), 1.7f, 135.9f) }));
             LogList = new();
         }
 
-        public void Logs()
+        public void LoadLogs()
         {
             var tour = selectedTour;
-            if (tour == null || tour.LogList == null) return;
             LogList.Clear();
+            if (tour == null || tour.LogList == null) return;
             foreach (var log in tour.LogList)
             {
                 LogList.Add(log);
             }
-            //LogList.Add(new Log(DateTime.Now, 2.5f, 215.7f));
-        }
-
-        public void OpenAddNewTour()
-        {
-            AddTourWindow win2 = new AddTourWindow(); 
-        }
-
-        public void CreateTour()
-        {
-            TourList.Add(this.addNewTourView.CreateTour());
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

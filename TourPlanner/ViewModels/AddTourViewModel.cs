@@ -7,11 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TourPlanner.Commands;
+using TourPlanner.Models;
 
 namespace TourPlanner.ViewModels
 {
-    public class ViewModelAddNewTour : INotifyPropertyChanged
+    internal class AddTourViewModel : INotifyPropertyChanged
     {
+        public AddTourViewModel(MainViewModel mainViewModel)
+        {
+            this.mainViewModel = mainViewModel;
+            CreateTourCommand = new RelayCommand(o => CreateTour());
+        }
+
+        private MainViewModel mainViewModel;
         private string createTourName { get; set; }
         private string createTourDescr { get; set; }
         private string createTourFrom { get; set; }
@@ -20,8 +28,8 @@ namespace TourPlanner.ViewModels
         private float createTourDist { get; set; }
         private float createTourEst { get; set; }
 
-     
-
+        public event EventHandler OnRequestClose;
+        public ICommand CreateTourCommand { get; set; }
 
         public string CreateTourName
         {
@@ -114,12 +122,8 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
-        public ViewModelAddNewTour()
-        {
-            
-        }
 
-        public Tour CreateTour()
+        public void CreateTour()
         {
             createTourDist = 1234;
             createTourEst = 1234;
@@ -132,7 +136,8 @@ namespace TourPlanner.ViewModels
             newTour.Distance = createTourDist;
             newTour.Estimation = createTourEst;
 
-            return newTour;
+            mainViewModel.TourList.Add(newTour);
+            OnRequestClose(this,new EventArgs());
         }
 
 

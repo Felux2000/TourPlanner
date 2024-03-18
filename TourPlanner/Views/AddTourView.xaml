@@ -1,11 +1,11 @@
-﻿<Window x:Class="TourPlanner.MainWindow"
+﻿<Window x:Class="TourPlanner.Views.AddTourView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TourPlanner"
+        xmlns:uc="clr-namespace:TourPlanner.UserControls"
+        xmlns:local="clr-namespace:TourPlanner.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <local:AddTourWindow x:Name="AddTourWindow" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" />
-    
+        Title="TourPlanner" Height="450" Width="800">
+    <uc:AddTourControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"/>
 </Window>

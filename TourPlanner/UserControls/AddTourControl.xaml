@@ -31,15 +31,15 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" HorizontalContentAlignment="Center">Name:</Label>
+                <Label Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Name:</Label>
                 <TextBox Grid.Row="1" Text="{Binding CreateTourName}"/>
-                <Label Grid.Row="2" HorizontalContentAlignment="Center">Description:</Label>
+                <Label Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Description:</Label>
                 <TextBox Grid.Row="3" Text="{Binding CreateTourDescr}"/>
-                <Label Grid.Row="4" HorizontalContentAlignment="Center">From:</Label>
+                <Label Grid.Row="4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">From:</Label>
                 <TextBox Grid.Row="5" Text="{Binding CreateTourFrom}"/>
-                <Label Grid.Row="6" HorizontalContentAlignment="Center">To:</Label>
+                <Label Grid.Row="6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">To:</Label>
                 <TextBox Grid.Row="7" Text="{Binding CreateTourTo}"/>
-                <Label Grid.Row="8" HorizontalContentAlignment="Center">Transport type:</Label>
+                <Label Grid.Row="8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Transport type:</Label>
                 <TextBox Grid.Row="9" Text="{Binding CreateTourTransportType}"/>
             </Grid>
             <Grid Grid.Column="1">
@@ -72,10 +72,13 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="1">Load Information</Button>
             <Button Grid.Column="3" Command="{Binding DataContext.CreateTourCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">Save Tour</Button>
+            <Button Grid.Column="5" Command="{Binding DataContext.CloseCreateTourWindow, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">Close</Button>
         </Grid>
     </Grid>
 </UserControl>

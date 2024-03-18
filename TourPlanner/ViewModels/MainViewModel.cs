@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -18,6 +19,7 @@ namespace TourPlanner.ViewModels
         public MainViewModel()
         {
             LoadTourLogs = new RelayCommand(o => LoadLogs());
+            DeleteTourCommand = new RelayCommand(o => DeleteTour());
             LoadTours();
         }
 
@@ -27,6 +29,7 @@ namespace TourPlanner.ViewModels
         public ObservableCollection<Tour> TourList { get; set; }
 
         public ICommand LoadTourLogs { get; set; }
+        public ICommand DeleteTourCommand { get; set; }
 
         public Tour SelectedTour
         {
@@ -59,6 +62,14 @@ namespace TourPlanner.ViewModels
             foreach (var log in tour.LogList)
             {
                 LogList.Add(log);
+            }
+        }
+
+        public void DeleteTour()
+        {
+            if(SelectedTour != null)
+            {
+                TourList.Remove(SelectedTour);
             }
         }
 

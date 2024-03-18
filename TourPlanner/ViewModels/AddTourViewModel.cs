@@ -17,6 +17,7 @@ namespace TourPlanner.ViewModels
         {
             this.mainViewModel = mainViewModel;
             CreateTourCommand = new RelayCommand(o => CreateTour());
+            CloseCreateTourWindow = new RelayCommand(o => CloseWindow());
         }
 
         private MainViewModel mainViewModel;
@@ -30,6 +31,7 @@ namespace TourPlanner.ViewModels
 
         public event EventHandler OnRequestClose;
         public ICommand CreateTourCommand { get; set; }
+        public ICommand CloseCreateTourWindow { get; set; }
 
         public string CreateTourName
         {
@@ -138,6 +140,11 @@ namespace TourPlanner.ViewModels
 
             mainViewModel.TourList.Add(newTour);
             OnRequestClose(this,new EventArgs());
+        }
+
+        public void CloseWindow()
+        {
+            OnRequestClose(this, new EventArgs());
         }
 
 

@@ -8,77 +8,124 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="2,2,2,2">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="12*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*" MinHeight="30"/>
+            <RowDefinition Height="12*" MinHeight="180"/>
+            <RowDefinition Height="1*" MinHeight="30"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" FontSize="18" HorizontalContentAlignment="Center">Add a new Tour!</Label>
+        <Label Grid.Row="0" FontSize="18" MinHeight="32" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Add new tour!</Label>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
+            <Grid Grid.Column="0" Margin="2,2,2,2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
-                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*" MinHeight="30"/>
+                    <RowDefinition Height="1*" MinHeight="30"/>
+                    <RowDefinition Height="1*" MinHeight="30"/>
+                    <RowDefinition Height="1*" MinHeight="30"/>
+                    <RowDefinition Height="2*" MinHeight="30"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Name:</Label>
-                <TextBox Grid.Row="1" Text="{Binding CreateTourName}"/>
-                <Label Grid.Row="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Description:</Label>
-                <TextBox Grid.Row="3" Text="{Binding CreateTourDescr}"/>
-                <Label Grid.Row="4" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">From:</Label>
-                <TextBox Grid.Row="5" Text="{Binding CreateTourFrom}"/>
-                <Label Grid.Row="6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">To:</Label>
-                <TextBox Grid.Row="7" Text="{Binding CreateTourTo}"/>
-                <Label Grid.Row="8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Transport type:</Label>
-                <TextBox Grid.Row="9" Text="{Binding CreateTourTransportType}"/>
+                <TextBox Grid.Row="0" x:Name="tbAddTourName" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourName}"/>
+                <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="Name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourName}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBox Grid.Row="1" x:Name="tbAddTourTo" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourTo}"/>
+                <TextBlock Grid.Row="1" IsHitTestVisible="False" Text="Destination" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourTo}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBox Grid.Row="2" x:Name="tbAddTourFrom" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourFrom}"/>
+                <TextBlock Grid.Row="2" IsHitTestVisible="False" Text="Start" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourFrom}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBox Grid.Row="3" x:Name="tbAddTourTransportType" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourTransportType}"/>
+                <TextBlock Grid.Row="3" IsHitTestVisible="False" Text="Transport type" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourTransportType}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBox Grid.Row="4" x:Name="tbAddTourDescription" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4,2,0" Padding="3" Text="{Binding CreateTourDescr}" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                <TextBlock Grid.Row="4" IsHitTestVisible="False" Text="Description" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourDescription}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
             </Grid>
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="9*"/>
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
-                <Border BorderBrush="Black" BorderThickness="2">
-                    <Image Grid.Row="0" Margin="2" Source="/Resources/exampleImage.png"/>
+                <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Margin="2,6,0,0">
+                    <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="/Resources/exampleImage.png"/>
                 </Border>
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="1*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <Label HorizontalContentAlignment="Center" VerticalAlignment="Center">Distance:</Label>
-                        <TextBlock Text="{Binding CreateTourDist, Mode=OneWay}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <Label HorizontalContentAlignment="Center" VerticalAlignment="Center">Estimation:</Label>
-                        <TextBlock Text="{Binding CreateTourEst, Mode=OneWay}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Grid>
+                <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Margin="2,0,0,2">
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="2,0">
+                            <Label HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Distance:</Label>
+                            <TextBlock Text="{Binding CreateTourDist, Mode=OneWay}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="2,0">
+                            <Label HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Estimation:</Label>
+                            <TextBlock Text="{Binding CreateTourEst, Mode=OneWay}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Margin="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1">Load Information</Button>
-            <Button Grid.Column="3" Command="{Binding DataContext.CreateTourCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">Save Tour</Button>
-            <Button Grid.Column="5" Command="{Binding DataContext.CloseCreateTourWindow, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">Close</Button>
+            <Button Grid.Column="1" Margin="4,2" Command="{Binding DataContext.CreateTourCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">Save</Button>
+            <Button Grid.Column="2" Margin="4,2" Command="{Binding DataContext.CloseCreateTourWindow, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">Cancle</Button>
         </Grid>
     </Grid>
 </UserControl>

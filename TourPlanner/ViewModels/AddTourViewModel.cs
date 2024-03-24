@@ -129,16 +129,17 @@ namespace TourPlanner.ViewModels
         {
             createTourDist = 1234;
             createTourEst = 1234;
-            Tour newTour = new Tour();
-            newTour.Name = createTourName;
-            newTour.Description = createTourDescr;
-            newTour.From = createTourFrom;
-            newTour.To = createTourTo;
-            newTour.TransportType = createTourTransportType;
-            newTour.Distance = createTourDist;
-            newTour.Estimation = createTourEst;
+              Tour newTour = new Tour();
+              newTour.Name = createTourName;
+              newTour.Description = createTourDescr;
+              newTour.From = createTourFrom;
+              newTour.To = createTourTo;
+              newTour.TransportType = createTourTransportType;
+              newTour.Distance = createTourDist;
+              newTour.Estimation = createTourEst;
+              newTour.Image = "/Resources/exampleImage.png";
 
-            mainViewModel.TourList.Add(newTour);
+              mainViewModel.TourList.Add(newTour);
             OnRequestClose(this,new EventArgs());
         }
 

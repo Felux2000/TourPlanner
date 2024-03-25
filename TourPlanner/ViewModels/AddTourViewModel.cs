@@ -21,6 +21,10 @@ namespace TourPlanner.ViewModels
         }
 
         private MainViewModel mainViewModel;
+
+        public event EventHandler OnRequestClose;
+        public ICommand CreateTourCommand { get; set; }
+        public ICommand CloseCreateTourWindow { get; set; }
         private string createTourName { get; set; }
         private string createTourDescr { get; set; }
         private string createTourFrom { get; set; }
@@ -28,10 +32,6 @@ namespace TourPlanner.ViewModels
         private string createTourTransportType { get; set; }
         private float createTourDist { get; set; }
         private float createTourEst { get; set; }
-
-        public event EventHandler OnRequestClose;
-        public ICommand CreateTourCommand { get; set; }
-        public ICommand CloseCreateTourWindow { get; set; }
 
         public string CreateTourName
         {

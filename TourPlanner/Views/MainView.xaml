@@ -82,7 +82,7 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <DataGrid x:Name="lstLogs" Grid.Row="0" ItemsSource="{Binding LogList, Mode=OneWay}" Margin="1,0" AutoGenerateColumns="False" ColumnWidth="*" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" IsReadOnly="True" HeadersVisibility="Column">
+                        <DataGrid x:Name="lstLogs" Grid.Row="0" ItemsSource="{Binding LogList, Mode=OneWay}" Margin="1,0" AutoGenerateColumns="False" ColumnWidth="*" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" IsReadOnly="True" HeadersVisibility="Column" SelectedItem="{Binding SelectedLog}">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
                                 <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" />
@@ -92,17 +92,49 @@
                         <Grid Grid.Row="1">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="1*"/>
                                 <RowDefinition Height="2*"/>
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
-                            <Label Grid.Row="0">Comment:</Label>
-                            <TextBlock Grid.Row="1" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBlock>
-                            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="10*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label VerticalContentAlignment="Center" Grid.Column="0" FontSize="20" FontStyle="Italic" Padding="3,0">Details</Label>
+                                <Button Grid.Column="2" Content="+" Click="btn_AddLog_Click" IsEnabled="{Binding ElementName=lstTours, Path=SelectedItems.Count}">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="5"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button Grid.Column="3" Content="-" IsEnabled="{Binding ElementName=lstLogs, Path=SelectedItems.Count}" Command="{Binding DeleteLogCommand}">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="5"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button Grid.Column="4" Content="..." IsEnabled="{Binding ElementName=lstLogs, Path=SelectedItems.Count}" HorizontalContentAlignment="Center">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="5"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </Grid>
+                            <Label Grid.Row="1">Comment:</Label>
+                            <TextBlock Grid.Row="2" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBlock>
+                            <StackPanel Grid.Row="3" Orientation="Horizontal">
                                 <Label VerticalContentAlignment="Center">Difficulty:</Label>
                                 <Label VerticalContentAlignment="Center">0</Label>
                             </StackPanel>
-                            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                            <StackPanel Grid.Row="4" Orientation="Horizontal">
                                 <Label VerticalContentAlignment="Center">Rating:</Label>
                                 <Label VerticalContentAlignment="Center">0</Label>
                             </StackPanel>

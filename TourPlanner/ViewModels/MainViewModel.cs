@@ -19,11 +19,13 @@ namespace TourPlanner.ViewModels
         public MainViewModel()
         {
             DeleteTourCommand = new RelayCommand(o => DeleteTour());
+            DeleteLogCommand = new RelayCommand(o => DeleteLog());
             tourImage = "/Resources/noImageImage.jpg";
             LoadTours();
         }
 
         private Tour selectedTour;
+        private TourLog selectedLog;
 
         private string tourImage;
         public Page DisplayPage { get; set; }
@@ -31,6 +33,7 @@ namespace TourPlanner.ViewModels
         public ObservableCollection<Tour> TourList { get; set; }
 
         public ICommand DeleteTourCommand { get; set; }
+        public ICommand DeleteLogCommand { get; set; }
 
         public string TourImage
         {
@@ -60,12 +63,25 @@ namespace TourPlanner.ViewModels
                 LoadTourInformation();
             }
         }
+        public TourLog SelectedLog
+        {
+            get
+            {
+                return selectedLog;
+            }
+
+            set
+            {
+                selectedLog = value;
+                OnPropertyChanged();
+            }
+        }
 
         public void LoadTours()
         {
             TourList = new ObservableCollection<Tour>();
-            TourList.Add(new Tour("Test1", new List<TourLog> { new(DateTime.Today, 2.5f, 215.7f) }, "/Resources/exampleImage.png"));
-            TourList.Add(new Tour("Test2", new List<TourLog> { new(DateTime.Today.AddDays(-1), 1.7f, 135.9f) }, "/Resources/exampleImage.png"));
+            TourList.Add(new Tour("Test1", new List<TourLog> { new(DateTime.Today, 2.5f, 215.7f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
+            TourList.Add(new Tour("Test2", new List<TourLog> { new(DateTime.Today.AddDays(-1), 1.7f, 135.9f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
             LogList = new();
         }
 
@@ -91,6 +107,16 @@ namespace TourPlanner.ViewModels
             if (SelectedTour != null)
             {
                 TourList.Remove(SelectedTour);
+                SelectedTour = null;
+            }
+        }
+        public void DeleteLog()
+        {
+            if (SelectedTour != null)
+            {
+                int index = 0;
+                index = TourList.IndexOf(SelectedTour);
+                TourList[index].LogList.Remove(SelectedLog);
                 SelectedTour = null;
             }
         }

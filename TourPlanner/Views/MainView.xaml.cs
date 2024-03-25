@@ -39,5 +39,22 @@ namespace TourPlanner.Views
         {
             this.IsEnabled = true;
         }
+
+
+        private void btn_AddLog_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = new AddTourLogViewModel(((MainViewModel)DataContext));
+            AddTourLogView addLog = new AddTourLogView{
+                DataContext = viewModel
+        };
+            viewModel.OnRequestClose += (s, e) => addLog.Close();
+            addLog.Closed += AddLog_Closed;
+            this.IsEnabled = false;
+            addLog.Show();
+        }
+        private void AddLog_Closed(object sender, EventArgs e)
+        {
+            this.IsEnabled = true;
+        }
     }
 }

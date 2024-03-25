@@ -15,11 +15,14 @@ namespace TourPlanner.Models
             public int Difficulty { get; set; }
             public int Rating { get; set; }
 
-            public TourLog(DateTime date, float duration, float distance)
+            public TourLog(DateTime date, float duration, float distance, string comment, int difficulty, int rating)
             {
                 Date = date;
                 Duration = duration;
                 Distance = distance;
+                Comment = comment;
+                Difficulty = difficulty;
+                Rating = rating;
             }
     }
 }

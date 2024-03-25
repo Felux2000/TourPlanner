@@ -114,10 +114,8 @@ namespace TourPlanner.ViewModels
         {
             if (SelectedTour != null)
             {
-                int index = 0;
-                index = TourList.IndexOf(SelectedTour);
-                TourList[index].LogList.Remove(SelectedLog);
-                SelectedTour = null;
+                selectedTour.LogList.Remove(SelectedLog);
+                LoadTourInformation();
             }
         }
 

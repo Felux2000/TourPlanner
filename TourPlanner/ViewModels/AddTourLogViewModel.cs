@@ -11,7 +11,7 @@ using TourPlanner.Models;
 
 namespace TourPlanner.ViewModels
 {
-    internal class AddTourLogViewModel
+    internal class AddTourLogViewModel : INotifyPropertyChanged
     {
         public AddTourLogViewModel(MainViewModel mainViewModel)
         {
@@ -44,7 +44,7 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
-        public float CreateLogTime
+        public float CreateLogDuration
         {
             get
             {
@@ -112,9 +112,9 @@ namespace TourPlanner.ViewModels
 
         public void CreateTourLog()
         {
-            TourLog newTourLog = new TourLog(createLogDate, createLogDuration, createLogDist, createLogComment, createLogDiff, createLogRate);
-            int index = mainViewModel.TourList.IndexOf(mainViewModel.SelectedTour);
-            mainViewModel.TourList[index].LogList.Add(newTourLog);
+            TourLog newTourLog = new TourLog(CreateLogDate, CreateLogDuration, CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate);
+            mainViewModel.SelectedTour.LogList.Add(newTourLog);
+            mainViewModel.LoadTourInformation();
             OnRequestClose(this, new EventArgs());
         }
         public void CloseWindow()

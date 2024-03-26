@@ -28,7 +28,7 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">Date:</Label>
                 <!-- <DatePicker Grid.Row="0" IsTodayHighlighted="True" FirstDayOfWeek="Monday" HorizontalAlignment="Center" SelectedDate="{Binding CreateLogDate}" /> -->
-                <xctk:DateTimePicker Grid.Row="0" Value="{Binding CreateLogDate}"/>
+                <xctk:DateTimePicker Grid.Row="0" Value="{Binding CreateLogDate}" Margin="2,4"/>
                 <TextBox Grid.Row="1" x:Name="tbAddLogComment" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateLogComment}"/>
                 <TextBlock Grid.Row="1" IsHitTestVisible="False" Text="Comment" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
@@ -63,45 +63,20 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="1" x:Name="tbAddLogDist" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateLogDist}"/>
-                <TextBlock Grid.Row="1" IsHitTestVisible="False" Text="Distance" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=tbAddLogDist}" Value="">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBox Grid.Row="2" x:Name="tbAddLogDuration" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateLogDuration}"/>
-                <TextBlock Grid.Row="2" IsHitTestVisible="False" Text="Total Time" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=tbAddLogDuration}" Value="">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBox Grid.Row="3" x:Name="tbAddLogRate" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateLogRate}"/>
-                <TextBlock Grid.Row="3" IsHitTestVisible="False" Text="Rating" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=tbAddLogRate}" Value="">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                <xctk:DecimalUpDown Grid.Row="1" x:Name="dUpDownDistance" Watermark="Distance" VerticalContentAlignment="Center" Minimum="0" ShowButtonSpinner="False" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateLogDist}">
+                    <xctk:DecimalUpDown.WatermarkTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Watermark, ElementName=dUpDownDistance}" Foreground="DarkGray"/>
+                        </DataTemplate>
+                    </xctk:DecimalUpDown.WatermarkTemplate>
+                </xctk:DecimalUpDown>
+                <!-- TextBox Grid.Row="2" x:Name="tbAddLogDuration" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateLogDuration}"/ -->
+                <xctk:TimeSpanUpDown Grid.Row="2" ShowDays="False" ShowSeconds="False" AllowDrop="False" Minimum="0" Value="{Binding CreateLogDuration}" Margin="2,4"/>
+                <TextBlock Grid.Row="2" IsHitTestVisible="False" Text="Total Time" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray" />
+                <!-- TextBox Grid.Row="3" x:Name="tbAddLogRate" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateLogRate}"/ -->
+                <Slider Grid.Row="3" Value="{Binding CreateLogRate}" Minimum="0" Maximum="10" AutoToolTipPlacement="BottomRight" IsMoveToPointEnabled="True" TickPlacement="Both" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Bottom" Margin="20" Orientation="Horizontal"/>
+                <Label Grid.Row="3" Content="Rating" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7,14" Padding="0" Foreground="Black"/>
+               
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Margin="2">

@@ -25,7 +25,7 @@ namespace TourPlanner.ViewModels
         public ICommand CreateTourLogCommand { get; set; }
         public ICommand CloseCreateTourLogWindow { get; set; }
         private DateTime createLogDate { get; set; }
-        private float createLogDuration { get; set; }
+        private TimeSpan createLogDuration { get; set; }
         private float createLogDist { get; set; }
         private string createLogComment { get; set; }
         private int createLogDiff { get; set; }
@@ -44,7 +44,7 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
-        public float CreateLogDuration
+        public TimeSpan CreateLogDuration
         {
             get
             {
@@ -113,8 +113,7 @@ namespace TourPlanner.ViewModels
         public void CreateTourLog()
         {
             TourLog newTourLog = new TourLog(CreateLogDate, CreateLogDuration, CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate);
-            mainViewModel.SelectedTour.LogList.Add(newTourLog);
-            mainViewModel.LoadTourInformation();
+            mainViewModel.AddTourLog(newTourLog);
             OnRequestClose(this, new EventArgs());
         }
         public void CloseWindow()

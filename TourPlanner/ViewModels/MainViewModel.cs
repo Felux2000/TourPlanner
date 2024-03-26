@@ -29,8 +29,8 @@ namespace TourPlanner.ViewModels
 
         private string tourImage;
         public Page DisplayPage { get; set; }
-        public ObservableCollection<TourLog> LogList { get; set; }
-        public ObservableCollection<Tour> TourList { get; set; }
+        public ObservableCollection<TourLog> LogList { get; private set; }
+        public ObservableCollection<Tour> TourList { get; private set; }
 
         public ICommand DeleteTourCommand { get; set; }
         public ICommand DeleteLogCommand { get; set; }
@@ -77,11 +77,22 @@ namespace TourPlanner.ViewModels
             }
         }
 
+        public void AddTour(Tour tour)
+        {
+            TourList.Add(tour);
+        }
+
+        public void AddTourLog(TourLog tourLog)
+        {
+            SelectedTour.LogList.Add(tourLog);
+            LoadTourInformation();
+        }
+
         public void LoadTours()
         {
             TourList = new ObservableCollection<Tour>();
-            TourList.Add(new Tour("Test1", new List<TourLog> { new(DateTime.Today, 2.5f, 215.7f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
-            TourList.Add(new Tour("Test2", new List<TourLog> { new(DateTime.Today.AddDays(-1), 1.7f, 135.9f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
+            TourList.Add(new Tour("Test1", new List<TourLog> { new(DateTime.Today, TimeSpan.FromHours(2.5), 215.7f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
+            TourList.Add(new Tour("Test2", new List<TourLog> { new(DateTime.Today.AddDays(-1), TimeSpan.FromHours(1.7), 135.9f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
             LogList = new();
         }
 

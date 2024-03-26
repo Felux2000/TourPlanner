@@ -82,7 +82,13 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <DataGrid x:Name="lstLogs" Grid.Row="0" ItemsSource="{Binding LogList, Mode=OneWay}" Margin="1,0" AutoGenerateColumns="False" ColumnWidth="*" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" IsReadOnly="True" HeadersVisibility="Column" SelectedItem="{Binding SelectedLog}">
+                        <DataGrid x:Name="lstLogs" Grid.Row="0" ItemsSource="{Binding LogList, Mode=OneWay}" Margin="1,0" AutoGenerateColumns="False" ColumnWidth="*" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" IsReadOnly="True" HeadersVisibility="Column" SelectionMode="Single" Focusable="False" SelectedItem="{Binding SelectedLog}">
+                            <DataGrid.Resources>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="BorderBrush" Value="Transparent" />
+                                    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                                </Style>
+                            </DataGrid.Resources>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Date" Binding="{Binding Date}" />
                                 <DataGridTextColumn Header="Duration" Binding="{Binding Duration}" />

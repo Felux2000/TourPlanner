@@ -130,7 +130,7 @@ namespace TourPlanner.ViewModels
             createTourDist = 1234;
             createTourEst = 1234;
             Tour newTour = new Tour(CreateTourName, CreateTourDescr, CreateTourFrom, CreateTourTo, CreateTourTransportType, CreateTourDist, CreateTourEst, "/Resources/exampleImage.png");
-            mainViewModel.TourList.Add(newTour);
+            mainViewModel.AddTour(newTour);
             OnRequestClose(this, new EventArgs());
         }
 

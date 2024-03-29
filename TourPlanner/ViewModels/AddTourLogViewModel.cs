@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 using TourPlanner.Commands;
 using TourPlanner.Models;
 
@@ -18,6 +19,11 @@ namespace TourPlanner.ViewModels
             this.mainViewModel = mainViewModel;
             CreateTourLogCommand = new RelayCommand(o => CreateTourLog());
             CloseCreateTourLogWindow = new RelayCommand(o => CloseWindow());
+            CreateLogDate = DateTime.Now;
+            rateColor = new();
+            diffColor = new();
+            ChangeDiffColor();
+            ChangeRateColor();
         }
 
         private MainViewModel mainViewModel;
@@ -26,10 +32,12 @@ namespace TourPlanner.ViewModels
         public ICommand CloseCreateTourLogWindow { get; set; }
         private DateTime createLogDate { get; set; }
         private TimeSpan createLogDuration { get; set; }
-        private float createLogDist { get; set; }
+        private double createLogDist { get; set; }
         private string createLogComment { get; set; }
         private int createLogDiff { get; set; }
         private int createLogRate { get; set; }
+        private SolidColorBrush rateColor { get; set; }
+        private SolidColorBrush diffColor { get; set; }
 
         public DateTime CreateLogDate
         {
@@ -57,7 +65,7 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
-        public float CreateLogDist
+        public double CreateLogDist
         {
             get
             {
@@ -94,6 +102,7 @@ namespace TourPlanner.ViewModels
             {
                 createLogDiff = value;
                 OnPropertyChanged();
+                ChangeDiffColor();
             }
         }
         public int CreateLogRate
@@ -107,12 +116,72 @@ namespace TourPlanner.ViewModels
             {
                 createLogRate = value;
                 OnPropertyChanged();
+                ChangeRateColor();
             }
+        }
+
+        public SolidColorBrush RateColor
+        {
+            get
+            {
+                return rateColor;
+            }
+
+            set
+            {
+                rateColor.Color = value.Color;
+                OnPropertyChanged();
+            }
+        }
+
+        public SolidColorBrush DiffColor
+        {
+            get
+            {
+                return diffColor;
+            }
+
+            set
+            {
+                diffColor.Color = value.Color;
+                OnPropertyChanged();
+            }
+        }
+
+        private void ChangeRateColor()
+        {
+            int red = 500 - 50 * CreateLogRate;
+            int green = 50 * CreateLogRate;
+            if(red> 250)
+            {
+                red = 250;
+            }
+            if(green> 250)
+            {
+                green = 250;
+            }
+            RateColor.Color = Color.FromRgb((byte)red, (byte)green, 20);
+        }
+        
+
+        private void ChangeDiffColor()
+        {
+            int red = 50 * CreateLogDiff;
+            int green = 500-50 * CreateLogDiff;
+            if(red> 250)
+            {
+                red = 250;
+            }
+            if(green> 250)
+            {
+                green = 250;
+            }
+            DiffColor.Color = Color.FromRgb((byte)red, (byte)green, 20);
         }
 
         public void CreateTourLog()
         {
-            TourLog newTourLog = new TourLog(CreateLogDate, CreateLogDuration, CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate);
+            TourLog newTourLog = new TourLog(CreateLogDate, CreateLogDuration, (float)CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate);
             mainViewModel.AddTourLog(newTourLog);
             OnRequestClose(this, new EventArgs());
         }

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TourPlanner.Views"
         mc:Ignorable="d"
+        MinHeight="450" MinWidth="800"
         Title="TourPlanner" Height="450" Width="800">
     <Grid Margin="2,2,2,2">
         <Grid.ColumnDefinitions>
@@ -135,14 +136,14 @@
                                 </Button>
                             </Grid>
                             <Label Grid.Row="1">Comment:</Label>
-                            <TextBlock Grid.Row="2" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto"></TextBlock>
+                            <TextBlock Grid.Row="2" Margin="7,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding SelectedLog.Comment}"/>
                             <StackPanel Grid.Row="3" Orientation="Horizontal">
                                 <Label VerticalContentAlignment="Center">Difficulty:</Label>
-                                <Label VerticalContentAlignment="Center">0</Label>
+                                <Label VerticalContentAlignment="Center" Content="{Binding SelectedLog.Difficulty}"/>
                             </StackPanel>
                             <StackPanel Grid.Row="4" Orientation="Horizontal">
                                 <Label VerticalContentAlignment="Center">Rating:</Label>
-                                <Label VerticalContentAlignment="Center">0</Label>
+                                <Label VerticalContentAlignment="Center" Content="{Binding SelectedLog.Rating}"/>
                             </StackPanel>
                         </Grid>
                     </Grid>

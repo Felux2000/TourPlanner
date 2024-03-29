@@ -6,6 +6,7 @@
         xmlns:uc="clr-namespace:TourPlanner.UserControls"
         xmlns:local="clr-namespace:TourPlanner.Views"
         mc:Ignorable="d"
+        MinHeight="450" MinWidth="800"
         Title="TourPlanner" Height="450" Width="800">
     <uc:AddTourLogControl Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"/>
 </Window>

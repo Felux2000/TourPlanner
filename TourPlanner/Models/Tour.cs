@@ -34,6 +34,7 @@ namespace TourPlanner.Models
             Distance = distance;
             Estimation = estimation;
             Image = image;
+            LogList = new();
         }
         public Tour()
         {

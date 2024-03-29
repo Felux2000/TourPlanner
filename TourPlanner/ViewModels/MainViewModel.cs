@@ -82,6 +82,15 @@ namespace TourPlanner.ViewModels
             TourList.Add(tour);
         }
 
+        public void EditTour(Tour oldTour, Tour newTour)
+        {
+            if(TourList.IndexOf(oldTour) != -1)
+            {
+                TourList.Remove(oldTour);
+                TourList.Add(newTour);
+            }
+        }
+
         public void AddTourLog(TourLog tourLog)
         {
             SelectedTour.LogList.Add(tourLog);
@@ -93,6 +102,7 @@ namespace TourPlanner.ViewModels
             TourList = new ObservableCollection<Tour>();
             TourList.Add(new Tour("Test1", new List<TourLog> { new(DateTime.Today, TimeSpan.FromHours(2.5), 215.7f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
             TourList.Add(new Tour("Test2", new List<TourLog> { new(DateTime.Today.AddDays(-1), TimeSpan.FromHours(1.7), 135.9f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
+            TourList.Add(new Tour("Test3", "TestDescr", "TestFrom", "TestTo", "TestTransportType", 12, 5, "/Resources/exampleImage.png"));
             LogList = new();
         }
 

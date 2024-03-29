@@ -34,12 +34,26 @@ namespace TourPlanner.Views
             this.IsEnabled = false;
             addTour.Show();
         }
-
         private void AddTour_Closed(object sender, EventArgs e)
         {
             this.IsEnabled = true;
         }
 
+        private void btn_EditTour_Click(object sender, RoutedEventArgs e)
+        {
+            var viewModel = new EditTourViewModel(((MainViewModel)DataContext));
+            EditTourView editTour = new EditTourView{
+                DataContext = viewModel
+        };
+            viewModel.OnRequestClose += (s, e) => editTour.Close();
+            editTour.Closed += EditTour_Closed;
+            this.IsEnabled = false;
+            editTour.Show();
+        }
+        private void EditTour_Closed(object sender, EventArgs e)
+        {
+            this.IsEnabled = true;
+        }
 
         private void btn_AddLog_Click(object sender, RoutedEventArgs e)
         {

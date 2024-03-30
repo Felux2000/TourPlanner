@@ -74,7 +74,37 @@
                 </TabItem>
                 <TabItem Header="Details">
                     <Grid >
-
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" FontWeight="Bold">Description:</Label>
+                        <TextBlock Grid.Row="1" Margin="7,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding SelectedTour.Description}"/>
+                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold">From:</Label>
+                            <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.From}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" Orientation="Horizontal">
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold">To:</Label>
+                            <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.To}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="4" Orientation="Horizontal">
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold">Transport Type:</Label>
+                            <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.TransportType}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="5" Orientation="Horizontal">
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold">Distance:</Label>
+                            <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.Distance}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Row="6" Orientation="Horizontal">
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold">Estimation:</Label>
+                            <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.Estimation}"/>
+                        </StackPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Logs">
@@ -112,7 +142,7 @@
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label VerticalContentAlignment="Center" Grid.Column="0" FontSize="20" FontStyle="Italic" Padding="3,0">Details</Label>
+                                <Label VerticalContentAlignment="Center" Grid.Column="0" FontSize="20" FontStyle="Italic" Padding="3,0" FontWeight="Bold">Details</Label>
                                 <Button Grid.Column="2" Content="+" Click="btn_AddLog_Click" IsEnabled="{Binding ElementName=lstTours, Path=SelectedItems.Count}">
                                     <Button.Resources>
                                         <Style TargetType="Border">
@@ -127,7 +157,7 @@
                                         </Style>
                                     </Button.Resources>
                                 </Button>
-                                <Button Grid.Column="4" Content="..." IsEnabled="{Binding ElementName=lstLogs, Path=SelectedItems.Count}" HorizontalContentAlignment="Center">
+                                <Button Grid.Column="4" Content="..." Click="btn_EditTourLog_Click" IsEnabled="{Binding ElementName=lstLogs, Path=SelectedItems.Count}" HorizontalContentAlignment="Center">
                                     <Button.Resources>
                                         <Style TargetType="Border">
                                             <Setter Property="CornerRadius" Value="5"/>
@@ -135,14 +165,14 @@
                                     </Button.Resources>
                                 </Button>
                             </Grid>
-                            <Label Grid.Row="1">Comment:</Label>
+                            <Label Grid.Row="1" FontWeight="Bold">Comment:</Label>
                             <TextBlock Grid.Row="2" Margin="7,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding SelectedLog.Comment}"/>
                             <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                <Label VerticalContentAlignment="Center">Difficulty:</Label>
+                                <Label VerticalContentAlignment="Center" FontWeight="Bold">Difficulty:</Label>
                                 <Label VerticalContentAlignment="Center" Content="{Binding SelectedLog.Difficulty}"/>
                             </StackPanel>
                             <StackPanel Grid.Row="4" Orientation="Horizontal">
-                                <Label VerticalContentAlignment="Center">Rating:</Label>
+                                <Label VerticalContentAlignment="Center" FontWeight="Bold">Rating:</Label>
                                 <Label VerticalContentAlignment="Center" Content="{Binding SelectedLog.Rating}"/>
                             </StackPanel>
                         </Grid>

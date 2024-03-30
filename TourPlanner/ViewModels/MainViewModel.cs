@@ -97,6 +97,20 @@ namespace TourPlanner.ViewModels
             LoadTourInformation();
         }
 
+        public void EditTourLog(Tour logTour, TourLog oldTourLog, TourLog newTourLog)
+        {
+            int index = TourList.IndexOf(logTour);
+            if (index != -1)
+            {
+                if( TourList[index].LogList.IndexOf(oldTourLog) != -1)
+                {
+                    TourList[index].LogList.Remove(oldTourLog);
+                    TourList[index].LogList.Add(newTourLog);
+                    LoadTourInformation();
+                }
+            }
+        }
+
         public void LoadTours()
         {
             TourList = new ObservableCollection<Tour>();

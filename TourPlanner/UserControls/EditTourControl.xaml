@@ -12,7 +12,7 @@
             <RowDefinition Height="12*" MinHeight="180"/>
             <RowDefinition Height="1*" MinHeight="30"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" FontSize="18" MinHeight="32" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Add new tour!</Label>
+        <Label Grid.Row="0" FontSize="18" MinHeight="32" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Edit tour!</Label>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -26,7 +26,7 @@
                     <RowDefinition Height="1*" MinHeight="30"/>
                     <RowDefinition Height="2*" MinHeight="30"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" x:Name="tbAddTourName" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditTourName}" IsReadOnly="True" IsEnabled="False"/>
+                <TextBox Grid.Row="0" x:Name="tbAddTourName" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditTourName}"/>
                 <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="Name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">

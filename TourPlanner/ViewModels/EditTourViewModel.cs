@@ -16,19 +16,20 @@ namespace TourPlanner.ViewModels
         public EditTourViewModel(MainViewModel mainViewModel)
         {
             this.mainViewModel = mainViewModel;
+            this.tourToEdit = mainViewModel.SelectedTour;
             SaveChangedTourCommand = new RelayCommand(o => SaveChangedTour());
             CloseEditTourWindow = new RelayCommand(o => CloseWindow());
             LoadTourInformation();
         }
 
         private MainViewModel mainViewModel;
+        private Tour tourToEdit;
 
         public event EventHandler OnRequestClose;
 
         public ICommand SaveChangedTourCommand { get; set; }
         public ICommand CloseEditTourWindow { get; set; }
 
-        private Tour oldTour;
         private string editTourName { get; set; }
         private string editTourDescr { get; set; }
         private string editTourFrom { get; set; }
@@ -145,23 +146,20 @@ namespace TourPlanner.ViewModels
 
         private void LoadTourInformation()
         {
-            oldTour = mainViewModel.SelectedTour;
-            EditTourName = oldTour.Name;
-            EditTourDescr = oldTour.Description;
-            EditTourFrom = oldTour.From;
-            EditTourTo = oldTour.To;
-            EditTourTransportType = oldTour.TransportType;
-            EditTourDist = oldTour.Distance;
-            EditTourEst = oldTour.Estimation;
-            EditTourImage = oldTour.Image;
+            EditTourName = tourToEdit.Name;
+            EditTourDescr = tourToEdit.Description;
+            EditTourFrom = tourToEdit.From;
+            EditTourTo = tourToEdit.To;
+            EditTourTransportType = tourToEdit.TransportType;
+            EditTourDist = tourToEdit.Distance;
+            EditTourEst = tourToEdit.Estimation;
+            EditTourImage = tourToEdit.Image;
         }
 
         public void SaveChangedTour()
         {
-            Tour newTour = oldTour;
-            newTour.Description = EditTourDescr;
-            newTour.TransportType = EditTourTransportType;
-            mainViewModel.EditTour(oldTour, newTour);
+            Tour editedTour = new(EditTourName, EditTourDescr, EditTourFrom, EditTourTo, EditTourTransportType,EditTourDist, EditTourEst,EditTourImage);
+            mainViewModel.EditTour(editedTour);
             OnRequestClose(this, new EventArgs());
         }
 

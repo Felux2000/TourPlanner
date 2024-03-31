@@ -17,20 +17,19 @@ namespace TourPlanner.ViewModels
         public EditTourLogViewModel(MainViewModel mainViewModel)
         {
             this.mainViewModel = mainViewModel;
+            logToEdit = mainViewModel.SelectedLog;
             EditTourLogCommand = new RelayCommand(o => SaveChangedTourLog());
             CloseEditTourLogWindow = new RelayCommand(o => CloseWindow());
             rateColor = new();
             diffColor = new();
             ChangeDiffColor();
             ChangeRateColor();
-            selectedTour = mainViewModel.SelectedTour;
             LoadLogInformation();
         }
 
         private MainViewModel mainViewModel;
         public event EventHandler OnRequestClose;
-        private TourLog oldLog;
-        private Tour selectedTour;
+        private TourLog logToEdit;
         public ICommand EditTourLogCommand { get; set; }
         public ICommand CloseEditTourLogWindow { get; set; }
         private DateTime editLogDate { get; set; }
@@ -184,19 +183,18 @@ namespace TourPlanner.ViewModels
 
         private void LoadLogInformation()
         {
-            oldLog = mainViewModel.SelectedLog;
-            EditLogDate = oldLog.Date;
-            EditLogDuration = oldLog.Duration;
-            EditLogDist = oldLog.Distance;
-            EditLogComment = oldLog.Comment;
-            EditLogDiff = oldLog.Difficulty;
-            EditLogRate = oldLog.Rating;
+            EditLogDate = logToEdit.Date;
+            EditLogDuration = logToEdit.Duration;
+            EditLogDist = logToEdit.Distance;
+            EditLogComment = logToEdit.Comment;
+            EditLogDiff = logToEdit.Difficulty;
+            EditLogRate = logToEdit.Rating;
         }
 
         public void SaveChangedTourLog()
         {
-            TourLog newLog = new TourLog(EditLogDate, EditLogDuration, (float)EditLogDist, EditLogComment, EditLogDiff, EditLogRate);
-            mainViewModel.EditTourLog(selectedTour, oldLog, newLog);
+            TourLog editedTourLog = new TourLog(EditLogDate, EditLogDuration, (float)EditLogDist, EditLogComment, EditLogDiff, EditLogRate);
+            mainViewModel.EditTourLog(editedTourLog);
             OnRequestClose(this, new EventArgs());
         }
         public void CloseWindow()

@@ -13,7 +13,7 @@
             <RowDefinition Height="12*" MinHeight="282"/>
             <RowDefinition Height="1*" MinHeight="30"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="3,0">Add a new TourLog!</Label>
+        <Label Grid.Row="0" FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Padding="3,0">Edit TourLog!</Label>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -24,7 +24,6 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="3*"/>
                 </Grid.RowDefinitions>
-                <!-- <DatePicker Grid.Row="0" IsTodayHighlighted="True" FirstDayOfWeek="Monday" HorizontalAlignment="Center" SelectedDate="{Binding EditLogDate}" /> -->
                 <Grid  Grid.Row="0" Margin="2">
                     <xctk:DateTimePicker Format="Custom" FormatString="MM/dd/yyyy H:mm:ss" Value="{Binding EditLogDate}" Margin="2,4"/>
                     <TextBlock IsHitTestVisible="False" Text="Tour Start" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray"/>
@@ -52,7 +51,6 @@
                     <RowDefinition Height="1*" MinHeight="72"/>
                     <RowDefinition Height="1*" MinHeight="72"/>
                 </Grid.RowDefinitions>
-                <!-- TextBox Grid.Row="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditLogDiff}"/ -->
                 <Grid  Grid.Row="0" Margin="2">
                     <xctk:TimeSpanUpDown ShowDays="False" ShowSeconds="False" AllowDrop="False" Minimum="0" Value="{Binding EditLogDuration}" Margin="2,4"/>
                     <TextBlock IsHitTestVisible="False" Text="Total Time" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray" />
@@ -61,34 +59,7 @@
                     <xctk:DoubleUpDown Increment="0.1" FormatString="F1" UpdateValueOnEnterKey="False" CultureInfo="en-US" VerticalContentAlignment="Center" Minimum="0.0" ShowButtonSpinner="False" HorizontalContentAlignment="Right" Margin="2,4" Padding="3" Text="{Binding EditLogDist}"/>
                     <TextBlock IsHitTestVisible="False" Text="Distance" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray"/>
                 </Grid>
-                <!-- TextBox Grid.Row="2" x:Name="tbAddLogDuration" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditLogDuration}"/ -->
-                <!-- TextBox Grid.Row="3" x:Name="tbAddLogRate" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditLogRate}"/ -->
                 <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1" Margin="4">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*"/>
-                            <ColumnDefinition Width="1*" MinWidth="30"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" MinHeight="30"/>
-                                <RowDefinition Height="2*" MinHeight="30"/>
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Content="Rating" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="0" Margin="4" Foreground="Black"/>
-                            <Slider Grid.Row="1" Margin="20,0" Value="{Binding EditLogRate}" Minimum="1" Maximum="10" AutoToolTipPlacement="BottomRight" IsMoveToPointEnabled="True" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" Orientation="Horizontal"/>
-                        </Grid>
-                        <Grid Grid.Column="1">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" MinHeight="30"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding RateColor}" Width="30" Height="30"/>
-                                <Label Content="{Binding EditLogRate}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Border>
-                <Border Grid.Row="3" BorderBrush="Gray" BorderThickness="1" Margin="4">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="5*"/>
@@ -109,6 +80,31 @@
                             <Grid Grid.Row="0">
                                 <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding DiffColor}" Width="30" Height="30"/>
                                 <Label Content="{Binding EditLogDiff}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Border Grid.Row="3" BorderBrush="Gray" BorderThickness="1" Margin="4">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="1*" MinWidth="30"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" MinHeight="30"/>
+                                <RowDefinition Height="2*" MinHeight="30"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Content="Rating" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="0" Margin="4" Foreground="Black"/>
+                            <Slider Grid.Row="1" Margin="20,0" Value="{Binding EditLogRate}" Minimum="1" Maximum="10" AutoToolTipPlacement="BottomRight" IsMoveToPointEnabled="True" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center" Orientation="Horizontal"/>
+                        </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" MinHeight="30"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Rectangle HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding RateColor}" Width="30" Height="30"/>
+                                <Label Content="{Binding EditLogRate}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Grid>
                         </Grid>
                     </Grid>

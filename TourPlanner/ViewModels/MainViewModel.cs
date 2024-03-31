@@ -82,13 +82,10 @@ namespace TourPlanner.ViewModels
             TourList.Add(tour);
         }
 
-        public void EditTour(Tour oldTour, Tour newTour)
+        public void EditTour(Tour editedTour)
         {
-            if(TourList.IndexOf(oldTour) != -1)
-            {
-                TourList.Remove(oldTour);
-                TourList.Add(newTour);
-            }
+            editedTour.LogList = SelectedTour.LogList;
+            SelectedTour = editedTour;
         }
 
         public void AddTourLog(TourLog tourLog)
@@ -97,18 +94,11 @@ namespace TourPlanner.ViewModels
             LoadTourInformation();
         }
 
-        public void EditTourLog(Tour logTour, TourLog oldTourLog, TourLog newTourLog)
+        public void EditTourLog(TourLog editedTourLog)
         {
-            int index = TourList.IndexOf(logTour);
-            if (index != -1)
-            {
-                if( TourList[index].LogList.IndexOf(oldTourLog) != -1)
-                {
-                    TourList[index].LogList.Remove(oldTourLog);
-                    TourList[index].LogList.Add(newTourLog);
-                    LoadTourInformation();
-                }
-            }
+            SelectedTour.LogList[SelectedTour.LogList.IndexOf(SelectedLog)] = editedTourLog;
+            LoadTourInformation();
+            SelectedLog = editedTourLog;
         }
 
         public void LoadTours()

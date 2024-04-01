@@ -20,35 +20,18 @@ namespace TourPlanner.ViewModels
         {
             DeleteTourCommand = new RelayCommand(o => DeleteTour());
             DeleteLogCommand = new RelayCommand(o => DeleteLog());
-            tourImage = "/Resources/noImageImage.jpg";
             LoadTours();
         }
 
         private Tour selectedTour;
         private TourLog selectedLog;
 
-        private string tourImage;
         public Page DisplayPage { get; set; }
-        public ObservableCollection<TourLog> LogList { get; private set; }
         public ObservableCollection<Tour> TourList { get; private set; }
 
         public ICommand DeleteTourCommand { get; set; }
         public ICommand DeleteLogCommand { get; set; }
 
-        public string TourImage
-        {
-            get
-            {
-                return tourImage;
-            }
-
-            set
-            {
-                tourImage = value;
-                OnPropertyChanged();
-
-            }
-        }
         public Tour SelectedTour
         {
             get
@@ -60,7 +43,6 @@ namespace TourPlanner.ViewModels
             {
                 selectedTour = value;
                 OnPropertyChanged();
-                LoadTourInformation();
             }
         }
         public TourLog SelectedLog
@@ -80,6 +62,7 @@ namespace TourPlanner.ViewModels
         public void AddTour(Tour tour)
         {
             TourList.Add(tour);
+            SelectedTour = tour;
         }
 
         public void EditTour(Tour editedTour)
@@ -91,40 +74,21 @@ namespace TourPlanner.ViewModels
         public void AddTourLog(TourLog tourLog)
         {
             SelectedTour.LogList.Add(tourLog);
-            LoadTourInformation();
+            SelectedLog = tourLog;
         }
 
         public void EditTourLog(TourLog editedTourLog)
         {
             SelectedTour.LogList[SelectedTour.LogList.IndexOf(SelectedLog)] = editedTourLog;
-            LoadTourInformation();
             SelectedLog = editedTourLog;
         }
 
         public void LoadTours()
         {
             TourList = new ObservableCollection<Tour>();
-            TourList.Add(new Tour("Test1", new List<TourLog> { new(DateTime.Today, TimeSpan.FromHours(2.5), 215.7f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
-            TourList.Add(new Tour("Test2", new List<TourLog> { new(DateTime.Today.AddDays(-1), TimeSpan.FromHours(1.7), 135.9f, "no comment", 5, 3) }, "/Resources/exampleImage.png"));
-            TourList.Add(new Tour("Test3", "TestDescr", "TestFrom", "TestTo", "TestTransportType", 12, 5, "/Resources/exampleImage.png"));
-            LogList = new();
-        }
-
-        public void LoadTourInformation()
-        {
-            var tour = selectedTour;
-            LogList.Clear();
-            if (tour == null)
-            {
-                TourImage = "/Resources/noImageImage.jpg";
-                return;
-            }
-            TourImage = tour.Image;
-            if (tour.LogList == null) return;
-            foreach (var log in tour.LogList)
-            {
-                LogList.Add(log);
-            }
+            TourList.Add(new Tour("Longus Tourus", new List<TourLog> { new(DateTime.Today, TimeSpan.FromHours(2.5), 215.7f, "Long and dangerous", 8, 3) }, "/Resources/exampleImage.png"));
+            TourList.Add(new Tour("Carus wroomus", new List<TourLog> { new(DateTime.Today.AddMonths(-1), TimeSpan.FromHours(1.7), 135.9f, "Car go wroom", 4, 6) }, "/Resources/exampleImage.png"));
+            TourList.Add(new Tour("Car", "Good for cars to loose the zoomies", "Top of car tree", "food bowl", "car", 2, 0.1f, "/Resources/exampleImage.png"));
         }
 
         public void DeleteTour()
@@ -137,10 +101,10 @@ namespace TourPlanner.ViewModels
         }
         public void DeleteLog()
         {
-            if (SelectedTour != null)
+            if (SelectedTour != null && SelectedLog != null)
             {
-                selectedTour.LogList.Remove(SelectedLog);
-                LoadTourInformation();
+                SelectedTour.LogList.Remove(SelectedLog);
+                SelectedLog = null;
             }
         }
 

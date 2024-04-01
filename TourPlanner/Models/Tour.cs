@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+
 
 namespace TourPlanner.Models
 {
@@ -16,12 +18,12 @@ namespace TourPlanner.Models
         public float Distance { get; set; }
         public float Estimation { get; set; }
         public string Image { get; set; }
-        public List<TourLog> LogList { get; set; }
+        public ObservableCollection<TourLog> LogList { get; set; }
 
         public Tour(string name, List<TourLog> logList, string image)
         {
             Name = name;
-            LogList = logList;
+            LogList = [.. logList];
             Image = image;
         }
         public Tour(string name, string description, string from, string to, string transportType, float distance, float estimation, string image)

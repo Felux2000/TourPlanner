@@ -17,13 +17,17 @@ namespace TourPlanner.ViewModels
         public AddTourLogViewModel(MainViewModel mainViewModel)
         {
             this.mainViewModel = mainViewModel;
+            CreateLogDate = DateTime.Now;
+            createLogDiff = 1;
+            createLogRate = 1;
+
             CreateTourLogCommand = new RelayCommand(o => CreateTourLog());
             CloseCreateTourLogWindow = new RelayCommand(o => CloseWindow());
-            CreateLogDate = DateTime.Now;
+
             rateColor = new();
             diffColor = new();
-            ChangeDiffColor();
             ChangeRateColor();
+            ChangeDiffColor();
         }
 
         private MainViewModel mainViewModel;
@@ -150,8 +154,8 @@ namespace TourPlanner.ViewModels
 
         private void ChangeRateColor()
         {
-            int red = 500 - 50 * CreateLogRate;
-            int green = 50 * CreateLogRate;
+            int red = 500 - 50 * (CreateLogRate - 1);
+            int green = 50 * (CreateLogRate - 1);
             if(red> 250)
             {
                 red = 250;
@@ -166,8 +170,8 @@ namespace TourPlanner.ViewModels
 
         private void ChangeDiffColor()
         {
-            int red = 50 * CreateLogDiff;
-            int green = 500-50 * CreateLogDiff;
+            int red = 50 * (CreateLogDiff-1);
+            int green = 500-50 * (CreateLogDiff-1);
             if(red> 250)
             {
                 red = 250;

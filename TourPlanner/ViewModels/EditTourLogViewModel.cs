@@ -152,8 +152,8 @@ namespace TourPlanner.ViewModels
 
         private void ChangeRateColor()
         {
-            int red = 500 - 50 * EditLogRate;
-            int green = 50 * EditLogRate;
+            int red = 500 - 50 * (EditLogRate-1);
+            int green = 50 * (EditLogRate - 1);
             if (red > 250)
             {
                 red = 250;
@@ -168,8 +168,8 @@ namespace TourPlanner.ViewModels
 
         private void ChangeDiffColor()
         {
-            int red = 50 * EditLogDiff;
-            int green = 500 - 50 * EditLogDiff;
+            int red = 50 * (EditLogDiff - 1);
+            int green = 500 - 50 * (EditLogDiff - 1);
             if (red > 250)
             {
                 red = 250;

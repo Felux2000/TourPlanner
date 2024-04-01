@@ -67,7 +67,7 @@ namespace TourPlanner.ViewModels
 
         public void EditTour(Tour editedTour)
         {
-            editedTour.LogList = SelectedTour.LogList;
+            TourList[TourList.IndexOf(SelectedTour)] = editedTour;
             SelectedTour = editedTour;
         }
 

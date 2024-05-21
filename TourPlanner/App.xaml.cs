@@ -3,6 +3,8 @@ using System.Data;
 using System.Windows;
 using TourPlanner.Views;
 
+using TourPlanner.DataLayer;
+
 namespace TourPlanner
 {
     /// <summary>
@@ -10,7 +12,11 @@ namespace TourPlanner
     /// </summary>
     public partial class App : Application
     {
-
+        App()
+        {
+            DbHandler databaseHandler = new DbHandler();
+        }
     }
 
 }
+ 

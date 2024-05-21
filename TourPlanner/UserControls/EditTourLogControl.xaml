@@ -117,8 +117,8 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Margin="4,2" Command="{Binding DataContext.EditTourLogCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">Save</Button>
-            <Button Grid.Column="2" Margin="4,2" Command="{Binding DataContext.CloseEditTourLogWindow, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">Cancle</Button>
+            <Button Grid.Column="1" Margin="4,2" Command="{Binding EditTourLogCommand}">Save</Button>
+            <Button Grid.Column="2" Margin="4,2" Command="{Binding CloseEditTourLogWindow}">Cancle</Button>
         </Grid>
     </Grid>
 </UserControl>

@@ -14,7 +14,6 @@ namespace TourPlanner
     {
         App()
         {
-            DbHandler databaseHandler = new DbHandler();
         }
     }
 

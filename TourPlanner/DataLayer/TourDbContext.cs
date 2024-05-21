@@ -15,17 +15,20 @@ namespace TourPlanner.DataLayer
     internal class TourDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
+
+        private LogInterceptor _interceptor;
         public DbSet<TourDbModel> Tours { get; set; }
         public DbSet<TourLogDbModel> TourLogs { get; set; }
 
-        public TourDbContext(IConfiguration configuration)
+        public TourDbContext(IConfiguration configuration, LogInterceptor interceptor)
         {
-            this._configuration = configuration;
+            _configuration = configuration;
+            _interceptor = interceptor;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.AddInterceptors(new[] { new LogInterceptor() });
+            optionsBuilder.AddInterceptors(new[] { _interceptor });
             optionsBuilder.EnableSensitiveDataLogging();
 
             optionsBuilder.UseNpgsql(_configuration.GetConnectionString("TourDbContext"));

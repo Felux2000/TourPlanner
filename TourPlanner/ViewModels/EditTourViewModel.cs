@@ -6,24 +6,27 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TourPlanner.BusinessLogic;
 using TourPlanner.Commands;
 using TourPlanner.Models;
 
 namespace TourPlanner.ViewModels
 {
-    class EditTourViewModel : INotifyPropertyChanged
+    public class EditTourViewModel : BaseViewModel
     {
-        public EditTourViewModel(MainViewModel mainViewModel)
+        public EditTourViewModel(BLHandler blHandler, MainViewModel mainViewModel)
         {
-            this.mainViewModel = mainViewModel;
-            this.tourToEdit = mainViewModel.SelectedTour;
+            _blHandler = blHandler;
+            _mainViewModel = mainViewModel;
+            _tourToEdit = mainViewModel.SelectedTour;
             SaveChangedTourCommand = new RelayCommand(o => SaveChangedTour());
             CloseEditTourWindow = new RelayCommand(o => CloseWindow());
             LoadTourInformation();
         }
 
-        private MainViewModel mainViewModel;
-        private Tour tourToEdit;
+        private BLHandler _blHandler;
+        private MainViewModel _mainViewModel;
+        private Tour _tourToEdit;
 
         public event EventHandler OnRequestClose;
 
@@ -146,33 +149,26 @@ namespace TourPlanner.ViewModels
 
         private void LoadTourInformation()
         {
-            EditTourName = tourToEdit.Name;
-            EditTourDescr = tourToEdit.Description;
-            EditTourFrom = tourToEdit.From;
-            EditTourTo = tourToEdit.To;
-            EditTourTransportType = tourToEdit.TransportType;
-            EditTourDist = tourToEdit.Distance;
-            EditTourEst = tourToEdit.Estimation;
-            EditTourImage = tourToEdit.Image;
+            EditTourName = _tourToEdit.Name;
+            EditTourDescr = _tourToEdit.Description;
+            EditTourFrom = _tourToEdit.From;
+            EditTourTo = _tourToEdit.To;
+            EditTourTransportType = _tourToEdit.TransportType;
+            EditTourDist = _tourToEdit.Distance;
+            EditTourEst = _tourToEdit.Estimation;
+            EditTourImage = _tourToEdit.Image;
         }
 
         public void SaveChangedTour()
         {
             Tour editedTour = new(EditTourName, EditTourDescr, EditTourFrom, EditTourTo, EditTourTransportType,EditTourDist, EditTourEst,EditTourImage);
-            mainViewModel.EditTour(editedTour);
+            _mainViewModel.EditTour(editedTour);
             OnRequestClose(this, new EventArgs());
         }
 
         public void CloseWindow()
         {
             OnRequestClose(this, new EventArgs());
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

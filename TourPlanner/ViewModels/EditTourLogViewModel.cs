@@ -7,16 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using TourPlanner.BusinessLogic;
 using TourPlanner.Commands;
 using TourPlanner.Models;
 
 namespace TourPlanner.ViewModels
 {
-    class EditTourLogViewModel : INotifyPropertyChanged
+    public class EditTourLogViewModel : BaseViewModel
     {
-        public EditTourLogViewModel(MainViewModel mainViewModel)
+        public EditTourLogViewModel(BLHandler blHandler, MainViewModel mainViewModel)
         {
-            this.mainViewModel = mainViewModel;
+            _blHandler = blHandler;
+            _mainViewModel = mainViewModel;
             logToEdit = mainViewModel.SelectedLog;
             EditTourLogCommand = new RelayCommand(o => SaveChangedTourLog());
             CloseEditTourLogWindow = new RelayCommand(o => CloseWindow());
@@ -27,7 +29,8 @@ namespace TourPlanner.ViewModels
             LoadLogInformation();
         }
 
-        private MainViewModel mainViewModel;
+        private BLHandler _blHandler;
+        private MainViewModel _mainViewModel;
         public event EventHandler OnRequestClose;
         private TourLog logToEdit;
         public ICommand EditTourLogCommand { get; set; }
@@ -152,7 +155,7 @@ namespace TourPlanner.ViewModels
 
         private void ChangeRateColor()
         {
-            int red = 500 - 50 * (EditLogRate-1);
+            int red = 500 - 50 * (EditLogRate - 1);
             int green = 50 * (EditLogRate - 1);
             if (red > 250)
             {
@@ -194,19 +197,12 @@ namespace TourPlanner.ViewModels
         public void SaveChangedTourLog()
         {
             TourLog editedTourLog = new TourLog(EditLogDate, EditLogDuration, (float)EditLogDist, EditLogComment, EditLogDiff, EditLogRate);
-            mainViewModel.EditTourLog(editedTourLog);
+            _mainViewModel.EditTourLog(editedTourLog);
             OnRequestClose(this, new EventArgs());
         }
         public void CloseWindow()
         {
             OnRequestClose(this, new EventArgs());
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

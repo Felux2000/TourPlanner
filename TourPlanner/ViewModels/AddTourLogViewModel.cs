@@ -7,16 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using TourPlanner.BusinessLogic;
 using TourPlanner.Commands;
 using TourPlanner.Models;
 
 namespace TourPlanner.ViewModels
 {
-    internal class AddTourLogViewModel : INotifyPropertyChanged
+    public class AddTourLogViewModel : BaseViewModel
     {
-        public AddTourLogViewModel(MainViewModel mainViewModel)
+        public AddTourLogViewModel(BLHandler blHandler, MainViewModel mainViewModel)
         {
-            this.mainViewModel = mainViewModel;
+            _blHandler = blHandler;
+            _mainViewModel = mainViewModel;
             CreateLogDate = DateTime.Now;
             createLogDiff = 1;
             createLogRate = 1;
@@ -30,7 +32,8 @@ namespace TourPlanner.ViewModels
             ChangeDiffColor();
         }
 
-        private MainViewModel mainViewModel;
+        private BLHandler _blHandler;
+        private MainViewModel _mainViewModel;
         public event EventHandler OnRequestClose;
         public ICommand CreateTourLogCommand { get; set; }
         public ICommand CloseCreateTourLogWindow { get; set; }
@@ -156,27 +159,27 @@ namespace TourPlanner.ViewModels
         {
             int red = 500 - 50 * (CreateLogRate - 1);
             int green = 50 * (CreateLogRate - 1);
-            if(red> 250)
+            if (red > 250)
             {
                 red = 250;
             }
-            if(green> 250)
+            if (green > 250)
             {
                 green = 250;
             }
             RateColor.Color = Color.FromRgb((byte)red, (byte)green, 20);
         }
-        
+
 
         private void ChangeDiffColor()
         {
-            int red = 50 * (CreateLogDiff-1);
-            int green = 500-50 * (CreateLogDiff-1);
-            if(red> 250)
+            int red = 50 * (CreateLogDiff - 1);
+            int green = 500 - 50 * (CreateLogDiff - 1);
+            if (red > 250)
             {
                 red = 250;
             }
-            if(green> 250)
+            if (green > 250)
             {
                 green = 250;
             }
@@ -186,19 +189,12 @@ namespace TourPlanner.ViewModels
         public void CreateTourLog()
         {
             TourLog newTourLog = new TourLog(CreateLogDate, CreateLogDuration, (float)CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate);
-            mainViewModel.AddTourLog(newTourLog);
+            _mainViewModel.AddTourLog(newTourLog);
             OnRequestClose(this, new EventArgs());
         }
         public void CloseWindow()
         {
             OnRequestClose(this, new EventArgs());
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

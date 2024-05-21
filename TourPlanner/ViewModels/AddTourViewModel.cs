@@ -6,21 +6,24 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using TourPlanner.BusinessLogic;
 using TourPlanner.Commands;
 using TourPlanner.Models;
 
 namespace TourPlanner.ViewModels
 {
-    internal class AddTourViewModel : INotifyPropertyChanged
+    public class AddTourViewModel : BaseViewModel
     {
-        public AddTourViewModel(MainViewModel mainViewModel)
+        public AddTourViewModel(BLHandler blHandler, MainViewModel mainViewModel)
         {
-            this.mainViewModel = mainViewModel;
+            _blHandler = blHandler;
+            _mainViewModel = mainViewModel;
             CreateTourCommand = new RelayCommand(o => CreateTour());
             CloseCreateTourWindow = new RelayCommand(o => CloseWindow());
         }
 
-        private MainViewModel mainViewModel;
+        private BLHandler _blHandler;
+        private MainViewModel _mainViewModel;
 
         public event EventHandler OnRequestClose;
         public ICommand CreateTourCommand { get; set; }
@@ -130,20 +133,13 @@ namespace TourPlanner.ViewModels
             createTourDist = 1234;
             createTourEst = 1234;
             Tour newTour = new Tour(CreateTourName, CreateTourDescr, CreateTourFrom, CreateTourTo, CreateTourTransportType, CreateTourDist, CreateTourEst, "/Resources/exampleImage.png");
-            mainViewModel.AddTour(newTour);
+            _mainViewModel.AddTour(newTour);
             OnRequestClose(this, new EventArgs());
         }
 
         public void CloseWindow()
         {
             OnRequestClose(this, new EventArgs());
-        }
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

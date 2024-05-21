@@ -9,22 +9,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TourPlanner.BusinessLogic;
 using TourPlanner.Commands;
 using TourPlanner.Models;
 
 namespace TourPlanner.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : BaseViewModel
     {
-        public MainViewModel()
+        private BLHandler _blHandler;
+        public MainViewModel(BLHandler blHandler)
         {
+            _blHandler = blHandler;
             DeleteTourCommand = new RelayCommand(o => DeleteTour());
             DeleteLogCommand = new RelayCommand(o => DeleteLog());
             LoadTours();
+            viewModel = this;
         }
 
         private Tour selectedTour;
         private TourLog selectedLog;
+        private BaseViewModel viewModel;
 
         public Page DisplayPage { get; set; }
         public ObservableCollection<Tour> TourList { get; private set; }
@@ -55,6 +60,19 @@ namespace TourPlanner.ViewModels
             set
             {
                 selectedLog = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public BaseViewModel ViewModel
+        {
+            get
+            {
+                return viewModel;
+            }
+            set
+            {
+                viewModel = value;
                 OnPropertyChanged();
             }
         }
@@ -109,11 +127,62 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string name = null)
+        public void DisplayMainView()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            ViewModel = IoCContainerConfig.Instance.MainViewModel;
+
         }
 
+        public ICommand DisplayAddTourView
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    var vm = IoCContainerConfig.Instance.AddTourViewModel;
+                    ViewModel = vm;
+                    vm.OnRequestClose += (s, e) => DisplayMainView();
+                });
+            }
+        }
+
+        public ICommand DisplayAddTourLogView
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    var vm = IoCContainerConfig.Instance.AddTourLogViewModel;
+                    ViewModel = vm;
+                    vm.OnRequestClose += (s, e) => DisplayMainView();
+                });
+            }
+        }
+
+        public ICommand DisplayEditTourView
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    var vm = IoCContainerConfig.Instance.EditTourViewModel;
+                    ViewModel = vm;
+                    vm.OnRequestClose += (s, e) => DisplayMainView();
+                });
+            }
+        }
+
+        public ICommand DisplayEditTourLogView
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    var vm = IoCContainerConfig.Instance.EditTourLogViewModel;
+                    ViewModel = vm;
+                    vm.OnRequestClose += (s, e) => DisplayMainView();
+                });
+            }
+        }
     }
 }

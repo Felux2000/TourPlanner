@@ -20,9 +20,9 @@ namespace TourPlanner.Views
         public MainView()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            DataContext = IoCContainerConfig.Instance.MainViewModel;
         }
-
+        /*
         private void btn_AddTour_Click(object sender, RoutedEventArgs e)
         {
             var viewModel = new AddTourViewModel(((MainViewModel)DataContext));
@@ -85,6 +85,6 @@ namespace TourPlanner.Views
         private void AddLog_Closed(object sender, EventArgs e)
         {
             this.IsEnabled = true;
-        }
+        }*/
     }
 }

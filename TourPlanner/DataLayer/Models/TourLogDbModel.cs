@@ -6,14 +6,24 @@ using System.Threading.Tasks;
 
 namespace TourPlanner.DataLayer.Models
 {
-    internal class TourLogDbModel
+    public class TourLogDbModel
     {
+        public TourLogDbModel(DateTime date, TimeSpan duration, float distance, string comment, int difficulty, int rating)
+        {
+            Id = Guid.NewGuid();
+            Date = date.ToFileTimeUtc();
+            Duration = duration;
+            Distance = distance;
+            Comment = comment;
+            Difficulty = difficulty;
+            Rating = rating;
+        }
         public TourLogDbModel()
         {
             Id = Guid.NewGuid();
         }
         public Guid Id { get; set; }
-        public DateTime Date { get; set; }
+        public long Date { get; set; }
         public TimeSpan Duration { get; set; }
         public float Distance { get; set; }
         public string Comment { get; set; }

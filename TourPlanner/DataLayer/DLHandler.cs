@@ -9,6 +9,7 @@ namespace TourPlanner.DataLayer
     public class DLHandler
     {
         private DbHandler _dbHandler;
+
         public DLHandler(DbHandler dbHandler)
         {
             _dbHandler = dbHandler;

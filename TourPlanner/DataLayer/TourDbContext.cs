@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace TourPlanner.DataLayer
 {
-    internal class TourDbContext : DbContext
+    public class TourDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
 

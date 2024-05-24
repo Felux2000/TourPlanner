@@ -9,10 +9,24 @@ using TourPlanner.Models;
 
 namespace TourPlanner.DataLayer.Models
 {
-    internal class TourDbModel
+    public class TourDbModel
     {
+        public TourDbModel(string name, string description, string from, string to, string transportType, float distance, float estimation, string image) 
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            Description = description;
+            From = from;
+            To = to;
+            TransportType = transportType;
+            Distance = distance;
+            Estimation = estimation;
+            Image = image;
+            this.Logs = new Collection<TourLogDbModel>();
+        }
         public TourDbModel() 
         {
+            Id = Guid.NewGuid();
             this.Logs = new Collection<TourLogDbModel>();
         }
 

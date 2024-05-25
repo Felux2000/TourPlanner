@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.DataLayer.Models;
+using TourPlanner.Models;
 
 namespace TourPlanner.DataLayer.Repositories
 {
@@ -28,6 +29,28 @@ namespace TourPlanner.DataLayer.Repositories
             context.Add(newLog);
             entity.Logs.Add(newLog);
             context.SaveChanges();
+        }
+
+        public void UpdateTourLog(TourLogDbModel log)
+        {
+            var entity = context.TourLogs.Find(log.Id);
+            if (entity == null)
+            {
+                throw new ArgumentOutOfRangeException("log", "No log found with that id to update!");
+            }
+
+            context.Entry(entity).CurrentValues.SetValues(log);
+            context.SaveChanges();
+        }
+
+        public void RemoveTour(TourLogDbModel log)
+        {
+            var c = context.TourLogs.Find(log.Id);
+            if (c != null)
+            {
+                context.TourLogs.Remove(c);
+                context.SaveChanges();
+            }
         }
     }
 }

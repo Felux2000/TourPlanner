@@ -29,29 +29,26 @@ namespace TourPlanner.DataLayer.Repositories
         {
             return context.Tours.Include(p=> p.Logs).ToList();
         }
+        public void UpdateTour(TourDbModel tour)
+        {
+            var entity = context.Tours.Find(tour.Id);
+            if (entity == null)
+            {
+                throw new ArgumentOutOfRangeException("tour", "No tour found with that id to update!");
+            }
+
+            context.Entry(entity).CurrentValues.SetValues(tour);
+            context.SaveChanges();
+        }
 
         public void RemoveTour(TourDbModel tour)
         {
-            Guid id = tour.Id;
-            var c = context.Tours.Find(id);
+            var c = context.Tours.Find(tour.Id);
             if (c!=null)
             {
                 context.Tours.Remove(c);
                 context.SaveChanges();
             }
         }
-
-        public void UpdateTour(TourDbModel tour)
-        {
-            var entity = context.Tours.Find(tour.Id);
-            if (entity == null)
-            {
-                throw new ArgumentOutOfRangeException("company", "No company found with that id to update!");
-            }
-
-            context.Entry(entity.Logs).CurrentValues.SetValues(tour);
-            context.SaveChanges();
-        }
-
     }
 }

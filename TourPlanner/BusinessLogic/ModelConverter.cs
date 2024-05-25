@@ -11,7 +11,7 @@ namespace TourPlanner.BusinessLogic
 {
     public class ModelConverter
     {
-        public List<Tour> ConvertTourDbModelToTour(ICollection<TourDbModel> dbTours)
+        public List<Tour> ConvertListTourDbModelToTour(ICollection<TourDbModel> dbTours)
         {
             List<Tour> convertedTourList = new List<Tour>();
             List<TourDbModel> tourDbModelList = dbTours.ToList();
@@ -47,6 +47,24 @@ namespace TourPlanner.BusinessLogic
                 convertedTourList.Add(newTour);
             }
             return convertedTourList;
+        }
+
+        public TourDbModel ConvertSingleTourToDbModelTour(Tour tour)
+        {
+            TourDbModel convertedTour = new TourDbModel(tour.Name, tour.Description, tour.From, tour.To, tour.TransportType, tour.Distance, tour.Estimation, tour.Image);
+            foreach(TourLog log in tour.LogList) 
+            {
+                TourLogDbModel convertedLog = new TourLogDbModel(
+                    log.Date,
+                    log.Duration,
+                    log.Distance,
+                    log.Comment,
+                    log.Difficulty,
+                    log.Rating
+                    );
+                convertedTour.Logs.Add(convertedLog);
+            }
+            return convertedTour;
         }
     }
 }

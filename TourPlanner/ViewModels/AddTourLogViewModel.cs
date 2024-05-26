@@ -188,8 +188,8 @@ namespace TourPlanner.ViewModels
 
         public void CreateTourLog()
         {
-            TourLog newTourLog = new TourLog(CreateLogDate, CreateLogDuration, (float)CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate);
-            _mainViewModel.AddTourLog(newTourLog);
+            //TourLog newTourLog = new TourLog(CreateLogDate, CreateLogDuration, (float)CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate);
+            //_mainViewModel.AddTourLog(newTourLog);
             OnRequestClose(this, new EventArgs());
         }
         public void CloseWindow()

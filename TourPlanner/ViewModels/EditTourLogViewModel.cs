@@ -196,8 +196,8 @@ namespace TourPlanner.ViewModels
 
         public void SaveChangedTourLog()
         {
-            TourLog editedTourLog = new TourLog(EditLogDate, EditLogDuration, (float)EditLogDist, EditLogComment, EditLogDiff, EditLogRate);
-            _mainViewModel.EditTourLog(editedTourLog);
+           // TourLog editedTourLog = new TourLog(EditLogDate, EditLogDuration, (float)EditLogDist, EditLogComment, EditLogDiff, EditLogRate);
+            //_mainViewModel.EditTourLog(editedTourLog);
             OnRequestClose(this, new EventArgs());
         }
         public void CloseWindow()

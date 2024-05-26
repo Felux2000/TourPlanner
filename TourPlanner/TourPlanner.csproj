@@ -9,7 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Resources\bycicle.png" />
+		<None Remove="Resources\car.png" />
 		<None Remove="Resources\exampleImage.png" />
+		<None Remove="Resources\walk.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -24,7 +27,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Resource Include="Resources\bycicle.png" />
+		<Resource Include="Resources\car.png" />
 		<Resource Include="Resources\exampleImage.png" />
+		<Resource Include="Resources\walk.png" />
 	</ItemGroup>
 
 	<ItemGroup>

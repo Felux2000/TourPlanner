@@ -4,8 +4,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlanner.UserControls"
+             xmlns:converters="clr-namespace:TourPlanner.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
+        <converters:LinearFunctionConverter x:Key="CbHeightToItems" A="1" B="-15"/>
+        <converters:LinearFunctionConverter x:Key="HeightToFontSize" A="0.5" B="-12"/>
+    </UserControl.Resources>
     <Grid Margin="2,2,2,2">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="30"/>
@@ -26,65 +32,84 @@
                     <RowDefinition Height="1*" MinHeight="30"/>
                     <RowDefinition Height="2*" MinHeight="30"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" x:Name="tbAddTourName" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditTourName}"/>
+                <TextBox Grid.Row="0" x:Name="tbEditTourName" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditTourName}"/>
                 <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="Name" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourName}" Value="">
+                                <DataTrigger Binding="{Binding Text, ElementName=tbEditTourName}" Value="">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="1" x:Name="tbAddTourTo" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditTourTo}" IsReadOnly="True" IsEnabled="False"/>
+                <TextBox Grid.Row="1" x:Name="tbEditTourTo" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditTourTo}" IsReadOnly="True" IsEnabled="False"/>
                 <TextBlock Grid.Row="1" IsHitTestVisible="False" Text="Destination" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourTo}" Value="">
+                                <DataTrigger Binding="{Binding Text, ElementName=tbEditTourTo}" Value="">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="2" x:Name="tbAddTourFrom" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditTourFrom}" IsReadOnly="True" IsEnabled="False"/>
+                <TextBox Grid.Row="2" x:Name="tbEditTourFrom" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditTourFrom}" IsReadOnly="True" IsEnabled="False"/>
                 <TextBlock Grid.Row="2" IsHitTestVisible="False" Text="Start" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourFrom}" Value="">
+                                <DataTrigger Binding="{Binding Text, ElementName=tbEditTourFrom}" Value="">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="3" x:Name="tbAddTourTransportType" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding EditTourTransportType}"/>
+                <ComboBox Grid.Row="3" x:Name="cbEditTourTransportType" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" SelectedValuePath="Tag" SelectedValue="{Binding EditTourTransportType}">
+                    <ComboBoxItem Tag="2">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Height="{Binding ActualHeight, ElementName=cbEditTourTransportType , Converter={StaticResource CbHeightToItems}}" Stretch="Fill" VerticalAlignment="Center" HorizontalAlignment="Center" Source="/Resources/walk.png" />
+                            <TextBlock Padding="20,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{Binding ActualHeight, ElementName=cbEditTourTransportType , Converter={StaticResource HeightToFontSize}}">Walk</TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="1">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Height="{Binding ActualHeight, ElementName=cbEditTourTransportType , Converter={StaticResource CbHeightToItems}}" Stretch="Fill" VerticalAlignment="Center" HorizontalAlignment="Center" Source="/Resources/bycicle.png" />
+                            <TextBlock Padding="20,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{Binding ActualHeight, ElementName=cbEditTourTransportType , Converter={StaticResource HeightToFontSize}}">Bike</TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem Tag="0">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Height="{Binding ActualHeight, ElementName=cbEditTourTransportType , Converter={StaticResource CbHeightToItems}}" Stretch="Fill" VerticalAlignment="Center" HorizontalAlignment="Center" Source="/Resources/car.png" />
+                            <TextBlock Padding="20,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{Binding ActualHeight, ElementName=cbEditTourTransportType , Converter={StaticResource HeightToFontSize}}">Car</TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                </ComboBox>
                 <TextBlock Grid.Row="3" IsHitTestVisible="False" Text="Transport type" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourTransportType}" Value="">
+                                <DataTrigger Binding="{Binding Text, ElementName=cbEditTourTransportType}" Value="">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="4" x:Name="tbAddTourDescription" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4,2,0" Padding="3" Text="{Binding EditTourDescr}" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
-                <TextBlock Grid.Row="4" IsHitTestVisible="False" Text="Description" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                <TextBox Grid.Row="4" x:Name="tbEditTourDescription" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Margin="2,4,2,0" Padding="3" Text="{Binding EditTourDescr}" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+                <TextBlock Grid.Row="4" IsHitTestVisible="False" Text="Description" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7,8,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Text, ElementName=tbAddTourDescription}" Value="">
+                                <DataTrigger Binding="{Binding Text, ElementName=tbEditTourDescription}" Value="">
                                     <Setter Property="Visibility" Value="Visible"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -124,7 +149,8 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="1" Margin="4,2" Command="{Binding SaveChangedTourCommand}">Save</Button>
+            <Label Visibility="{Binding TourLoadSuccessful,Mode=OneWay, Converter={StaticResource InverseBoolToVisibility}}" Content="{Binding LoadingMessageText}"/>
+            <Button Grid.Column="1" Margin="4,2" Command="{Binding SaveChangedTourCommand}" IsEnabled="{Binding TourLoadSuccessful,Mode=OneWay}">Save</Button>
             <Button Grid.Column="2" Margin="4,2" Command="{Binding CloseEditTourWindow}">Cancle</Button>
         </Grid>
     </Grid>

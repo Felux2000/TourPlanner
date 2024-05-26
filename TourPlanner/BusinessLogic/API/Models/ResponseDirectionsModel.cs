@@ -16,6 +16,21 @@ namespace TourPlanner.BusinessLogic.API.Models
         {
             [JsonProperty("geometry")]
             public Geometry Geometry { get; set; }
+            [JsonProperty("properties")]
+            public Properties Properties { get; set; }
+        }
+
+        public class Properties
+        {
+            [JsonProperty("summary")]
+            public Summary Summary { get; set; }
+        }
+        public class Summary
+        {
+            [JsonProperty("distance")]
+            public double Distance { get; set; }
+            [JsonProperty("duration")]
+            public double Duration { get; set; }
         }
 
         public class Geometry

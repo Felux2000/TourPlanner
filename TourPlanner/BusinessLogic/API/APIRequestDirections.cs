@@ -13,7 +13,7 @@ namespace TourPlanner.BusinessLogic.API
         private static HttpClient client;
         private static readonly string apiKey = "5b3ce3597851110001cf62484cb26a25beb74f8793aa63cbf86f442c";
         private static readonly string geoCodeBaseUrl = "https://api.openrouteservice.org/geocode/search";
-        private static readonly string directionsBaseUrl = "https://api.openrouteservice.org/v2/directions/driving-car";
+        private static readonly string directionsBaseUrl = "https://api.openrouteservice.org/v2/directions/";
 
         static APIRequestDirections()
         {
@@ -29,11 +29,13 @@ namespace TourPlanner.BusinessLogic.API
                 // Geocode location B
                 var coordinatesB = await GeocodeAddress(geoCodeBaseUrl, apiKey, address2);
 
+                var transportType = TransportDic.ContainsKey(transportation) ? TransportDic[transportation] : TransportDic["0"];
+
                 if (coordinatesA != null && coordinatesB != null)
                 {
                     string formattedStart = $"{coordinatesA[0].ToString(CultureInfo.InvariantCulture)},{coordinatesA[1].ToString(CultureInfo.InvariantCulture)}";
                     string formattedEnd = $"{coordinatesB[0].ToString(CultureInfo.InvariantCulture)},{coordinatesB[1].ToString(CultureInfo.InvariantCulture)}";
-                    string requestUrl = $"{directionsBaseUrl}?api_key={apiKey}&start={formattedStart}&end={formattedEnd}";
+                    string requestUrl = $"{directionsBaseUrl}{transportType}?api_key={apiKey}&start={formattedStart}&end={formattedEnd}";
                     Console.WriteLine($"Requesting directions with URL: {requestUrl}");
                     HttpResponseMessage response = await client.GetAsync(requestUrl);
                     response.EnsureSuccessStatusCode();
@@ -77,5 +79,13 @@ namespace TourPlanner.BusinessLogic.API
                 return null;
             }
         }
+
+        static Dictionary<string, string> TransportDic = new()
+        {
+            {"2", "foot-walking"},
+            {"1", "cycling-regular"},
+            {"0", "driving-car"}
+        };
+
     }
 }

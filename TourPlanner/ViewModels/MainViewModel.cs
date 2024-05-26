@@ -105,9 +105,9 @@ namespace TourPlanner.ViewModels
         public void LoadTours()
         {
             TourList = new ObservableCollection<Tour>();
-            TourList.Add(new Tour("Longus Tourus", new List<TourLog> { new(DateTime.Today, TimeSpan.FromHours(2.5), 215.7f, "Long and dangerous", 8, 3) }, "/Resources/exampleImage.png"));
+            /*TourList.Add(new Tour("Longus Tourus", new List<TourLog> { new(DateTime.Today, TimeSpan.FromHours(2.5), 215.7f, "Long and dangerous", 8, 3) }, "/Resources/exampleImage.png"));
             TourList.Add(new Tour("Carus wroomus", new List<TourLog> { new(DateTime.Today.AddMonths(-1), TimeSpan.FromHours(1.7), 135.9f, "Car go wroom", 4, 6) }, "/Resources/exampleImage.png"));
-            TourList.Add(new Tour("Car", "Good for cars to loose the zoomies", "Top of car tree", "food bowl", "car", 2, 0.1f, "/Resources/exampleImage.png"));
+            TourList.Add(new Tour("Car", "Good for cars to loose the zoomies", "Top of car tree", "food bowl", "car", 2, 0.1f, "/Resources/exampleImage.png"));*/
         }
 
         public void DeleteTour()

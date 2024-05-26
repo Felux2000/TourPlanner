@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TourPlanner.DataLayer;
 using Microsoft.Extensions.Configuration;
 using TourPlanner.BusinessLogic;
+using TourPlanner.BusinessLogic.API;
 
 namespace TourPlanner
 {
@@ -24,6 +25,7 @@ namespace TourPlanner
             services.AddSingleton<DbHandler>();
             services.AddSingleton<DLHandler>();
 
+            services.AddSingleton<APIRequestDirections>();
             services.AddSingleton<BLHandler>();
 
             services.AddSingleton<MainViewModel>();

@@ -24,5 +24,10 @@ namespace TourPlanner.UserControls
         {
             InitializeComponent();
         }
+
+        private void cbAddTourTransportType_SelectionChanged()
+        {
+
+        }
     }
 }

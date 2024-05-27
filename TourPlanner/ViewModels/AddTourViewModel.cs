@@ -26,6 +26,7 @@ namespace TourPlanner.ViewModels
             CreateTourCommand = new RelayCommand(o => CreateTour());
             CloseCreateTourWindow = new RelayCommand(o => CloseWindow());
             TourLoadSuccessful = false;
+            FormActive = true;
             loadingMessageText = "Fill out the details to continue...";
         }
 
@@ -43,6 +44,7 @@ namespace TourPlanner.ViewModels
         private float createTourDist { get; set; }
         private float createTourEst { get; set; }
         private bool tourLoadSuccessful { get; set; }
+        private bool formActive { get; set; }
         private string loadingMessageText { get; set; }
         private Task<bool> tourLoadTask;
         private ResponseDirectionsModel lastResponse;
@@ -57,7 +59,6 @@ namespace TourPlanner.ViewModels
             set
             {
                 createTourName = value;
-                StartTourLoad();
                 OnPropertyChanged();
             }
         }
@@ -155,6 +156,19 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
+        public bool FormActive
+        {
+            get
+            {
+                return formActive;
+            }
+
+            set
+            {
+                formActive = value;
+                OnPropertyChanged();
+            }
+        }
         public string LoadingMessageText
         {
             get
@@ -171,11 +185,13 @@ namespace TourPlanner.ViewModels
 
         public void CreateTour()
         {
+            FormActive = false;
             Task.Delay(1200).ContinueWith(async _ =>
             {
                 if (await tourLoadTask)
                 {
-                    if (!_blHandler.SaveTourDb(new Tour(CreateTourName, CreateTourDescr, CreateTourFrom, CreateTourTo, CreateTourTransportType, createTourDist, createTourEst,JsonConvert.SerializeObject(lastResponse))))
+                    Tour newTour = new Tour(CreateTourName, CreateTourDescr, CreateTourFrom, CreateTourTo, CreateTourTransportType, createTourDist, createTourEst, JsonConvert.SerializeObject(lastResponse));
+                    if (!_blHandler.SaveTourDb(newTour))
                     {
                         LoadingMessageText = "Tour could not be saved!";
                         MessageBox.Show("Unable to save tour, try again.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -186,6 +202,7 @@ namespace TourPlanner.ViewModels
                         OnRequestClose(this, new EventArgs());
                     }
                 }
+                FormActive = true;
             });
         }
 

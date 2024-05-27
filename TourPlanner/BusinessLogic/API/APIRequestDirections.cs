@@ -29,7 +29,7 @@ namespace TourPlanner.BusinessLogic.API
                 // Geocode location B
                 var coordinatesB = await GeocodeAddress(geoCodeBaseUrl, apiKey, address2);
 
-                var transportType = TransportDic.ContainsKey(transportation) ? TransportDic[transportation] : TransportDic["0"];
+                var transportType = TransportDic.ContainsKey(transportation) ? TransportDic[transportation] : TransportDic["Car"];
 
                 if (coordinatesA != null && coordinatesB != null)
                 {
@@ -82,9 +82,9 @@ namespace TourPlanner.BusinessLogic.API
 
         static Dictionary<string, string> TransportDic = new()
         {
-            {"2", "foot-walking"},
-            {"1", "cycling-regular"},
-            {"0", "driving-car"}
+            {"Walk", "foot-walking"},
+            {"Bike", "cycling-regular"},
+            {"Car", "driving-car"}
         };
 
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,10 +9,10 @@ namespace TourPlanner.DataLayer.Models
 {
     public class TourLogDbModel
     {
-        public TourLogDbModel(DateTime date, TimeSpan duration, float distance, string comment, int difficulty, int rating)
+        public TourLogDbModel(Guid id, DateTime date, TimeSpan duration, float distance, string comment, int difficulty, int rating)
         {
-            Id = Guid.NewGuid();
-            Date = date.ToFileTimeUtc();
+            Id = id;
+            Date = date.ToUniversalTime();
             Duration = duration;
             Distance = distance;
             Comment = comment;
@@ -22,12 +23,18 @@ namespace TourPlanner.DataLayer.Models
         {
             Id = Guid.NewGuid();
         }
+        [Required]
         public Guid Id { get; set; }
-        public long Date { get; set; }
+        [Required]
+        public DateTimeOffset Date { get; set; }
+        [Required]
         public TimeSpan Duration { get; set; }
+        [Required]
         public float Distance { get; set; }
         public string Comment { get; set; }
+        [Required]
         public int Difficulty { get; set; }
+        [Required]
         public int Rating { get; set; }
     }
 }

@@ -20,5 +20,25 @@ namespace TourPlanner.DataLayer
         {
             return _dbHandler.AddTour(newTour);
         }
+
+        public bool UpdateTourInDb(TourDbModel updatedTour)
+        {
+            return _dbHandler.UpdateTour(updatedTour);
+        }
+
+        public bool UpdateTourLogInDb(TourLogDbModel updatedLog)
+        {
+            return _dbHandler.UpdateTourLog(updatedLog);
+        }
+
+        public ICollection<TourDbModel> LoadToursFromDb()
+        {
+            return _dbHandler.GetAllTours();
+        }
+
+        public bool SaveTourLogToDb(TourDbModel relatedTour, TourLogDbModel newTourLog)
+        {
+            return _dbHandler.AddTourLog(relatedTour, newTourLog);
+        }
     }
 }

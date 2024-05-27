@@ -1,11 +1,14 @@
 ﻿using Azure;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TourPlanner.BusinessLogic;
 using TourPlanner.BusinessLogic.API.Models;
@@ -19,15 +22,14 @@ namespace TourPlanner.ViewModels
         public EditTourViewModel(BLHandler blHandler, MainViewModel mainViewModel)
         {
             _blHandler = blHandler;
-            _mainViewModel = mainViewModel;
             _tourToEdit = mainViewModel.SelectedTour;
             SaveChangedTourCommand = new RelayCommand(o => SaveChangedTour());
             CloseEditTourWindow = new RelayCommand(o => CloseWindow());
             LoadTourInformation();
+            FormActive = true;
         }
 
         private BLHandler _blHandler;
-        private MainViewModel _mainViewModel;
         private Tour _tourToEdit;
 
         public event EventHandler OnRequestClose;
@@ -40,12 +42,14 @@ namespace TourPlanner.ViewModels
         private string editTourFrom { get; set; }
         private string editTourTo { get; set; }
         private string editTourTransportType { get; set; }
-        private string editTourDist { get; set; }
-        private string editTourEst { get; set; }
+        private float editTourDist { get; set; }
+        private float editTourEst { get; set; }
         public string editTourImage { get; set; }
         private bool tourLoadSuccessful { get; set; }
+        private bool formActive { get; set; }
         private string loadingMessageText { get; set; }
         private Task<bool> tourLoadTask;
+        private ResponseDirectionsModel lastResponse;
 
         public string EditTourName
         {
@@ -57,6 +61,7 @@ namespace TourPlanner.ViewModels
             set
             {
                 editTourName = value;
+                StartTourLoad();
                 OnPropertyChanged();
             }
         }
@@ -109,6 +114,7 @@ namespace TourPlanner.ViewModels
             set
             {
                 editTourTransportType = value;
+                StartTourLoad();
                 OnPropertyChanged();
             }
         }
@@ -116,12 +122,12 @@ namespace TourPlanner.ViewModels
         {
             get
             {
-                return editTourDist;
+                return $"{editTourDist} km";
             }
 
             set
             {
-                editTourDist = value;
+                editTourDist = (float)Convert.ToDouble(value);
                 OnPropertyChanged();
             }
         }
@@ -129,12 +135,12 @@ namespace TourPlanner.ViewModels
         {
             get
             {
-                return editTourEst;
+                return $"{TimeSpan.FromSeconds(editTourEst).ToString(@"hh\:mm")} h";
             }
 
             set
             {
-                editTourEst = value;
+                editTourEst = (float)Convert.ToDouble(value);
                 OnPropertyChanged();
             }
         }
@@ -164,6 +170,19 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
+        public bool FormActive
+        {
+            get
+            {
+                return formActive;
+            }
+
+            set
+            {
+                formActive = value;
+                OnPropertyChanged();
+            }
+        }
         public string LoadingMessageText
         {
             get
@@ -185,26 +204,37 @@ namespace TourPlanner.ViewModels
             EditTourFrom = _tourToEdit.From;
             EditTourTo = _tourToEdit.To;
             EditTourTransportType = _tourToEdit.TransportType;
-            EditTourDist = $"{Math.Round(_tourToEdit.Distance / 1000, 2)} km";
-            EditTourEst = $"{TimeSpan.FromSeconds(_tourToEdit.Estimation).ToString(@"hh\:mm")} h";
-            //EditTourImage = _tourToEdit.Image;
-        }
-
-        public void SaveChangedTour()
-        {
-            Task.Delay(1200).ContinueWith(async _ =>
-            {
-                if (await tourLoadTask)
-                {
-                    //save in database
-                    OnRequestClose(this, new EventArgs());
-                }
-            });
+            EditTourDist = $"{Math.Round(_tourToEdit.Distance / 1000, 2)}";
+            EditTourEst = $"{_tourToEdit.Estimation}";
+            StartTourLoad();
         }
 
         public void CloseWindow()
         {
             OnRequestClose(this, new EventArgs());
+        }
+
+        public void SaveChangedTour()
+        {
+            FormActive = false;
+            Task.Delay(1200).ContinueWith(async _ =>
+            {
+                if (await tourLoadTask)
+                {
+                    UpdateTourInformation();
+                    if (!_blHandler.UpdateTourDb(_tourToEdit))
+                    {
+                        LoadingMessageText = "Tour could not be saved!";
+                        MessageBox.Show("Unable to save tour, try again.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        TourLoadSuccessful = false;
+                    }
+                    else
+                    {
+                        OnRequestClose(this, new EventArgs());
+                    }
+                }
+                FormActive = true;
+            });
         }
 
         private bool ValidForm()
@@ -228,26 +258,38 @@ namespace TourPlanner.ViewModels
             }
         }
 
+        private void UpdateTourInformation()
+        {
+            _tourToEdit.Name = EditTourName;
+            _tourToEdit.Description = EditTourDescr;
+            _tourToEdit.From = EditTourFrom;
+            _tourToEdit.To = EditTourTo;
+            _tourToEdit.TransportType = EditTourTransportType;
+            _tourToEdit.Distance = editTourDist;
+            _tourToEdit.Estimation = editTourEst;
+            _tourToEdit.MapJson = JsonConvert.SerializeObject(lastResponse);
+        }
+
         private async Task<bool> LoadTOur()
         {
             LoadingMessageText = "Fill out the details to continue...";
             if (ValidForm())
             {
-                var apiCall = _blHandler.ApiHandler.GetDirections(EditTourFrom, EditTourTo, EditTourTransportType);
+                var apiCall = _blHandler.GetTourDetails(EditTourFrom, EditTourTo, EditTourTransportType);
                 LoadingMessageText = "Tour is loading...";
 
-                ResponseDirectionsModel response = await apiCall;
-                if (response != null)
+                lastResponse = await apiCall;
+                if (lastResponse != null)
                 {
-                    EditTourDist = $"{Math.Round(response.Features[0].Properties.Summary.Distance / 1000, 2)} km";
-                    EditTourEst = $"{TimeSpan.FromSeconds(response.Features[0].Properties.Summary.Duration).ToString(@"hh\:mm")} h";
+                    EditTourDist = $"{Math.Round(lastResponse.Features[0].Properties.Summary.Distance / 1000, 2)}";
+                    EditTourEst = $"{lastResponse.Features[0].Properties.Summary.Duration}";
                     TourLoadSuccessful = true;
                     return true;
                 }
                 else
                 {
-                    EditTourDist = $"0 km";
-                    EditTourEst = $"{TimeSpan.FromSeconds(0).ToString(@"hh\:mm")} h";
+                    EditTourDist = $"0";
+                    EditTourEst = $"0";
                     LoadingMessageText = "Invalid tour details...";
                     TourLoadSuccessful = false;
                     return false;
@@ -255,8 +297,8 @@ namespace TourPlanner.ViewModels
             }
             else
             {
-                EditTourDist = $"0 km";
-                EditTourEst = $"{TimeSpan.FromSeconds(0).ToString(@"hh\:mm")} h";
+                EditTourDist = $"0";
+                EditTourEst = $"0";
                 TourLoadSuccessful = false;
                 return false;
             }

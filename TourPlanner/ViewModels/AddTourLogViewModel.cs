@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using TourPlanner.BusinessLogic;
@@ -18,7 +20,7 @@ namespace TourPlanner.ViewModels
         public AddTourLogViewModel(BLHandler blHandler, MainViewModel mainViewModel)
         {
             _blHandler = blHandler;
-            _mainViewModel = mainViewModel;
+            _tourToEdit = mainViewModel.SelectedTour;
             CreateLogDate = DateTime.Now;
             createLogDiff = 1;
             createLogRate = 1;
@@ -30,10 +32,12 @@ namespace TourPlanner.ViewModels
             diffColor = new();
             ChangeRateColor();
             ChangeDiffColor();
+            loadingMessageText = "Fill out the details to continue...";
+            FormActive = true;
         }
 
         private BLHandler _blHandler;
-        private MainViewModel _mainViewModel;
+        private Tour _tourToEdit;
         public event EventHandler OnRequestClose;
         public ICommand CreateTourLogCommand { get; set; }
         public ICommand CloseCreateTourLogWindow { get; set; }
@@ -45,6 +49,9 @@ namespace TourPlanner.ViewModels
         private int createLogRate { get; set; }
         private SolidColorBrush rateColor { get; set; }
         private SolidColorBrush diffColor { get; set; }
+        private bool tourLogValid { get; set; }
+        private bool formActive { get; set; }
+        private string loadingMessageText { get; set; }
 
         public DateTime CreateLogDate
         {
@@ -56,6 +63,7 @@ namespace TourPlanner.ViewModels
             set
             {
                 createLogDate = value;
+                ValidateForm();
                 OnPropertyChanged();
             }
         }
@@ -69,6 +77,7 @@ namespace TourPlanner.ViewModels
             set
             {
                 createLogDuration = value;
+                ValidateForm();
                 OnPropertyChanged();
             }
         }
@@ -82,6 +91,7 @@ namespace TourPlanner.ViewModels
             set
             {
                 createLogDist = value;
+                ValidateForm();
                 OnPropertyChanged();
             }
         }
@@ -154,6 +164,45 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
+        public bool TourLogValid
+        {
+            get
+            {
+                return tourLogValid;
+            }
+
+            set
+            {
+                tourLogValid = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool FormActive
+        {
+            get
+            {
+                return formActive;
+            }
+
+            set
+            {
+                formActive = value;
+                OnPropertyChanged();
+            }
+        }
+        public string LoadingMessageText
+        {
+            get
+            {
+                return loadingMessageText;
+            }
+
+            set
+            {
+                loadingMessageText = value;
+                OnPropertyChanged();
+            }
+        }
 
         private void ChangeRateColor()
         {
@@ -188,10 +237,48 @@ namespace TourPlanner.ViewModels
 
         public void CreateTourLog()
         {
-            //TourLog newTourLog = new TourLog(CreateLogDate, CreateLogDuration, (float)CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate);
-            //_mainViewModel.AddTourLog(newTourLog);
-            OnRequestClose(this, new EventArgs());
+            if (ValidForm())
+            {
+                FormActive = false;
+                if (!_blHandler.SaveTourLogDb(_tourToEdit, new TourLog(CreateLogDate, CreateLogDuration, (float)CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate)))
+                {
+                    LoadingMessageText = "Log could not be saved!";
+                    MessageBox.Show("Unable to save log, try again.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    TourLogValid = false;
+                }
+                else
+                {
+                    OnRequestClose(this, new EventArgs());
+                }
+            }
+            FormActive = true;
         }
+
+        private bool ValidForm()
+        {
+            if (CreateLogDate == null || CreateLogDate > DateTime.Now)
+                return false;
+            if (CreateLogDuration == null || CreateLogDuration <= TimeSpan.Zero)
+                return false;
+            if (CreateLogDist == null || CreateLogDist <= 0)
+                return false;
+            if ((CreateLogDist > 0 && CreateLogDuration <= TimeSpan.Zero) || (CreateLogDist <= 0 && CreateLogDuration > TimeSpan.Zero))
+                return false;
+            return true;
+        }
+
+        private void ValidateForm()
+        {
+            TourLogValid = false;
+            if (ValidForm())
+            {
+                LoadingMessageText = "Fill out the details to continue...";
+                TourLogValid = true;
+            }
+            else
+                LoadingMessageText = "Invalid tour records...";
+        }
+
         public void CloseWindow()
         {
             OnRequestClose(this, new EventArgs());

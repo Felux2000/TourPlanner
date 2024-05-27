@@ -14,7 +14,7 @@ namespace TourPlanner.DataLayer.Repositories
     {
         private readonly TourDbContext context;
         public TourRepository(TourDbContext context)
-        { 
+        {
             this.context = context;
         }
 
@@ -26,7 +26,7 @@ namespace TourPlanner.DataLayer.Repositories
 
         public ICollection<TourDbModel> GetAllTours()
         {
-            return context.Tours.Include(p=> p.Logs).ToList();
+            return context.Tours.Include(p => p.Logs).OrderBy(p => p.Name).ToList();
         }
         public void UpdateTour(TourDbModel tour)
         {
@@ -43,7 +43,7 @@ namespace TourPlanner.DataLayer.Repositories
         public void RemoveTour(TourDbModel tour)
         {
             var c = context.Tours.Find(tour.Id);
-            if (c!=null)
+            if (c != null)
             {
                 context.Tours.Remove(c);
                 context.SaveChanges();

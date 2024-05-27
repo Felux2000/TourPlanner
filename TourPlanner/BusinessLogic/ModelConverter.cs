@@ -15,7 +15,7 @@ namespace TourPlanner.BusinessLogic
         {
             List<Tour> convertedTourList = new List<Tour>();
             List<TourDbModel> tourDbModelList = dbTours.ToList();
-            foreach(TourDbModel dbTour in tourDbModelList)
+            foreach (TourDbModel dbTour in tourDbModelList)
             {
                 Tour newTour = new Tour(
                     dbTour.Id,
@@ -28,14 +28,14 @@ namespace TourPlanner.BusinessLogic
                     dbTour.Estimation,
                     dbTour.MapJson
                     );
-                
+
                 List<TourLog> convertedLogList = new List<TourLog>();
                 List<TourLogDbModel> logDbList = dbTour.Logs.ToList();
-                foreach(TourLogDbModel dbLog in logDbList)
+                foreach (TourLogDbModel dbLog in logDbList)
                 {
                     convertedLogList.Add(new TourLog(
                         dbLog.Id,
-                        new DateTime(dbLog.Date),
+                        dbLog.Date.UtcDateTime,
                         dbLog.Duration,
                         dbLog.Distance,
                         dbLog.Comment,
@@ -49,18 +49,19 @@ namespace TourPlanner.BusinessLogic
             return convertedTourList;
         }
 
-        public static TourDbModel ConvertOnlyTourToDbModelTour(Tour tour)
+        public static TourLogDbModel ConvertTourLogToDbModelTour(TourLog tourLog)
         {
-            TourDbModel convertedTour = new TourDbModel(tour.Name, tour.Description, tour.From, tour.To, tour.TransportType, tour.Distance, tour.Estimation, tour.MapJson);
-            return convertedTour;
+            TourLogDbModel convertedTourLog = new TourLogDbModel(tourLog.Id, tourLog.Date, tourLog.Duration, tourLog.Distance, tourLog.Comment, tourLog.Difficulty, tourLog.Rating);
+            return convertedTourLog;
         }
 
         public static TourDbModel ConvertSingleTourToDbModelTour(Tour tour)
         {
-            TourDbModel convertedTour = new TourDbModel(tour.Name, tour.Description, tour.From, tour.To, tour.TransportType, tour.Distance, tour.Estimation, tour.MapJson);
-            foreach(TourLog log in tour.LogList) 
+            TourDbModel convertedTour = new TourDbModel(tour.Id, tour.Name, tour.Description, tour.From, tour.To, tour.TransportType, tour.Distance, tour.Estimation, tour.MapJson);
+            foreach (TourLog log in tour.LogList)
             {
                 TourLogDbModel convertedLog = new TourLogDbModel(
+                    log.Id,
                     log.Date,
                     log.Duration,
                     log.Distance,

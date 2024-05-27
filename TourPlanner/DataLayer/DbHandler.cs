@@ -23,15 +23,16 @@ namespace TourPlanner.DataLayer
         public DbHandler(LogInterceptor logInterceptor, TourDbContext dbContext, TourRepository tourRepository, TourLogRepository tourLogRepository)
         {
             _dbContext = dbContext;
-            //try
-            //{ 
-            _dbContext.Database.EnsureDeleted();
-            _dbContext.Database.EnsureCreated();
-
-            //Following code if for testing purposes only
             _tourRepository = tourRepository;
             _tourLogRepository = tourLogRepository;
-            TourLogDbModel log1 = new TourLogDbModel(DateTime.Now, new TimeSpan(12, 23, 46), 12, "The string representations of TimeSpan values are produced by calls to the overloads of the TimeSpan.ToString method, as well as by methods that support composite formatting, such as String.Format. For more information, see Formatting Types and Composite Formatting. The following example illustrates the use of standard format", 5, 10);
+            //try
+            //{ 
+
+        //_dbContext.Database.EnsureDeleted();
+        //_dbContext.Database.EnsureCreated();
+
+            //Following code if for testing purposes only
+         /* TourLogDbModel log1 = new TourLogDbModel(DateTime.Now, new TimeSpan(12, 23, 46), 12, "The string representations of TimeSpan values are produced by calls to the overloads of the TimeSpan.ToString method, as well as by methods that support composite formatting, such as String.Format. For more information, see Formatting Types and Composite Formatting. The following example illustrates the use of standard format", 5, 10);
             TourLogDbModel log2 = new TourLogDbModel(DateTime.Now, new TimeSpan(12, 23, 46), 12, "comment of the second log", 5, 10);
             TourDbModel tour = new TourDbModel("Car", "Good for cars to loose the zoomies", "Top of car tree", "food bowl", "car", 2, 0.1f, "/Resources/exampleImage.png");
             tour.Logs.Add(log1);
@@ -57,6 +58,60 @@ namespace TourPlanner.DataLayer
             //try
             {
                 _tourRepository.AddTour(newTour);
+                return true;
+            }
+            /*catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }*/
+        }
+
+        public bool UpdateTour(TourDbModel updatedTour)
+        {
+            //try
+            {
+                _tourRepository.UpdateTour(updatedTour);
+                return true;
+            }
+            /*catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }*/
+        }
+
+        public ICollection<TourDbModel> GetAllTours()
+        {
+            //try
+            {
+                return _tourRepository.GetAllTours();
+            }
+            /*catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }*/
+        }
+
+        public bool AddTourLog(TourDbModel relatedTour,TourLogDbModel newTourLog)
+        {
+            //try
+            {
+                _tourLogRepository.AddTourLogToTour(relatedTour,newTourLog);
+                return true;
+            }
+            /*catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }*/
+        }
+        public bool UpdateTourLog(TourLogDbModel updatedTourLog)
+        {
+            //try
+            {
+                _tourLogRepository.UpdateTourLog(updatedTourLog);
                 return true;
             }
             /*catch (Exception ex)

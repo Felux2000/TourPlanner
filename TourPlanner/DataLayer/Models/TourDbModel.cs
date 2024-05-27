@@ -12,10 +12,9 @@ namespace TourPlanner.DataLayer.Models
 {
     public class TourDbModel
     {
-        //NewTour
-        public TourDbModel(string name, string description, string from, string to, string transportType, float distance, float estimation, string mapJson) 
+        public TourDbModel(Guid id, string name, string description, string from, string to, string transportType, float distance, float estimation, string mapJson)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Name = name;
             Description = description;
             From = from;
@@ -27,10 +26,10 @@ namespace TourPlanner.DataLayer.Models
             Logs = new Collection<TourLogDbModel>();
         }
 
-        public TourDbModel() 
+        public TourDbModel()
         {
             Id = Guid.NewGuid();
-            this.Logs = new Collection<TourLogDbModel>();
+            Logs = new Collection<TourLogDbModel>();
         }
 
         [Required]
@@ -50,6 +49,6 @@ namespace TourPlanner.DataLayer.Models
         public float Estimation { get; set; }
         [Required]
         public string MapJson { get; set; }
-        public ICollection<TourLogDbModel> ?Logs { get; set; }
+        public ICollection<TourLogDbModel>? Logs { get; set; }
     }
 }

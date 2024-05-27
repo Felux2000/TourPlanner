@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,7 +28,27 @@ namespace TourPlanner.BusinessLogic
 
         public bool SaveTourDb(Tour newTour)
         {
-            return _dlHandler.SaveTourToDb(ModelConverter.ConvertOnlyTourToDbModelTour(newTour));
+            return _dlHandler.SaveTourToDb(ModelConverter.ConvertSingleTourToDbModelTour(newTour));
+        }
+
+        public bool SaveTourLogDb(Tour relatedTour, TourLog newTourLog)
+        {
+            return _dlHandler.SaveTourLogToDb(ModelConverter.ConvertSingleTourToDbModelTour(relatedTour), ModelConverter.ConvertTourLogToDbModelTour(newTourLog));
+        }
+
+        public bool UpdateTourDb(Tour updatedTour)
+        {
+            return _dlHandler.UpdateTourInDb(ModelConverter.ConvertSingleTourToDbModelTour(updatedTour));
+        }
+
+        public bool UpdateTourLogDb(TourLog updatedLog)
+        {
+            return _dlHandler.UpdateTourLogInDb(ModelConverter.ConvertTourLogToDbModelTour(updatedLog));
+        }
+
+        public List<Tour> LoadToursDb()
+        {
+            return ModelConverter.ConvertListTourDbModelToTour(_dlHandler.LoadToursFromDb());
         }
 
         public DLHandler DLHandler => _dlHandler;

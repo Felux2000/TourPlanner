@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using TourPlanner.BusinessLogic;
@@ -18,8 +20,7 @@ namespace TourPlanner.ViewModels
         public EditTourLogViewModel(BLHandler blHandler, MainViewModel mainViewModel)
         {
             _blHandler = blHandler;
-            _mainViewModel = mainViewModel;
-            logToEdit = mainViewModel.SelectedLog;
+            _logToEdit = mainViewModel.SelectedLog;
             EditTourLogCommand = new RelayCommand(o => SaveChangedTourLog());
             CloseEditTourLogWindow = new RelayCommand(o => CloseWindow());
             rateColor = new();
@@ -27,12 +28,12 @@ namespace TourPlanner.ViewModels
             ChangeDiffColor();
             ChangeRateColor();
             LoadLogInformation();
+            FormActive = true;
         }
 
         private BLHandler _blHandler;
-        private MainViewModel _mainViewModel;
         public event EventHandler OnRequestClose;
-        private TourLog logToEdit;
+        private TourLog _logToEdit;
         public ICommand EditTourLogCommand { get; set; }
         public ICommand CloseEditTourLogWindow { get; set; }
         private DateTime editLogDate { get; set; }
@@ -43,6 +44,9 @@ namespace TourPlanner.ViewModels
         private int editLogRate { get; set; }
         private SolidColorBrush rateColor { get; set; }
         private SolidColorBrush diffColor { get; set; }
+        private bool tourLogValid { get; set; }
+        private bool formActive { get; set; }
+        private string loadingMessageText { get; set; }
 
         public DateTime EditLogDate
         {
@@ -54,6 +58,7 @@ namespace TourPlanner.ViewModels
             set
             {
                 editLogDate = value;
+                ValidateForm();
                 OnPropertyChanged();
             }
         }
@@ -67,6 +72,7 @@ namespace TourPlanner.ViewModels
             set
             {
                 editLogDuration = value;
+                ValidateForm();
                 OnPropertyChanged();
             }
         }
@@ -80,6 +86,7 @@ namespace TourPlanner.ViewModels
             set
             {
                 editLogDist = value;
+                ValidateForm();
                 OnPropertyChanged();
             }
         }
@@ -152,6 +159,45 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged();
             }
         }
+        public bool TourLogValid
+        {
+            get
+            {
+                return tourLogValid;
+            }
+
+            set
+            {
+                tourLogValid = value;
+                OnPropertyChanged();
+            }
+        }
+        public bool FormActive
+        {
+            get
+            {
+                return formActive;
+            }
+
+            set
+            {
+                formActive = value;
+                OnPropertyChanged();
+            }
+        }
+        public string LoadingMessageText
+        {
+            get
+            {
+                return loadingMessageText;
+            }
+
+            set
+            {
+                loadingMessageText = value;
+                OnPropertyChanged();
+            }
+        }
 
         private void ChangeRateColor()
         {
@@ -186,20 +232,67 @@ namespace TourPlanner.ViewModels
 
         private void LoadLogInformation()
         {
-            EditLogDate = logToEdit.Date;
-            EditLogDuration = logToEdit.Duration;
-            EditLogDist = logToEdit.Distance;
-            EditLogComment = logToEdit.Comment;
-            EditLogDiff = logToEdit.Difficulty;
-            EditLogRate = logToEdit.Rating;
+            EditLogDate = _logToEdit.Date;
+            EditLogDuration = _logToEdit.Duration;
+            EditLogDist = _logToEdit.Distance;
+            EditLogComment = _logToEdit.Comment;
+            EditLogDiff = _logToEdit.Difficulty;
+            EditLogRate = _logToEdit.Rating;
         }
 
         public void SaveChangedTourLog()
         {
-           // TourLog editedTourLog = new TourLog(EditLogDate, EditLogDuration, (float)EditLogDist, EditLogComment, EditLogDiff, EditLogRate);
-            //_mainViewModel.EditTourLog(editedTourLog);
-            OnRequestClose(this, new EventArgs());
+            if (ValidForm())
+            {
+                FormActive = false;
+                UpdateTourLogInformation();
+                if (!_blHandler.UpdateTourLogDb(_logToEdit))
+                {
+                    LoadingMessageText = "Log could not be saved!";
+                    MessageBox.Show("Unable to save log, try again.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    TourLogValid = false;
+                }
+                else
+                {
+                    OnRequestClose(this, new EventArgs());
+                }
+            }
+            FormActive = true;
         }
+        private void UpdateTourLogInformation()
+        {
+            _logToEdit.Date = EditLogDate;
+            _logToEdit.Duration = EditLogDuration;
+            _logToEdit.Difficulty = EditLogDiff;
+            _logToEdit.Distance = (float)EditLogDist;
+            _logToEdit.Comment = EditLogComment;
+            _logToEdit.Rating = EditLogRate;
+        }
+        private bool ValidForm()
+        {
+            if (EditLogDate == null || EditLogDate > DateTime.Now)
+                return false;
+            if (EditLogDuration == null || EditLogDuration <= TimeSpan.Zero)
+                return false;
+            if (EditLogDist == null || EditLogDist <= 0)
+                return false;
+            if ((EditLogDist > 0 && EditLogDuration <= TimeSpan.Zero) || (EditLogDist <= 0 && EditLogDuration > TimeSpan.Zero))
+                return false;
+            return true;
+        }
+
+        private void ValidateForm()
+        {
+            TourLogValid = false;
+            if (ValidForm())
+            {
+                LoadingMessageText = "Fill out the details to continue...";
+                TourLogValid = true;
+            }
+            else
+                LoadingMessageText = "Invalid tour records...";
+        }
+
         public void CloseWindow()
         {
             OnRequestClose(this, new EventArgs());

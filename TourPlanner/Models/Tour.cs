@@ -18,16 +18,16 @@ namespace TourPlanner.Models
         public string TransportType { get; set; }
         public float Distance { get; set; }
         public float Estimation { get; set; }
-        public string Image { get; set; }
+        public string MapJson { get; set; }
         public ObservableCollection<TourLog> LogList { get; set; }
 
-        public Tour(string name, List<TourLog> logList, string image)
+        public Tour(string name, List<TourLog> logList, string mapJson)
         {
             Name = name;
             LogList = [.. logList];
-            Image = image;
+            MapJson = mapJson;
         }
-        public Tour(Guid id, string name, string description, string from, string to, string transportType, float distance, float estimation, string image)
+        public Tour(Guid id, string name, string description, string from, string to, string transportType, float distance, float estimation, string mapJson)
         {
             Id = id;
             Name = name;
@@ -37,8 +37,20 @@ namespace TourPlanner.Models
             TransportType = transportType;
             Distance = distance;
             Estimation = estimation;
-            Image = image;
+            MapJson = mapJson;
             LogList = new();
+        }
+        //NewTour
+        public Tour(string name, string description, string from, string to, string transportType, float distance, float estimation, string mapJson)
+        {
+            Name = name;
+            Description = description;
+            From = from;
+            To = to;
+            TransportType = transportType;
+            Distance = distance;
+            Estimation = estimation;
+            MapJson = mapJson;
         }
         public Tour()
         {

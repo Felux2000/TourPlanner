@@ -95,8 +95,8 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
             Paragraph tourImageParagraph = new Paragraph();
             tourImageParagraph.Add("Map Image:");
             document.Add(tourImageParagraph);
-            ImageData imageData = ImageDataFactory.Create(tour.Image);
-            document.Add(new Image(imageData));
+            //ImageData imageData = ImageDataFactory.Create(tour.Image);
+            //document.Add(new Image(imageData));
 
             document.Close();
 

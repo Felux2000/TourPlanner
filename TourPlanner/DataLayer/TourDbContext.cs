@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using TourPlanner.Models;
 using TourPlanner.DataLayer.Models;
 using System.Diagnostics;
+using System.IO;
 
 namespace TourPlanner.DataLayer
 {
@@ -20,9 +21,11 @@ namespace TourPlanner.DataLayer
         public DbSet<TourDbModel> Tours { get; set; }
         public DbSet<TourLogDbModel> TourLogs { get; set; }
 
-        public TourDbContext(IConfiguration configuration, LogInterceptor interceptor)
+        public TourDbContext(LogInterceptor interceptor)
         {
-            _configuration = configuration;
+            _configuration = new ConfigurationBuilder()
+                    .AddJsonFile($"{Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.FullName}\\DataLayer\\dbSettings.json", optional: false, reloadOnChange: true)
+                    .Build();
             _interceptor = interceptor;
         }
 

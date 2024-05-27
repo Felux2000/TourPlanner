@@ -187,7 +187,7 @@ namespace TourPlanner.ViewModels
             EditTourTransportType = _tourToEdit.TransportType;
             EditTourDist = $"{Math.Round(_tourToEdit.Distance / 1000, 2)} km";
             EditTourEst = $"{TimeSpan.FromSeconds(_tourToEdit.Estimation).ToString(@"hh\:mm")} h";
-            EditTourImage = _tourToEdit.Image;
+            //EditTourImage = _tourToEdit.Image;
         }
 
         public void SaveChangedTour()

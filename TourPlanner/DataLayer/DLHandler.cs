@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.DataLayer.Models;
 
 namespace TourPlanner.DataLayer
 {
@@ -13,6 +14,11 @@ namespace TourPlanner.DataLayer
         public DLHandler(DbHandler dbHandler)
         {
             _dbHandler = dbHandler;
+        }
+
+        public bool SaveTourToDb(TourDbModel newTour)
+        {
+            return _dbHandler.AddTour(newTour);
         }
     }
 }

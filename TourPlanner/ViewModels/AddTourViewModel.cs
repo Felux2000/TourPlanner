@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TourPlanner.BusinessLogic;
 using TourPlanner.BusinessLogic.API.Models;
@@ -38,11 +40,12 @@ namespace TourPlanner.ViewModels
         private string createTourFrom { get; set; }
         private string createTourTo { get; set; }
         private string createTourTransportType { get; set; }
-        private string createTourDist { get; set; }
-        private string createTourEst { get; set; }
+        private float createTourDist { get; set; }
+        private float createTourEst { get; set; }
         private bool tourLoadSuccessful { get; set; }
         private string loadingMessageText { get; set; }
         private Task<bool> tourLoadTask;
+        private ResponseDirectionsModel lastResponse;
 
         public string CreateTourName
         {
@@ -117,12 +120,12 @@ namespace TourPlanner.ViewModels
         {
             get
             {
-                return createTourDist;
+                return $"{createTourDist} km";
             }
 
             set
             {
-                createTourDist = value;
+                createTourDist = (float)Convert.ToDouble(value);
                 OnPropertyChanged();
             }
         }
@@ -130,12 +133,12 @@ namespace TourPlanner.ViewModels
         {
             get
             {
-                return createTourEst;
+                return $"{TimeSpan.FromSeconds(createTourEst).ToString(@"hh\:mm")} h";
             }
 
             set
             {
-                createTourEst = value;
+                createTourEst = (float)Convert.ToDouble(value);
                 OnPropertyChanged();
             }
         }
@@ -172,8 +175,16 @@ namespace TourPlanner.ViewModels
             {
                 if (await tourLoadTask)
                 {
-                    //save in database
-                    OnRequestClose(this, new EventArgs());
+                    if (!_blHandler.SaveTourDb(new Tour(CreateTourName, CreateTourDescr, CreateTourFrom, CreateTourTo, CreateTourTransportType, createTourDist, createTourEst,JsonConvert.SerializeObject(lastResponse))))
+                    {
+                        LoadingMessageText = "Tour could not be saved!";
+                        MessageBox.Show("Unable to save tour, try again.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        TourLoadSuccessful = false;
+                    }
+                    else
+                    {
+                        OnRequestClose(this, new EventArgs());
+                    }
                 }
             });
         }
@@ -209,21 +220,21 @@ namespace TourPlanner.ViewModels
             LoadingMessageText = "Fill out the details to continue...";
             if (ValidForm())
             {
-                var apiCall = _blHandler.ApiHandler.GetDirections(CreateTourFrom, CreateTourTo, CreateTourTransportType);
+                var apiCall = _blHandler.GetTourDetails(CreateTourFrom, CreateTourTo, CreateTourTransportType);
                 LoadingMessageText = "Tour is loading...";
 
-                ResponseDirectionsModel response = await apiCall;
-                if (response != null)
+                lastResponse = await apiCall;
+                if (lastResponse != null)
                 {
-                    CreateTourDist = $"{Math.Round(response.Features[0].Properties.Summary.Distance / 1000, 2)} km";
-                    CreateTourEst = $"{TimeSpan.FromSeconds(response.Features[0].Properties.Summary.Duration).ToString(@"hh\:mm")} h";
+                    CreateTourDist = $"{Math.Round(lastResponse.Features[0].Properties.Summary.Distance / 1000, 2)}";
+                    CreateTourEst = $"{lastResponse.Features[0].Properties.Summary.Duration}";
                     TourLoadSuccessful = true;
                     return true;
                 }
                 else
                 {
-                    CreateTourDist = $"0 km";
-                    CreateTourEst = $"{TimeSpan.FromSeconds(0).ToString(@"hh\:mm")} h";
+                    CreateTourDist = $"0";
+                    CreateTourEst = $"0";
                     LoadingMessageText = "Invalid tour details...";
                     TourLoadSuccessful = false;
                     return false;
@@ -231,8 +242,8 @@ namespace TourPlanner.ViewModels
             }
             else
             {
-                CreateTourDist = $"0 km";
-                CreateTourEst = $"{TimeSpan.FromSeconds(0).ToString(@"hh\:mm")} h";
+                CreateTourDist = $"0";
+                CreateTourEst = $"0";
                 TourLoadSuccessful = false;
                 return false;
             }

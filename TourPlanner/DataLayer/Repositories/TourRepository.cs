@@ -20,7 +20,6 @@ namespace TourPlanner.DataLayer.Repositories
 
         public void AddTour(TourDbModel tour)
         {
-            Debug.WriteLine("code reached");
             context.Add(tour);
             context.SaveChanges();
         }

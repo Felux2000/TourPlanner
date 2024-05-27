@@ -9,9 +9,9 @@ using System.Collections.ObjectModel;
 
 namespace TourPlanner.BusinessLogic
 {
-    public class ModelConverter
+    public static class ModelConverter
     {
-        public List<Tour> ConvertListTourDbModelToTour(ICollection<TourDbModel> dbTours)
+        public static List<Tour> ConvertListTourDbModelToTour(ICollection<TourDbModel> dbTours)
         {
             List<Tour> convertedTourList = new List<Tour>();
             List<TourDbModel> tourDbModelList = dbTours.ToList();
@@ -26,7 +26,7 @@ namespace TourPlanner.BusinessLogic
                     dbTour.TransportType,
                     dbTour.Distance,
                     dbTour.Estimation,
-                    dbTour.Image
+                    dbTour.MapJson
                     );
                 
                 List<TourLog> convertedLogList = new List<TourLog>();
@@ -49,9 +49,15 @@ namespace TourPlanner.BusinessLogic
             return convertedTourList;
         }
 
-        public TourDbModel ConvertSingleTourToDbModelTour(Tour tour)
+        public static TourDbModel ConvertOnlyTourToDbModelTour(Tour tour)
         {
-            TourDbModel convertedTour = new TourDbModel(tour.Name, tour.Description, tour.From, tour.To, tour.TransportType, tour.Distance, tour.Estimation, tour.Image);
+            TourDbModel convertedTour = new TourDbModel(tour.Name, tour.Description, tour.From, tour.To, tour.TransportType, tour.Distance, tour.Estimation, tour.MapJson);
+            return convertedTour;
+        }
+
+        public static TourDbModel ConvertSingleTourToDbModelTour(Tour tour)
+        {
+            TourDbModel convertedTour = new TourDbModel(tour.Name, tour.Description, tour.From, tour.To, tour.TransportType, tour.Distance, tour.Estimation, tour.MapJson);
             foreach(TourLog log in tour.LogList) 
             {
                 TourLogDbModel convertedLog = new TourLogDbModel(

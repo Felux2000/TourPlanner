@@ -9,6 +9,7 @@ using TourPlanner.DataLayer;
 using Microsoft.Extensions.Configuration;
 using TourPlanner.BusinessLogic;
 using TourPlanner.BusinessLogic.API;
+using TourPlanner.DataLayer.Repositories;
 
 namespace TourPlanner
 {
@@ -22,6 +23,9 @@ namespace TourPlanner
             var services = new ServiceCollection();
 
             services.AddSingleton<LogInterceptor>();
+            services.AddSingleton<TourRepository>();
+            services.AddSingleton<TourLogRepository>();
+            services.AddSingleton<TourDbContext>();
             services.AddSingleton<DbHandler>();
             services.AddSingleton<DLHandler>();
 

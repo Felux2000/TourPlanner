@@ -32,7 +32,7 @@ namespace TourPlanner.DataLayer.Models
             Logs = new Collection<TourLogDbModel>();
         }
 
-        [Required]
+        [Key]
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }

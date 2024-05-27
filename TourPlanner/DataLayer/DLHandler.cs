@@ -31,6 +31,15 @@ namespace TourPlanner.DataLayer
             return _dbHandler.UpdateTourLog(updatedLog);
         }
 
+        public bool DeleteTourFromDb(TourDbModel removeableTour)
+        {
+            return _dbHandler.DeleteTour(removeableTour);
+        }
+        public bool DeleteTourLogFromDb(TourLogDbModel removeableLog)
+        {
+            return _dbHandler.DeleteLog(removeableLog);
+        }
+
         public ICollection<TourDbModel> LoadToursFromDb()
         {
             return _dbHandler.GetAllTours();

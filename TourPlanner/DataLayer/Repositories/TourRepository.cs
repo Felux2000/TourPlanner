@@ -40,7 +40,7 @@ namespace TourPlanner.DataLayer.Repositories
             context.SaveChanges();
         }
 
-        public void RemoveTour(TourDbModel tour)
+        public void DeleteTour(TourDbModel tour)
         {
             var c = context.Tours.Find(tour.Id);
             if (c != null)

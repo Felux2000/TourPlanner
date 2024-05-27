@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using TourPlanner.BusinessLogic;
@@ -86,18 +87,30 @@ namespace TourPlanner.ViewModels
         {
             if (SelectedTour != null)
             {
-                //delete from db
-                TourList.Remove(SelectedTour);
-                SelectedTour = null;
+                if (!_blHandler.DeleteTourDb(SelectedTour))
+                {
+                    MessageBox.Show("Unable to delete tour, try again.", "Delete error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    TourList.Remove(SelectedTour);
+                    SelectedTour = null;
+                }
             }
         }
         public void DeleteLog()
         {
             if (SelectedTour != null && SelectedLog != null)
             {
-                //delete from db
-                SelectedTour.LogList.Remove(SelectedLog);
-                SelectedLog = null;
+                if (!_blHandler.DeleteTourLogDb(SelectedLog))
+                {
+                    MessageBox.Show("Unable to delete log, try again.", "Delete error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    SelectedTour.LogList.Remove(SelectedLog);
+                    SelectedLog = null;
+                }
             }
         }
 

@@ -28,8 +28,8 @@ namespace TourPlanner.DataLayer
             //try
             //{ 
 
-        //_dbContext.Database.EnsureDeleted();
-        //_dbContext.Database.EnsureCreated();
+        _dbContext.Database.EnsureDeleted();
+        _dbContext.Database.EnsureCreated();
 
             //Following code if for testing purposes only
          /* TourLogDbModel log1 = new TourLogDbModel(DateTime.Now, new TimeSpan(12, 23, 46), 12, "The string representations of TimeSpan values are produced by calls to the overloads of the TimeSpan.ToString method, as well as by methods that support composite formatting, such as String.Format. For more information, see Formatting Types and Composite Formatting. The following example illustrates the use of standard format", 5, 10);
@@ -80,6 +80,19 @@ namespace TourPlanner.DataLayer
                 return false;
             }*/
         }
+        public bool DeleteTour(TourDbModel removeableTour)
+        {
+            //try
+            {
+                _tourRepository.DeleteTour(removeableTour);
+                return true;
+            }
+            /*catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }*/
+        }
 
         public ICollection<TourDbModel> GetAllTours()
         {
@@ -112,6 +125,19 @@ namespace TourPlanner.DataLayer
             //try
             {
                 _tourLogRepository.UpdateTourLog(updatedTourLog);
+                return true;
+            }
+            /*catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }*/
+        }
+        public bool DeleteLog(TourLogDbModel removeableLog)
+        {
+            //try
+            {
+                _tourLogRepository.DeleteTourLog(removeableLog);
                 return true;
             }
             /*catch (Exception ex)

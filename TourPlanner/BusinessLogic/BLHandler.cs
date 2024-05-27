@@ -46,6 +46,15 @@ namespace TourPlanner.BusinessLogic
             return _dlHandler.UpdateTourLogInDb(ModelConverter.ConvertTourLogToDbModelTour(updatedLog));
         }
 
+        public bool DeleteTourDb(Tour removeableTour)
+        {
+            return _dlHandler.DeleteTourFromDb(ModelConverter.ConvertSingleTourToDbModelTour(removeableTour));
+        }
+        public bool DeleteTourLogDb(TourLog removeableTourLog)
+        {
+            return _dlHandler.DeleteTourLogFromDb(ModelConverter.ConvertTourLogToDbModelTour(removeableTourLog));
+        }
+
         public List<Tour> LoadToursDb()
         {
             return ModelConverter.ConvertListTourDbModelToTour(_dlHandler.LoadToursFromDb());

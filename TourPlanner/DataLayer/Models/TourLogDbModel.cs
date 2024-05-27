@@ -23,7 +23,7 @@ namespace TourPlanner.DataLayer.Models
         {
             Id = Guid.NewGuid();
         }
-        [Required]
+        [Key]
         public Guid Id { get; set; }
         [Required]
         public DateTimeOffset Date { get; set; }
@@ -36,5 +36,7 @@ namespace TourPlanner.DataLayer.Models
         public int Difficulty { get; set; }
         [Required]
         public int Rating { get; set; }
+        //needed for 1-to-many cascade delete
+        public TourDbModel tourDbModel { get; set; }
     }
 }

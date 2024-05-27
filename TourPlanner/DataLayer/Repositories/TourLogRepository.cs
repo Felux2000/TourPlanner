@@ -43,7 +43,7 @@ namespace TourPlanner.DataLayer.Repositories
             context.SaveChanges();
         }
 
-        public void RemoveTour(TourLogDbModel log)
+        public void DeleteTourLog(TourLogDbModel log)
         {
             var c = context.TourLogs.Find(log.Id);
             if (c != null)

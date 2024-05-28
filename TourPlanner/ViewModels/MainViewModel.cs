@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -26,6 +29,7 @@ namespace TourPlanner.ViewModels
             DeleteLogCommand = new RelayCommand(o => DeleteLog());
             LoadTours();
             viewModel = this;
+            SelectedTour = null;
         }
 
         private Tour selectedTour;
@@ -48,6 +52,7 @@ namespace TourPlanner.ViewModels
             set
             {
                 selectedTour = value;
+                LoadWebView();
                 OnPropertyChanged();
             }
         }
@@ -114,10 +119,36 @@ namespace TourPlanner.ViewModels
             }
         }
 
+        private void LoadWebView()
+        {
+            if (SelectedTour != null)
+            {
+                if (SelectedTour.MapJson == null || SelectedTour.MapJson == string.Empty)
+                    return;
+                WriteJs();
+                WebViewRefreshEventHandler.Invoke(this, null);
+            }
+        }
+
+        private void WriteJs()
+        {
+            string jsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/WebView/directions.js");
+            using (StreamWriter sw = new StreamWriter(jsPath, false))
+            {
+                sw.Write($"var directions = ");
+            }
+            using (StreamWriter sw = new StreamWriter(jsPath, true))
+            {
+                sw.Write(SelectedTour.MapJson);
+                sw.Write(";");
+            }
+        }
+
         public void DisplayMainView()
         {
             ViewModel = IoCContainerConfig.Instance.MainViewModel;
             LoadTours();
+            SelectedTour = null;
         }
 
         public ICommand DisplayAddTourView

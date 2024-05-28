@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
 using System.Runtime.Loader;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TourPlanner.BusinessLogic.API.Models;
@@ -23,7 +24,7 @@ namespace TourPlanner.BusinessLogic.API
             client = new HttpClient();
         }
 
-        public async Task<ResponseDirectionsModel> GetDirections(string address1, string address2, string transportation)
+        public async Task<(string,ResponseDirectionsModel)> GetDirections(string address1, string address2, string transportation)
         {
             try
             {
@@ -44,18 +45,18 @@ namespace TourPlanner.BusinessLogic.API
                     response.EnsureSuccessStatusCode();
                     string responseBody = await response.Content.ReadAsStringAsync();
 
-                    return JsonConvert.DeserializeObject<ResponseDirectionsModel>(responseBody);
+                    return (responseBody,JsonConvert.DeserializeObject<ResponseDirectionsModel>(responseBody));
                 }
                 else
                 {
                     logger.Error("Api could not generate directions. One or both adresses may be incorrect");
-                    return null;
+                    return (null,null);
                 }
             }
             catch (HttpRequestException e)
             {
                 Console.WriteLine($"An error occurred: {e.Message}");
-                return null;
+                return (null,null);
             }
         }
 

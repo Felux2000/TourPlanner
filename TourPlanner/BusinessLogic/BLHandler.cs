@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using TourPlanner.BusinessLogic.API;
 using TourPlanner.BusinessLogic.API.Models;
@@ -21,7 +22,7 @@ namespace TourPlanner.BusinessLogic
             _apiHandler = apiHandler;
         }
 
-        public async Task<ResponseDirectionsModel> GetTourDetails(string startAdress, string destinationAdress, string transportType)
+        public async Task<(string,ResponseDirectionsModel)> GetTourDetails(string startAdress, string destinationAdress, string transportType)
         {
             return await _apiHandler.GetDirections(startAdress, destinationAdress, transportType);
         }

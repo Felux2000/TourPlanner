@@ -12,6 +12,7 @@ namespace TourPlanner.ViewModels
     {
         public event EventHandler OnRequestClose;
         public event PropertyChangedEventHandler PropertyChanged;
+        public EventHandler WebViewRefreshEventHandler;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

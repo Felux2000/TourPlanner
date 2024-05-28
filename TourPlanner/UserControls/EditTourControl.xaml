@@ -4,13 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlanner.UserControls"
+             xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              xmlns:converters="clr-namespace:TourPlanner.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" Inverse="False"/>
         <converters:LinearFunctionConverter x:Key="CbHeightToItems" A="1" B="-15"/>
         <converters:LinearFunctionConverter x:Key="HeightToFontSize" A="0.5" B="-12"/>
+        <converters:DistanceToStringConverter x:Key="DistanceToString"/>
+        <converters:DurationToStringConverter x:Key="DurationToString"/>
     </UserControl.Resources>
     <Grid Margin="2,2,2,2">
         <Grid.RowDefinitions>
@@ -123,7 +126,10 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <Border Grid.Row="0" BorderBrush="Black" BorderThickness="2" Margin="2,6,0,0">
-                    <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="{Binding EditTourImage}"/>
+                    <Grid Margin="0">
+                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"  Content="{Binding LoadingMessageText}"/>
+                        <Wpf:WebView2 Visibility="{Binding TourLoadSuccessful, Mode=OneWay,Converter={StaticResource BoolToVisibility}}" x:Name="webView" Source="about:blank"/>
+                    </Grid>
                 </Border>
                 <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Margin="2,0,0,2">
                     <Grid Grid.Row="1">
@@ -133,11 +139,11 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="2,0">
                             <Label HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Distance:</Label>
-                            <TextBlock Text="{Binding EditTourDist, Mode=OneWay}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding EditTourDist, Mode=OneWay, Converter={StaticResource DistanceToString}}" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="2,0">
                             <Label HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Estimation:</Label>
-                            <TextBlock Text="{Binding EditTourEst, Mode=OneWay}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding EditTourEst, Mode=OneWay, Converter={StaticResource DurationToString}}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -149,7 +155,6 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <Label Visibility="{Binding TourLoadSuccessful,Mode=OneWay, Converter={StaticResource InverseBoolToVisibility}}" Content="{Binding LoadingMessageText}"/>
             <Button Grid.Column="1" Margin="4,2" Command="{Binding SaveChangedTourCommand}" IsEnabled="{Binding TourLoadSuccessful,Mode=OneWay}">Save</Button>
             <Button Grid.Column="2" Margin="4,2" Command="{Binding CloseEditTourWindow}">Cancle</Button>
         </Grid>

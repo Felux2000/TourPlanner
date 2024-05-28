@@ -4,8 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlanner.UserControls"
+             xmlns:Wpf="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf" 
+             xmlns:converters="clr-namespace:TourPlanner.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:SelectedToVisibilityConverter x:Key="SelectedToVisibility" Inverse="False"/>
+        <converters:SelectedToVisibilityConverter x:Key="SelectedToVisibilityInverse" Inverse="True"/>
+        <converters:DistanceToStringConverter x:Key="DistanceToString"/>
+        <converters:DurationToStringConverter x:Key="DurationToString"/>
+    </UserControl.Resources>
     <Grid Margin="2,2,2,2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -26,24 +34,24 @@
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Label VerticalContentAlignment="Center" Grid.Column="0" FontSize="20" FontStyle="Italic" Padding="3,0">Tours</Label>
-                        <Button Grid.Column="2" Content="+"  Command="{Binding DataContext.DisplayAddTourView, RelativeSource={RelativeSource AncestorType={x:Type Window}} }">
+                        <Label VerticalContentAlignment="Center" Grid.Column="0" FontSize="20" FontStyle="Italic" Padding="3,0" Content="Tours"/>
+                        <Button Grid.Column="2" Content="+"  Command="{Binding DataContext.DisplayAddTourView, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
                             <Button.Resources>
-                                <Style TargetType="Border">
+                                <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
                             </Button.Resources>
                         </Button>
-                        <Button Grid.Column="3" Content="-" Command="{Binding DeleteTourCommand}" IsEnabled="{Binding ElementName=lstTours, Path=SelectedItems.Count}">
+                        <Button Grid.Column="3" Content="-" Command="{Binding DeleteTourCommand}" IsEnabled="{Binding SelectedItems.Count, ElementName=lstTours}">
                             <Button.Resources>
-                                <Style TargetType="Border">
+                                <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
                             </Button.Resources>
                         </Button>
-                        <Button Grid.Column="4" Content="..." Command="{Binding DataContext.DisplayEditTourView, RelativeSource={RelativeSource AncestorType={x:Type Window}} }" HorizontalContentAlignment="center" IsEnabled="{Binding ElementName=lstTours, Path=SelectedItems.Count}">
+                        <Button Grid.Column="4" Content="..." Command="{Binding DataContext.DisplayEditTourView, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" HorizontalContentAlignment="center" IsEnabled="{Binding SelectedItems.Count, ElementName=lstTours}">
                             <Button.Resources>
-                                <Style TargetType="Border">
+                                <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="5"/>
                                 </Style>
                             </Button.Resources>
@@ -54,7 +62,7 @@
             <Grid Grid.Row="1">
                 <ListBox x:Name="lstTours" Grid.Column="0" ItemsSource="{Binding TourList}" DisplayMemberPath="Name" SelectionMode="Single" HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedTour}">
                     <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
+                        <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="Margin" Value="3"/>
                             <Setter Property="Padding" Value="4"/>
                             <Setter Property="BorderThickness" Value="1" />
@@ -67,28 +75,52 @@
         <Grid Grid.Column="1">
             <TabControl>
                 <TabControl.Style>
-                    <Style TargetType="TabControl">
+                    <Style TargetType="{x:Type TabControl}">
                         <Style.Triggers>
-                            <DataTrigger  Binding="{Binding ElementName=lstTours, Path=SelectedItems.Count}" Value="0">
+                            <DataTrigger  Binding="{Binding SelectedItems.Count, ElementName=lstTours}" Value="0">
                                 <Setter Property="SelectedIndex" Value="0" />
                             </DataTrigger>
-                            <DataTrigger  Binding="{Binding ElementName=lstTours, Path=SelectedItems.Count}" Value="1">
+                            <DataTrigger  Binding="{Binding SelectedItems.Count, ElementName=lstTours}" Value="1">
                                 <Setter Property="SelectedIndex" Value="0" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TabControl.Style>
                 <TabItem Header="Preview">
-                    <Grid >
-                        <Label HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20">Select a Tour</Label>
-                        <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="{Binding SelectedTour.Image}"/>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="9*"/>
+                            <RowDefinition Height="1*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" BorderBrush="Black" BorderThickness="1" Margin="2,6,0,0">
+                            <Grid Margin="0">
+                                <Label Visibility="{Binding SelectedTour, Mode=OneWay,Converter={StaticResource SelectedToVisibilityInverse}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Content="Select tour for preview"/>
+                                <Wpf:WebView2 Visibility="{Binding SelectedTour, Mode=OneWay,Converter={StaticResource SelectedToVisibility}}" x:Name="webView" Source="about:blank"/>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="1" Margin="2,0,0,2">
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="2,0">
+                                    <Label HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Distance:</Label>
+                                    <TextBlock Text="{Binding SelectedTour.Distance, Mode=OneWay, Converter={StaticResource DistanceToString}}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="2,0">
+                                    <Label HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Estimation:</Label>
+                                    <TextBlock Text="{Binding SelectedTour.Estimation, Mode=OneWay, Converter={StaticResource DurationToString}}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Details">
                     <TabItem.Style>
-                        <Style TargetType="TabItem">
+                        <Style TargetType="{x:Type TabItem}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=lstTours, Path=SelectedItems.Count}" Value="0">
+                                <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=lstTours}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -104,35 +136,35 @@
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="1*"/>
                         </Grid.RowDefinitions>
-                        <Label Grid.Row="0" FontWeight="Bold">Description:</Label>
+                        <Label Grid.Row="0" FontWeight="Bold" Content="Description:"/>
                         <TextBlock Grid.Row="1" Margin="7,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding SelectedTour.Description}"/>
                         <StackPanel Grid.Row="2" Orientation="Horizontal">
-                            <Label VerticalContentAlignment="Center" FontWeight="Bold">From:</Label>
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold" Content="From:"/>
                             <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.From}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="3" Orientation="Horizontal">
-                            <Label VerticalContentAlignment="Center" FontWeight="Bold">To:</Label>
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold" Content="To:"/>
                             <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.To}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="4" Orientation="Horizontal">
-                            <Label VerticalContentAlignment="Center" FontWeight="Bold">Transport Type:</Label>
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold" Content="Transport Type:"/>
                             <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.TransportType}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="5" Orientation="Horizontal">
-                            <Label VerticalContentAlignment="Center" FontWeight="Bold">Distance:</Label>
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold" Content="Distance:"/>
                             <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.Distance}"/>
                         </StackPanel>
                         <StackPanel Grid.Row="6" Orientation="Horizontal">
-                            <Label VerticalContentAlignment="Center" FontWeight="Bold">Estimation:</Label>
+                            <Label VerticalContentAlignment="Center" FontWeight="Bold" Content="Estimation:"/>
                             <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.Estimation}"/>
                         </StackPanel>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Logs">
                     <TabItem.Style>
-                        <Style TargetType="TabItem">
+                        <Style TargetType="{x:Type TabItem}">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ElementName=lstTours, Path=SelectedItems.Count}" Value="0">
+                                <DataTrigger Binding="{Binding SelectedItems.Count, ElementName=lstTours}" Value="0">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -172,37 +204,37 @@
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="1*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label VerticalContentAlignment="Center" Grid.Column="0" FontSize="20" FontStyle="Italic" Padding="3,0" FontWeight="Bold">Details</Label>
-                                <Button Grid.Column="2" Content="+" Command="{Binding DataContext.DisplayAddTourLogView, RelativeSource={RelativeSource AncestorType={x:Type Window}} }" IsEnabled="{Binding ElementName=lstTours, Path=SelectedItems.Count}">
+                                <Label VerticalContentAlignment="Center" Grid.Column="0" FontSize="20" FontStyle="Italic" Padding="3,0" FontWeight="Bold" Content="Details"/>
+                                <Button Grid.Column="2" Content="+" Command="{Binding DataContext.DisplayAddTourLogView, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" IsEnabled="{Binding SelectedItems.Count, ElementName=lstTours}">
                                     <Button.Resources>
-                                        <Style TargetType="Border">
+                                        <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="5"/>
                                         </Style>
                                     </Button.Resources>
                                 </Button>
-                                <Button Grid.Column="3" Content="-" IsEnabled="{Binding ElementName=lstLogs, Path=SelectedItems.Count}" Command="{Binding DeleteLogCommand}">
+                                <Button Grid.Column="3" Content="-" IsEnabled="{Binding SelectedItems.Count, ElementName=lstLogs}" Command="{Binding DeleteLogCommand}">
                                     <Button.Resources>
-                                        <Style TargetType="Border">
+                                        <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="5"/>
                                         </Style>
                                     </Button.Resources>
                                 </Button>
-                                <Button Grid.Column="4" Content="..." Command="{Binding DataContext.DisplayEditTourLogView, RelativeSource={RelativeSource AncestorType={x:Type Window}} }" IsEnabled="{Binding ElementName=lstLogs, Path=SelectedItems.Count}" HorizontalContentAlignment="Center">
+                                <Button Grid.Column="4" Content="..." Command="{Binding DataContext.DisplayEditTourLogView, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" IsEnabled="{Binding SelectedItems.Count, ElementName=lstLogs}" HorizontalContentAlignment="Center">
                                     <Button.Resources>
-                                        <Style TargetType="Border">
+                                        <Style TargetType="{x:Type Border}">
                                             <Setter Property="CornerRadius" Value="5"/>
                                         </Style>
                                     </Button.Resources>
                                 </Button>
                             </Grid>
-                            <Label Grid.Row="1" FontWeight="Bold">Comment:</Label>
+                            <Label Grid.Row="1" FontWeight="Bold" Content="Comment:"/>
                             <TextBlock Grid.Row="2" Margin="7,0" TextWrapping="Wrap" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding SelectedLog.Comment}"/>
                             <StackPanel Grid.Row="3" Orientation="Horizontal">
-                                <Label VerticalContentAlignment="Center" FontWeight="Bold">Difficulty:</Label>
+                                <Label VerticalContentAlignment="Center" FontWeight="Bold" Content="Difficulty:"/>
                                 <Label VerticalContentAlignment="Center" Content="{Binding SelectedLog.Difficulty}"/>
                             </StackPanel>
                             <StackPanel Grid.Row="4" Orientation="Horizontal">
-                                <Label VerticalContentAlignment="Center" FontWeight="Bold">Rating:</Label>
+                                <Label VerticalContentAlignment="Center" FontWeight="Bold" Content="Rating:"/>
                                 <Label VerticalContentAlignment="Center" Content="{Binding SelectedLog.Rating}"/>
                             </StackPanel>
                         </Grid>

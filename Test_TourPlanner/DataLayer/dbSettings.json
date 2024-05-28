@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "TourDbContext": "Server=localhost; Port=5432; Username=tourUser; Password=tourPw; Database=tourdb-test;"
+  }
+}

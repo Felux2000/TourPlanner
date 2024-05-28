@@ -15,7 +15,7 @@ namespace TourPlanner.DataLayer
 {
     public class TourDbContext : DbContext
     {
-        private readonly IConfiguration _configuration;
+        public IConfiguration Configuration;
 
         private LogInterceptor _interceptor;
         public DbSet<TourDbModel> Tours { get; set; }
@@ -23,7 +23,7 @@ namespace TourPlanner.DataLayer
 
         public TourDbContext(LogInterceptor interceptor)
         {
-            _configuration = new ConfigurationBuilder()
+            Configuration = new ConfigurationBuilder()
                     .AddJsonFile($"{Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.FullName}\\DataLayer\\dbSettings.json", optional: false, reloadOnChange: true)
                     .Build();
             _interceptor = interceptor;
@@ -34,7 +34,7 @@ namespace TourPlanner.DataLayer
             optionsBuilder.AddInterceptors(new[] { _interceptor });
             optionsBuilder.EnableSensitiveDataLogging();
 
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("TourDbContext"));
+            optionsBuilder.UseNpgsql(Configuration.GetConnectionString("TourDbContext"));
 
         }
     }

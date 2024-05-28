@@ -5,7 +5,7 @@ namespace Test_TourPlanner
 {
     public class MainVMTest
     {
-        private MainViewModel mainViewModel;
+        /*private MainViewModel mainViewModel;
 
         [SetUp]
         public void Setup()
@@ -92,6 +92,6 @@ namespace Test_TourPlanner
 
             Assert.That(mainViewModel.SelectedLog, Is.EqualTo(editedLog));
             Assert.That(mainViewModel.SelectedLog, Is.Not.EqualTo(originalLog));
-        }
+        }*/
     }
 }

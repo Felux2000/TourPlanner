@@ -7,12 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.DataLayer.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using TourPlanner.logging;
 
 namespace TourPlanner.DataLayer.Repositories
 {
     public class TourRepository
     {
         private readonly TourDbContext context;
+        private static readonly ILoggerWrapper logger = LoggerFactory.GetLogger();
         public TourRepository(TourDbContext context)
         {
             this.context = context;
@@ -33,6 +35,7 @@ namespace TourPlanner.DataLayer.Repositories
             var entity = context.Tours.Find(tour.Id);
             if (entity == null)
             {
+                logger.Fatal("Failed updating Tour in database. Tour with that specified Id does not exist in Database");
                 throw new ArgumentOutOfRangeException("tour", "No tour found with that id to update!");
             }
 

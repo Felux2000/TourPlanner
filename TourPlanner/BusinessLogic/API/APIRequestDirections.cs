@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
+using System.Runtime.Loader;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TourPlanner.BusinessLogic.API.Models;
+using TourPlanner.logging;
 
 namespace TourPlanner.BusinessLogic.API
 {
     public class APIRequestDirections
     {
+        private static readonly ILoggerWrapper logger = LoggerFactory.GetLogger();
         private static HttpClient client;
         private static readonly string apiKey = "5b3ce3597851110001cf62484cb26a25beb74f8793aa63cbf86f442c";
         private static readonly string geoCodeBaseUrl = "https://api.openrouteservice.org/geocode/search";
@@ -45,7 +48,7 @@ namespace TourPlanner.BusinessLogic.API
                 }
                 else
                 {
-                    Console.WriteLine("One or both addresses could not be geocoded.");
+                    logger.Error("Api could not generate directions. One or both adresses may be incorrect");
                     return null;
                 }
             }
@@ -75,7 +78,7 @@ namespace TourPlanner.BusinessLogic.API
             }
             else
             {
-                Console.WriteLine($"No coordinates found for '{address}'.");
+                logger.Error($"Api could not get coordinates for following adress: {address}");
                 return null;
             }
         }

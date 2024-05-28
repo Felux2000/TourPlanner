@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TourPlanner.DataLayer.Models;
 using TourPlanner.Models;
+using TourPlanner.logging;
 
 namespace TourPlanner.DataLayer.Repositories
 {
     public class TourLogRepository
     {
+        private static readonly ILoggerWrapper logger = LoggerFactory.GetLogger();
         private readonly TourDbContext context;
         public TourLogRepository(TourDbContext context)
         {
@@ -24,6 +26,7 @@ namespace TourPlanner.DataLayer.Repositories
                 .FirstOrDefault(p => p.Id == tour.Id);
             if (entity == null)
             {
+                logger.Fatal("Failed to add new TourLog to tour in Database. Tour with specified Id does not exist in Database");
                 throw new ArgumentOutOfRangeException("company", "No company found with that id to update!");
             }
             context.Add(newLog);
@@ -36,6 +39,7 @@ namespace TourPlanner.DataLayer.Repositories
             var entity = context.TourLogs.Find(log.Id);
             if (entity == null)
             {
+                logger.Fatal("Failed to update new TourLog in Database. TourLog with specified Id does not exist in Database");
                 throw new ArgumentOutOfRangeException("log", "No log found with that id to update!");
             }
 

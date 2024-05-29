@@ -10,6 +10,7 @@ using TourPlanner.DataLayer;
 
 namespace Test_TourPlanner.Database
 {
+    [TestFixture]
     public class DbTests
     {
         private TourPlanner.DataLayer.TourDbContext _dbContext;
@@ -26,6 +27,8 @@ namespace Test_TourPlanner.Database
             _tourRepository = new TourRepository(_dbContext);
             _tourLogRepository = new TourLogRepository(_dbContext);
             _dbHandler = new DbHandler(_interceptor, _dbContext, _tourRepository, _tourLogRepository);
+            _dbContext.Database.EnsureDeleted();
+            _dbContext.Database.EnsureCreated();
         }
 
         [Test]

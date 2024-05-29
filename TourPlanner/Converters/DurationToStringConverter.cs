@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace TourPlanner.Converters
 {
-    class DurationToStringConverter : IValueConverter
+    public class DurationToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

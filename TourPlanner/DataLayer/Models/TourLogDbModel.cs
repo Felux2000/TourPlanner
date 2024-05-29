@@ -31,7 +31,7 @@ namespace TourPlanner.DataLayer.Models
         public TimeSpan Duration { get; set; }
         [Required]
         public float Distance { get; set; }
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
         [Required]
         public int Difficulty { get; set; }
         [Required]

@@ -13,13 +13,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.Converters;
 using TourPlanner.Models;
 
 namespace TourPlanner.BusinessLogic.ReportGeneration
 {
-    public class PdfGenerator
+    public static class PdfGenerator
     {
-        public void TourReportGenerator(Tour tour, string savePath, byte[] image)
+        public static void TourReportGenerator(Tour tour, string savePath, byte[] image)
         {
             string TARGET_PDF = savePath;
             PdfWriter writer = new PdfWriter(TARGET_PDF);
@@ -98,7 +99,7 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
                     table.AddCell(log.Date.ToString());
                     table.AddCell(log.Duration.ToString());
                     table.AddCell(log.Distance.ToString());
-                    table.AddCell(log.Comment);
+                    table.AddCell(log.Comment ?? string.Empty);
                     table.AddCell(log.Difficulty.ToString());
                     table.AddCell(log.Rating.ToString());
                 }
@@ -133,7 +134,7 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
             fileOpener.Start();
         }
 
-        public void TourSummaryGenerator(List<Tour> tourList, string savePath)
+        public static void TourSummaryGenerator(List<Tour> tourList, string savePath)
         {
             string TARGET_PDF = savePath;
             PdfWriter writer = new PdfWriter(TARGET_PDF);
@@ -166,9 +167,9 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
                     averageRating += log.Rating;
                     counter++;
                 }
-                averageDistance = averageDistance / counter;
-                averageTime = averageTime / counter;
-                averageRating = averageRating / counter;
+                averageDistance = counter == 0 ? 0 : Math.Round(averageDistance / counter, 2);
+                averageTime = counter == 0 ? 0 : averageTime / counter;
+                averageRating = counter == 0 ? 0 : Math.Round(averageRating / counter, 2);
                 TimeSpan averageDuration = TimeSpan.FromSeconds(averageTime);
                 table.AddCell(tour.Name);
                 table.AddCell(averageDuration.ToString());
@@ -185,7 +186,7 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
             fileOpener.Start();
         }
 
-        static Cell getHeaderCell(String s)
+        private static Cell getHeaderCell(String s)
         {
             return new Cell().Add(new Paragraph(s)).SetBold().SetBackgroundColor(ColorConstants.GRAY);
         }

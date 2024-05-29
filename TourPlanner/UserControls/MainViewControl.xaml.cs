@@ -61,7 +61,6 @@ namespace TourPlanner.UserControls
 
             var devData = await webView.CoreWebView2.CallDevToolsProtocolMethodAsync("Page.captureScreenshot", p);
 
-                Debug.WriteLine(devData);
                 var imgData = (string)((dynamic)JObject.Parse(devData)).data;
                 return Convert.FromBase64String(imgData);
            }

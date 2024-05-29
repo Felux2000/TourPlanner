@@ -12,8 +12,7 @@ namespace TourPlanner.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var distance = (float)value;
-            TimeSpan duration = TimeSpan.FromSeconds(distance);
+            TimeSpan duration = value.GetType() == typeof(TimeSpan) ? (TimeSpan)value : TimeSpan.FromSeconds((float)value);
             var days = duration.Days;
             if (days > 0)
                 return $"{days} d {duration.Subtract(TimeSpan.FromDays(days)).ToString(@"hh\:mm")} h";

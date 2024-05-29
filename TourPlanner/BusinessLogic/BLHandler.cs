@@ -21,12 +21,10 @@ namespace TourPlanner.BusinessLogic
     {
         private DLHandler _dlHandler;
         private APIRequestDirections _apiHandler;
-        private PdfGenerator _pdfGenerator;
-        public BLHandler(DLHandler dlHandler, APIRequestDirections apiHandler, PdfGenerator pdfGenerator)
+        public BLHandler(DLHandler dlHandler, APIRequestDirections apiHandler)
         {
             _dlHandler = dlHandler;
             _apiHandler = apiHandler;
-            _pdfGenerator = pdfGenerator;
         }
 
         public async Task<(string,ResponseDirectionsModel)> GetTourDetails(string startAdress, string destinationAdress, string transportType)
@@ -70,12 +68,12 @@ namespace TourPlanner.BusinessLogic
 
         public async void GenerateReport(Tour tour, string savePath, Task<byte[]> captureTask)
         {
-            _pdfGenerator.TourReportGenerator(tour, savePath, await captureTask);
+            PdfGenerator.TourReportGenerator(tour, savePath, await captureTask);
         }
 
         public void GenerateSummary(List<Tour> tourList, string savePath)
         {
-            _pdfGenerator.TourSummaryGenerator(tourList, savePath);
+            PdfGenerator.TourSummaryGenerator(tourList, savePath);
         }
 
         public DLHandler DLHandler => _dlHandler;

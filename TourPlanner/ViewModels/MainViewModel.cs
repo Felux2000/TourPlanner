@@ -145,13 +145,15 @@ namespace TourPlanner.ViewModels
             return CaptureTourImageEvent.Invoke(this, null);
         }
 
-        private async void GenerateTourReport()
+        private void GenerateTourReport()
         {
             if (SelectedTour != null)
             {
                 //reload webview to original size
                 SelectedTour = SelectedTour;
-                _blHandler.GenerateReport(SelectedTour, GetSavePath(FileType.pdf), CaptureTourImage());
+                string path = GetSavePath(FileType.pdf);
+                if (path != string.Empty)
+                    _blHandler.GenerateReport(SelectedTour, path, CaptureTourImage());
             }
         }
 
@@ -159,7 +161,9 @@ namespace TourPlanner.ViewModels
         {
             if (TourList.Count != 0)
             {
-                _blHandler.GenerateSummary(TourList.ToList(), GetSavePath(FileType.pdf));
+                string path = GetSavePath(FileType.pdf);
+                if (path != string.Empty)
+                    _blHandler.GenerateSummary(TourList.ToList(), path);
             }
         }
 
@@ -207,6 +211,7 @@ namespace TourPlanner.ViewModels
             ViewModel = IoCContainerConfig.Instance.MainViewModel;
             LoadTours();
             SelectedTour = null;
+            SelectedLog = null;
         }
 
         public ICommand ExampleFileTourCommand

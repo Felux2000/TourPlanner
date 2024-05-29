@@ -10,8 +10,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" Inverse="False"/>
-        <converters:LinearFunctionConverter x:Key="CbHeightToItems" A="1" B="-15"/>
-        <converters:LinearFunctionConverter x:Key="HeightToFontSize" A="0.5" B="-12"/>
+        <converters:LinearFunctionConverter x:Key="CbHeightToItems" A="0.8" B="-5"/>
+        <converters:LinearFunctionConverter x:Key="HeightToFontSize" A="0.4" B="-8"/>
         <converters:DistanceToStringConverter x:Key="DistanceToString"/>
         <converters:DurationToStringConverter x:Key="DurationToString"/>
     </UserControl.Resources>
@@ -35,7 +35,7 @@
                     <RowDefinition Height="1*" MinHeight="30"/>
                     <RowDefinition Height="2*" MinHeight="30"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" x:Name="tbAddTourName" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourName, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Row="0" x:Name="tbAddTourName" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourName, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="Name*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
@@ -48,7 +48,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="1" x:Name="tbAddTourTo" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourTo, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Row="1" x:Name="tbAddTourTo" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourTo, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Row="1" IsHitTestVisible="False" Text="Destination*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
@@ -61,7 +61,7 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="2" x:Name="tbAddTourFrom" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourFrom, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Grid.Row="2" x:Name="tbAddTourFrom" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourFrom, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Row="2" IsHitTestVisible="False" Text="Start*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">

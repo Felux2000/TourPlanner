@@ -30,7 +30,7 @@
                 </Grid.RowDefinitions>
                 <Grid  Grid.Row="0" Margin="2">
                     <xctk:DateTimePicker Format="Custom" FormatString="MM/dd/yyyy H:mm:ss" Value="{Binding EditLogDate}" Margin="2,4"/>
-                    <TextBlock IsHitTestVisible="False" Text="Tour Start" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray"/>
+                    <TextBlock IsHitTestVisible="False" Text="Tour Start*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray"/>
                 </Grid>
                 <Grid Grid.Row="1" Margin="2">
                     <TextBox x:Name="tbAddLogComment" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Margin="2,4,2,2" Padding="3" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding EditLogComment,UpdateSourceTrigger=PropertyChanged}"/>
@@ -57,11 +57,11 @@
                 </Grid.RowDefinitions>
                 <Grid  Grid.Row="0" Margin="2">
                     <xctk:TimeSpanUpDown ShowDays="False" ShowSeconds="False" AllowDrop="False" Minimum="0" Value="{Binding EditLogDuration}" Margin="2,4"/>
-                    <TextBlock IsHitTestVisible="False" Text="Total Time" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray" />
+                    <TextBlock IsHitTestVisible="False" Text="Total Time (hh:mm)*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray" />
                 </Grid>
                 <Grid  Grid.Row="1" Margin="2">
                     <xctk:DoubleUpDown Increment="0.1" FormatString="F1" UpdateValueOnEnterKey="False" CultureInfo="en-US" VerticalContentAlignment="Center" Minimum="0.0" ShowButtonSpinner="False" HorizontalContentAlignment="Right" Margin="2,4" Padding="3" Text="{Binding EditLogDist,UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock IsHitTestVisible="False" Text="Distance" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray"/>
+                    <TextBlock IsHitTestVisible="False" Text="Distance in meter*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray"/>
                 </Grid>
                 <Border Grid.Row="2" BorderBrush="Gray" BorderThickness="1" Margin="4">
                     <Grid>

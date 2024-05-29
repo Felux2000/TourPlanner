@@ -31,7 +31,6 @@ namespace TourPlanner
             services.AddSingleton<DLHandler>();
 
             services.AddSingleton<APIRequestDirections>();
-            services.AddSingleton<PdfGenerator>();
             services.AddSingleton<BLHandler>();
 
             services.AddSingleton<MainViewModel>();

@@ -1,12 +1,17 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using TourPlanner.BusinessLogic.API;
 using TourPlanner.BusinessLogic.API.Models;
+using TourPlanner.BusinessLogic.ReportGeneration;
 using TourPlanner.DataLayer;
 using TourPlanner.Models;
 
@@ -16,10 +21,12 @@ namespace TourPlanner.BusinessLogic
     {
         private DLHandler _dlHandler;
         private APIRequestDirections _apiHandler;
-        public BLHandler(DLHandler dlHandler, APIRequestDirections apiHandler)
+        private PdfGenerator _pdfGenerator;
+        public BLHandler(DLHandler dlHandler, APIRequestDirections apiHandler, PdfGenerator pdfGenerator)
         {
             _dlHandler = dlHandler;
             _apiHandler = apiHandler;
+            _pdfGenerator = pdfGenerator;
         }
 
         public async Task<(string,ResponseDirectionsModel)> GetTourDetails(string startAdress, string destinationAdress, string transportType)
@@ -59,6 +66,16 @@ namespace TourPlanner.BusinessLogic
         public List<Tour> LoadToursDb()
         {
             return ModelConverter.ConvertListTourDbModelToTour(_dlHandler.LoadToursFromDb());
+        }
+
+        public async void GenerateReport(Tour tour, string savePath, Task<byte[]> captureTask)
+        {
+            _pdfGenerator.TourReportGenerator(tour, savePath, await captureTask);
+        }
+
+        public void GenerateSummary(List<Tour> tourList, string savePath)
+        {
+            _pdfGenerator.TourSummaryGenerator(tourList, savePath);
         }
 
         public DLHandler DLHandler => _dlHandler;

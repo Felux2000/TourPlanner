@@ -9,6 +9,7 @@ using iText.Layout.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,11 +17,11 @@ using TourPlanner.Models;
 
 namespace TourPlanner.BusinessLogic.ReportGeneration
 {
-    class PdfGenerator
+    public class PdfGenerator
     {
-        public void TourReportGenerator(Tour tour)
+        public void TourReportGenerator(Tour tour, string savePath, byte[] image)
         {
-            string TARGET_PDF = "target.pdf";
+            string TARGET_PDF = savePath;
             PdfWriter writer = new PdfWriter(TARGET_PDF);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
@@ -39,7 +40,7 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
 
             Paragraph tourDescriptionParagraph = new Paragraph();
             tourDescriptionParagraph.Add(new Text("Description: ").SetFont(boldFont));
-            tourDescriptionParagraph.Add(tour.Description).SetFont(normalFont);
+            tourDescriptionParagraph.Add(tour.Description ?? "No Desciption").SetFont(normalFont);
             document.Add(tourDescriptionParagraph);
 
             Paragraph tourFromParagraph = new Paragraph();
@@ -59,7 +60,7 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
 
             Paragraph tourDistanceParagraph = new Paragraph();
             tourDistanceParagraph.Add(new Text("Distance: ").SetFont(boldFont));
-            tourDistanceParagraph.Add(tour.Distance.ToString()).SetFont(normalFont);
+            tourDistanceParagraph.Add(Math.Round(tour.Distance / 1000, 2).ToString()).SetFont(normalFont);
             tourDistanceParagraph.Add("km").SetFont(normalFont);
             document.Add(tourDistanceParagraph);
 
@@ -76,38 +77,53 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
 
             Paragraph tourEstimationParagraph = new Paragraph();
             tourEstimationParagraph.Add(new Text("Estimated time: ").SetFont(boldFont));
-            tourEstimationParagraph.Add(tour.Estimation.ToString()).SetFont(normalFont);
+            tourEstimationParagraph.Add(TimeSpan.FromSeconds(tour.Estimation).ToString(@"hh\:mm")).SetFont(normalFont);
             tourEstimationParagraph.Add("h").SetFont(normalFont);
             document.Add(tourEstimationParagraph);
-
             Paragraph LogTableHeader = new Paragraph();
-            LogTableHeader.Add(new Text("Logs:").SetFont(boldFont));
-            document.Add(LogTableHeader);
-            Table table = new Table(UnitValue.CreatePercentArray(6)).UseAllAvailableWidth();
-            table.AddHeaderCell(getHeaderCell("Date"));
-            table.AddHeaderCell(getHeaderCell("Duration"));
-            table.AddHeaderCell(getHeaderCell("Distance"));
-            table.AddHeaderCell(getHeaderCell("Comment"));
-            table.AddHeaderCell(getHeaderCell("Difficulty"));
-            table.AddHeaderCell(getHeaderCell("Rating"));
-            table.SetBackgroundColor(ColorConstants.WHITE);
-            foreach (TourLog log in tour.LogList)
+            LogTableHeader.Add(new Text("Logs: ").SetFont(boldFont));
+            if (tour.LogList.Count > 0)
             {
-                table.AddCell(log.Date.ToString());
-                table.AddCell(log.Duration.ToString());
-                table.AddCell(log.Distance.ToString());
-                table.AddCell(log.Comment);
-                table.AddCell(log.Difficulty.ToString());
-                table.AddCell(log.Rating.ToString());
+                document.Add(LogTableHeader);
+                Table table = new Table(UnitValue.CreatePercentArray(6)).UseAllAvailableWidth();
+                table.AddHeaderCell(getHeaderCell("Date"));
+                table.AddHeaderCell(getHeaderCell("Duration"));
+                table.AddHeaderCell(getHeaderCell("Distance"));
+                table.AddHeaderCell(getHeaderCell("Comment"));
+                table.AddHeaderCell(getHeaderCell("Difficulty"));
+                table.AddHeaderCell(getHeaderCell("Rating"));
+                table.SetBackgroundColor(ColorConstants.WHITE);
+                foreach (TourLog log in tour.LogList)
+                {
+                    table.AddCell(log.Date.ToString());
+                    table.AddCell(log.Duration.ToString());
+                    table.AddCell(log.Distance.ToString());
+                    table.AddCell(log.Comment);
+                    table.AddCell(log.Difficulty.ToString());
+                    table.AddCell(log.Rating.ToString());
+                }
+                document.Add(table);
+                document.Add(new AreaBreak());
             }
-            document.Add(table);
-            document.Add(new AreaBreak());
+            else
+            {
+                LogTableHeader.Add("No Logs").SetFont(normalFont);
+                document.Add(LogTableHeader);
+            }
 
             Paragraph tourImageParagraph = new Paragraph();
             tourImageParagraph.Add("Map Image:");
-            document.Add(tourImageParagraph);
-            //ImageData imageData = ImageDataFactory.Create(tour.Image);
-            //document.Add(new Image(imageData));
+            if (image.Length > 0)
+            {
+                document.Add(tourImageParagraph);
+                ImageData imageData = ImageDataFactory.Create(image);
+                document.Add(new Image(imageData));
+            }
+            else
+            {
+                tourImageParagraph.Add("No Image").SetFont(normalFont);
+                document.Add(tourImageParagraph);
+            }
 
             document.Close();
 
@@ -117,9 +133,9 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
             fileOpener.Start();
         }
 
-        public void TourSummaryGenerator(List<Tour> tourList)
+        public void TourSummaryGenerator(List<Tour> tourList, string savePath)
         {
-            string TARGET_PDF = "target.pdf";
+            string TARGET_PDF = savePath;
             PdfWriter writer = new PdfWriter(TARGET_PDF);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);

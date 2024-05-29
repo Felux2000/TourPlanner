@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using TourPlanner.BusinessLogic;
 using TourPlanner.BusinessLogic.API;
 using TourPlanner.DataLayer.Repositories;
+using TourPlanner.BusinessLogic.ReportGeneration;
 
 namespace TourPlanner
 {
@@ -30,6 +31,7 @@ namespace TourPlanner
             services.AddSingleton<DLHandler>();
 
             services.AddSingleton<APIRequestDirections>();
+            services.AddSingleton<PdfGenerator>();
             services.AddSingleton<BLHandler>();
 
             services.AddSingleton<MainViewModel>();

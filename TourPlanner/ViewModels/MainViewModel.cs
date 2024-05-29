@@ -1,10 +1,12 @@
 ﻿using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -12,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using TourPlanner.BusinessLogic;
 using TourPlanner.Commands;
@@ -25,8 +28,6 @@ namespace TourPlanner.ViewModels
         public MainViewModel(BLHandler blHandler)
         {
             _blHandler = blHandler;
-            DeleteTourCommand = new RelayCommand(o => DeleteTour());
-            DeleteLogCommand = new RelayCommand(o => DeleteLog());
             LoadTours();
             viewModel = this;
             SelectedTour = null;
@@ -38,9 +39,9 @@ namespace TourPlanner.ViewModels
 
         public Page DisplayPage { get; set; }
         public ObservableCollection<Tour> TourList { get; private set; }
+        public delegate Task<byte[]> ImageCaptureDelegate(object sender, EventArgs e);
+        public event ImageCaptureDelegate CaptureTourImageEvent;
 
-        public ICommand DeleteTourCommand { get; set; }
-        public ICommand DeleteLogCommand { get; set; }
 
         public Tour SelectedTour
         {
@@ -83,18 +84,18 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        public void LoadTours()
+        private void LoadTours()
         {
             TourList = [.. _blHandler.LoadToursDb()];
         }
 
-        public void DeleteTour()
+        private void DeleteTour()
         {
             if (SelectedTour != null)
             {
                 if (!_blHandler.DeleteTourDb(SelectedTour))
                 {
-                    MessageBox.Show("Unable to delete tour, try again.", "Delete error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show("Unable to delete tour, try again.", "Delete error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
@@ -103,13 +104,13 @@ namespace TourPlanner.ViewModels
                 }
             }
         }
-        public void DeleteLog()
+        private void DeleteLog()
         {
             if (SelectedTour != null && SelectedLog != null)
             {
                 if (!_blHandler.DeleteTourLogDb(SelectedLog))
                 {
-                    MessageBox.Show("Unable to delete log, try again.", "Delete error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show("Unable to delete log, try again.", "Delete error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
@@ -117,6 +118,63 @@ namespace TourPlanner.ViewModels
                     SelectedLog = null;
                 }
             }
+        }
+
+        private string GetSavePath(FileType type)
+        {
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.InitialDirectory = "c:\\";
+                saveFileDialog.FileName = type == FileType.pdf ? "Report" : "TourExport";
+                saveFileDialog.DefaultExt = type == FileType.pdf ? ".pdf" : ".json";
+                saveFileDialog.Filter = type == FileType.pdf ? "Pdf documents (.pdf)|*.pdf" : "Json files (.json)|*.json";
+
+                saveFileDialog.FilterIndex = 2;
+                saveFileDialog.RestoreDirectory = true;
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return saveFileDialog.FileName;
+                }
+                return string.Empty;
+            }
+        }
+
+        private Task<byte[]> CaptureTourImage()
+        {
+            return CaptureTourImageEvent.Invoke(this, null);
+        }
+
+        private async void GenerateTourReport()
+        {
+            if (SelectedTour != null)
+            {
+                //reload webview to original size
+                SelectedTour = SelectedTour;
+                _blHandler.GenerateReport(SelectedTour, GetSavePath(FileType.pdf), CaptureTourImage());
+            }
+        }
+
+        private void GenerateSummarizeReport()
+        {
+            if (TourList.Count != 0)
+            {
+                _blHandler.GenerateSummary(TourList.ToList(), GetSavePath(FileType.pdf));
+            }
+        }
+
+        private void ExportTour()
+        {
+
+        }
+
+        private void ImportTour()
+        {
+
+        }
+        private void ExampleFileTour()
+        {
+
         }
 
         private void LoadWebView()
@@ -144,14 +202,86 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        public void DisplayMainView()
+        private void DisplayMainView()
         {
             ViewModel = IoCContainerConfig.Instance.MainViewModel;
             LoadTours();
             SelectedTour = null;
         }
 
-        public ICommand DisplayAddTourView
+        public ICommand ExampleFileTourCommand
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    ExampleFileTour();
+                });
+            }
+        }
+        public ICommand ExportTourCommand
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    ExportTour();
+                });
+            }
+        }
+        public ICommand ImportTourCommand
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    ImportTour();
+                });
+            }
+        }
+        public ICommand GenerateSummarizeReportCommand
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    GenerateSummarizeReport();
+                });
+            }
+        }
+        public ICommand GenerateTourReportCommand
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    GenerateTourReport();
+                });
+            }
+        }
+
+        public ICommand DeleteLogCommand
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    DeleteLog();
+                });
+            }
+        }
+        public ICommand DeleteTourCommand
+        {
+            get
+            {
+                return new RelayCommand(action =>
+                {
+                    DeleteTour();
+                });
+            }
+        }
+
+        public ICommand DisplayAddTourViewCommand
         {
             get
             {
@@ -164,7 +294,7 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        public ICommand DisplayAddTourLogView
+        public ICommand DisplayAddTourLogViewCommand
         {
             get
             {
@@ -177,7 +307,7 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        public ICommand DisplayEditTourView
+        public ICommand DisplayEditTourViewCommand
         {
             get
             {
@@ -190,7 +320,7 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        public ICommand DisplayEditTourLogView
+        public ICommand DisplayEditTourLogViewCommand
         {
             get
             {
@@ -201,6 +331,12 @@ namespace TourPlanner.ViewModels
                     vm.OnRequestClose += (s, e) => DisplayMainView();
                 });
             }
+        }
+
+        private enum FileType
+        {
+            pdf = 0,
+            json = 1
         }
     }
 }

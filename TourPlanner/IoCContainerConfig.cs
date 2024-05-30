@@ -11,6 +11,7 @@ using TourPlanner.BusinessLogic;
 using TourPlanner.BusinessLogic.API;
 using TourPlanner.DataLayer.Repositories;
 using TourPlanner.BusinessLogic.ReportGeneration;
+using TourPlanner.BusinessLogic.ImportExport;
 
 namespace TourPlanner
 {
@@ -26,6 +27,7 @@ namespace TourPlanner
             services.AddSingleton<LogInterceptor>();
             services.AddSingleton<TourRepository>();
             services.AddSingleton<TourLogRepository>();
+            services.AddSingleton<FileImporter_Exporter>();
             services.AddSingleton<TourDbContext>();
             services.AddSingleton<DbHandler>();
             services.AddSingleton<DLHandler>();

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
-using TourPlanner.Models.ComputedAttributes;
+using Newtonsoft.Json;
 
 
 namespace TourPlanner.Models
@@ -21,8 +21,8 @@ namespace TourPlanner.Models
         public float Estimation { get; set; }
         public string MapJson { get; set; }
         public ObservableCollection<TourLog> LogList { get; set; }
-        public Popularity Popularity { get; private set; }
-        public ChildFriendliness ChildFriendliness { get; private set; }
+        public double Popularity { get; private set; }
+        public int ChildFriendliness { get; private set; }
 
         public Tour(string name, List<TourLog> logList, string mapJson)
         {
@@ -63,21 +63,50 @@ namespace TourPlanner.Models
         }
         public Tour()
         {
+            LogList = new();
             InitializeAttributes();
         }
 
         private void InitializeAttributes()
         {
-            Popularity = new Popularity();
-            ChildFriendliness = new ChildFriendliness();
             LogList.CollectionChanged += (s, e) => ComputeAttributes();
             ComputeAttributes();
         }
 
         private void ComputeAttributes()
         {
-            Popularity.ComputeAttribute(LogList);
-            ChildFriendliness.ComputeAttribute(LogList);
+            ComputePopularity();
+            ComputeChildFriendliness();
+        }
+
+        private void ComputeChildFriendliness()
+        {
+            if (LogList.Count == 0)
+            {
+                ChildFriendliness = 0;
+                return;
+            }
+
+            int totalDifficulty = LogList.Sum(log => log.Difficulty);
+            double averageDifficulty = (double)totalDifficulty / LogList.Count;
+
+            ChildFriendliness = (int)((1 / averageDifficulty) * 100);
+        }
+
+        private void ComputePopularity()
+        {
+            int logCount = LogList.Count;
+            if (logCount == 0)
+            {
+                Popularity = 0;
+                return;
+            }
+
+            double averageRating = LogList.Average(log => log.Rating);
+            double invertedRating = 1 - averageRating / 10;
+
+            double x = 0.001; //number needed to avoid division by 0
+            Popularity = logCount / (invertedRating + x);
         }
     }
 }

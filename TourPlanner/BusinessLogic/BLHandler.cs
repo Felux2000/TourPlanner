@@ -11,6 +11,7 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using TourPlanner.BusinessLogic.API;
 using TourPlanner.BusinessLogic.API.Models;
+using TourPlanner.BusinessLogic.ImportExport;
 using TourPlanner.BusinessLogic.ReportGeneration;
 using TourPlanner.DataLayer;
 using TourPlanner.Models;
@@ -21,10 +22,12 @@ namespace TourPlanner.BusinessLogic
     {
         private DLHandler _dlHandler;
         private APIRequestDirections _apiHandler;
-        public BLHandler(DLHandler dlHandler, APIRequestDirections apiHandler)
+        private FileImporter_Exporter _fileImportExport;
+        public BLHandler(DLHandler dlHandler, APIRequestDirections apiHandler, FileImporter_Exporter fileImportExport)
         {
             _dlHandler = dlHandler;
             _apiHandler = apiHandler;
+            _fileImportExport = fileImportExport;
         }
 
         public async Task<(string,ResponseDirectionsModel)> GetTourDetails(string startAdress, string destinationAdress, string transportType)
@@ -74,6 +77,18 @@ namespace TourPlanner.BusinessLogic
         public void GenerateSummary(List<Tour> tourList, string savePath)
         {
             PdfGenerator.TourSummaryGenerator(tourList, savePath);
+        }
+
+        public void ExportTour(Tour tour, string filePath)
+        {
+            _fileImportExport.SaveTourToFile(tour, filePath);
+        }
+
+        public Tour ImportTour(string savePath)
+        {
+            Tour importedTour = _fileImportExport.ImportTourFromFile(savePath);
+            SaveTourDb(importedTour);
+            return importedTour;
         }
 
         public DLHandler DLHandler => _dlHandler;

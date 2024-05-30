@@ -30,20 +30,6 @@ namespace TourPlanner.DataLayer
 
         //_dbContext.Database.EnsureDeleted();
         //_dbContext.Database.EnsureCreated();
-
-            //Following code if for testing purposes only
-         /* TourLogDbModel log1 = new TourLogDbModel(DateTime.Now, new TimeSpan(12, 23, 46), 12, "The string representations of TimeSpan values are produced by calls to the overloads of the TimeSpan.ToString method, as well as by methods that support composite formatting, such as String.Format. For more information, see Formatting Types and Composite Formatting. The following example illustrates the use of standard format", 5, 10);
-            TourLogDbModel log2 = new TourLogDbModel(DateTime.Now, new TimeSpan(12, 23, 46), 12, "comment of the second log", 5, 10);
-            TourDbModel tour = new TourDbModel("Car", "Good for cars to loose the zoomies", "Top of car tree", "food bowl", "car", 2, 0.1f, "/Resources/exampleImage.png");
-            tour.Logs.Add(log1);
-            tour.Logs.Add(log2);
-
-            _tourRepository.AddTour(tour);
-            _tourLogRepository.RemoveTour(log1);
-
-            List<TourDbModel> tourList = _tourRepository.GetAllTours().ToList<TourDbModel>();
-            List<TourLogDbModel> logList = tourList[0].Logs.ToList<TourLogDbModel>();
-            Debug.WriteLine(logList[0].Comment);
             /*}
             catch (Exception ex)
             {

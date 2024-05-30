@@ -67,12 +67,12 @@ namespace TourPlanner.BusinessLogic.ReportGeneration
 
             Paragraph tourPopularityPagraph = new Paragraph();
             tourPopularityPagraph.Add(new Text("Popularity: ").SetFont(boldFont));
-            tourPopularityPagraph.Add(tour.Popularity.Value.ToString()).SetFont(normalFont);
+            tourPopularityPagraph.Add(tour.Popularity.ToString()).SetFont(normalFont);
             document.Add(tourPopularityPagraph);
 
             Paragraph tourChildFriendlinessParagraph = new Paragraph();
             tourChildFriendlinessParagraph.Add(new Text("Child Friendliness (0-100% higher value means more child friendly): ").SetFont(boldFont));
-            tourChildFriendlinessParagraph.Add(tour.ChildFriendliness.Value.ToString()).SetFont(normalFont);
+            tourChildFriendlinessParagraph.Add(tour.ChildFriendliness.ToString()).SetFont(normalFont);
             tourChildFriendlinessParagraph.Add("%").SetFont(normalFont);
             document.Add(tourChildFriendlinessParagraph);
 

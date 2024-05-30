@@ -10,10 +10,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using TourPlanner.BusinessLogic;
@@ -36,12 +38,28 @@ namespace TourPlanner.ViewModels
         private Tour selectedTour;
         private TourLog selectedLog;
         private BaseViewModel viewModel;
+        private string searchText;
 
         public Page DisplayPage { get; set; }
-        public ObservableCollection<Tour> TourList { get; private set; }
+        private ObservableCollection<Tour> tourList;
+        public List<Tour> UnfilteredTourList { get; private set; }
         public delegate Task<byte[]> ImageCaptureDelegate(object sender, EventArgs e);
         public event ImageCaptureDelegate CaptureTourImageEvent;
 
+
+        public ObservableCollection<Tour> TourList
+        {
+            get
+            {
+                return tourList;
+            }
+
+            set
+            {
+                tourList = value;
+                OnPropertyChanged();
+            }
+        }
 
         public Tour SelectedTour
         {
@@ -71,6 +89,21 @@ namespace TourPlanner.ViewModels
             }
         }
 
+        public string SearchText
+        {
+            get
+            {
+                return searchText;
+            }
+
+            set
+            {
+                searchText = value;
+                OnPropertyChanged();
+                FilterTours();
+            }
+        }
+
         public BaseViewModel ViewModel
         {
             get
@@ -86,7 +119,12 @@ namespace TourPlanner.ViewModels
 
         private void LoadTours()
         {
-            TourList = [.. _blHandler.LoadToursDb()];
+            TourList = new();
+            UnfilteredTourList = [.. _blHandler.LoadToursDb()];
+            foreach(var tour in UnfilteredTourList)
+            {
+                TourList.Add(tour);
+            }
         }
 
         private void DeleteTour()
@@ -140,6 +178,22 @@ namespace TourPlanner.ViewModels
             }
         }
 
+        private string GetOpenFilePath()
+        {
+            using(OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.InitialDirectory = "c:\\";
+                openFileDialog.DefaultExt = ".json";
+                openFileDialog.Filter = "Json files (.json)|*.json";
+
+                if(openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    return openFileDialog.FileName;
+                }
+                return string.Empty;
+            }
+        }
+
         private Task<byte[]> CaptureTourImage()
         {
             return CaptureTourImageEvent.Invoke(this, null);
@@ -169,16 +223,67 @@ namespace TourPlanner.ViewModels
 
         private void ExportTour()
         {
-
+            string savePath = GetSavePath(FileType.json);
+            if(savePath != string.Empty)
+            {
+                _blHandler.ExportTour(selectedTour, savePath);
+            }
         }
 
         private void ImportTour()
         {
-
+            string importFilePath = GetOpenFilePath();
+            if (importFilePath != string.Empty)
+            {
+                Tour importedTour = _blHandler.ImportTour(importFilePath);
+                if(importedTour != null)
+                {
+                    TourList.Add(importedTour);
+                }
+            }
         }
         private void ExampleFileTour()
         {
 
+        }
+
+        private void FilterTours()
+        {
+            SelectedTour = null;
+            SelectedLog = null;
+            if(SearchText == string.Empty || SearchText == null)
+            {
+                TourList.Clear();
+                foreach(Tour tour in UnfilteredTourList)
+                { 
+                    TourList.Add(tour);
+                }
+            }
+            else
+            {
+                TourList.Clear();
+                foreach(Tour tour in UnfilteredTourList)
+                {
+                    if (tour.Name.Contains(SearchText)) { TourList.Add(tour); continue; }
+                    if (tour.Description.Contains(SearchText)) { TourList.Add(tour); continue; }
+                    if (tour.From.Contains(SearchText)) { TourList.Add(tour); continue; }
+                    if (tour.To.Contains(SearchText)) { TourList.Add(tour); continue; }
+                    if (tour.TransportType.Contains(SearchText)) { TourList.Add(tour); continue; }
+                    if (tour.Distance.ToString().Contains(SearchText)) { TourList.Add(tour); continue; }
+                    if (tour.Estimation.ToString().Contains(SearchText)) { TourList.Add(tour); continue; }
+                    if (tour.Popularity.ToString().Contains(SearchText)) { TourList.Add(tour); continue; }
+                    if (tour.ChildFriendliness.ToString().Contains(SearchText)) { TourList.Add(tour); continue; }
+                    for(int a=0; a < tour.LogList.Count; a++)
+                    {
+                        if (tour.LogList[a].Date.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (tour.LogList[a].Duration.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (tour.LogList[a].Distance.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (tour.LogList[a].Comment.Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (tour.LogList[a].Difficulty.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (tour.LogList[a].Rating.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                    }
+                }
+            }
         }
 
         private void LoadWebView()

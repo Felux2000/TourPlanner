@@ -38,5 +38,6 @@ namespace TourPlanner.Models
             Difficulty = difficulty;
             Rating = rating;
         }
+        public TourLog() { }
     }
 }

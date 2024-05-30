@@ -10,15 +10,9 @@ using TourPlanner.logging;
 
 namespace TourPlanner.BusinessLogic.ImportExport
 {
-    internal class FileImporter_Exporter
+    public class FileImporter_Exporter
     {
-        private BLHandler _blHandler;
         private static readonly ILoggerWrapper logger = LoggerFactory.GetLogger();
-
-        public FileImporter_Exporter(BLHandler blHandler)
-        {
-            _blHandler = blHandler;
-        }
 
         public Tour ImportTourFromFile(string filePath)
         {
@@ -30,7 +24,11 @@ namespace TourPlanner.BusinessLogic.ImportExport
                     Tour importedTour = JsonSerializer.Deserialize<Tour>(jsonString);
                     if(importedTour!=null)
                     {
-                        _blHandler.SaveTourDb(importedTour);
+                        importedTour.Id = new Guid();
+                        foreach(TourLog log in importedTour.LogList)
+                        {
+                            log.Id = new Guid();
+                        }
                         return importedTour;
                     }
                 }
@@ -51,6 +49,7 @@ namespace TourPlanner.BusinessLogic.ImportExport
                 if(jsonString!=null)
                 {
                     File.WriteAllText(filePath, jsonString);
+                return;
                 }
                 throw new InvalidOperationException("Failed to serialize the Tour object string to a JSON string.");
             }

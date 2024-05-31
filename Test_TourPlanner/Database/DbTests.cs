@@ -7,13 +7,14 @@ using Test_TourPlanner.Database;
 using TourPlanner.DataLayer.Models;
 using TourPlanner.DataLayer.Repositories;
 using TourPlanner.DataLayer;
+using System.Runtime.CompilerServices;
 
 namespace Test_TourPlanner.Database
 {
     [TestFixture]
     public class DbTests
     {
-        private TourPlanner.DataLayer.TourDbContext _dbContext;
+        private TourDbContext _dbContext;
         private DbHandler _dbHandler;
         private LogInterceptor _interceptor;
         private TourRepository _tourRepository;
@@ -23,14 +24,14 @@ namespace Test_TourPlanner.Database
         public void SetUp()
         {
             _interceptor = new LogInterceptor();
-            _dbContext= new TourPlanner.DataLayer.TourDbContext(_interceptor);
+            _dbContext= new TourDbContext(_interceptor ,$"{Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName }\\Test_TourPlanner\\DataLayer\\dbSettings.json");
             _tourRepository = new TourRepository(_dbContext);
             _tourLogRepository = new TourLogRepository(_dbContext);
             _dbHandler = new DbHandler(_interceptor, _dbContext, _tourRepository, _tourLogRepository);
             _dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
-
+        
         [Test]
         public void AddTourTest()
         {

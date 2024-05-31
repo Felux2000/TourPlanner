@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using TourPlanner.BusinessLogic;
+using TourPlanner.BusinessLayer;
 using TourPlanner.DataLayer.Models;
-using TourPlanner.Models;
+using TourPlanner.HelperLayer.Models;
 
 namespace Test_TourPlanner.ConverterTests
 {

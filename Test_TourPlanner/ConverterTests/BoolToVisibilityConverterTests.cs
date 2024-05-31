@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using TourPlanner.Converters;
+using TourPlanner.PresentationLayer.Converters;
 
 namespace Test_TourPlanner.ConverterTests
 {

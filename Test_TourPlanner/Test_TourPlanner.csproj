@@ -17,9 +17,12 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\TourPlanner\TourPlanner.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\BusinessLayer\BusinessLayer.csproj" />
+		<ProjectReference Include="..\HelperLayer\HelperLayer.csproj" />
+		<ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+		<ProjectReference Include="..\PresentationLayer\PresentationLayer.csproj" />
+	</ItemGroup>
 
   <ItemGroup>
     <Using Include="NUnit.Framework" />

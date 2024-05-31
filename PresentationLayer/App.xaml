@@ -1,0 +1,26 @@
+﻿<Application x:Class="TourPlanner.PresentationLayer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:TourPlanner.PresentationLayer" 
+             xmlns:Views="clr-namespace:TourPlanner.PresentationLayer.UserControls"
+             xmlns:ViewModels="clr-namespace:TourPlanner.PresentationLayer.ViewModels"
+             StartupUri="Views/MainView.xaml">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type ViewModels:MainViewModel}">
+            <Views:MainViewControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ViewModels:AddTourViewModel}">
+            <Views:AddTourControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ViewModels:AddTourLogViewModel}">
+            <Views:AddTourLogControl />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ViewModels:EditTourViewModel}">
+            <Views:EditTourControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ViewModels:EditTourLogViewModel}">
+            <Views:EditTourLogControl />
+        </DataTemplate>
+    </Application.Resources>
+</Application>
+ 

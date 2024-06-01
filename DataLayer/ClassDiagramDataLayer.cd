@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TourPlanner.DataLayer.Models.TourDbModel">
+    <Position X="9.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgASAAAQAAAgAAAAAAAAAAQAAAAIAABAAiAAAAAAAAA=</HashCode>
+      <FileName>Models\TourDbModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DataLayer.Models.TourLogDbModel">
+    <Position X="7.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAACAQAAAAAQAAAAAAAAAAFBAAAAAAAAAAA=</HashCode>
+      <FileName>Models\TourLogDbModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DataLayer.Repositories.TourLogRepository">
+    <Position X="8.25" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAABAABAAAACAAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\TourLogRepository.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="context" />
+      <Field Name="logger" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TourPlanner.DataLayer.Repositories.TourRepository">
+    <Position X="6.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAIAIACAAAAAAAAAAAAAAABAAAAAAAIAAA=</HashCode>
+      <FileName>Repositories\TourRepository.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="context" />
+      <Field Name="logger" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TourPlanner.DataLayer.DbHandler">
+    <Position X="2.75" Y="0.75" Width="2" />
+    <AssociationLine Name="_tourLogRepository" Type="TourPlanner.DataLayer.Repositories.TourLogRepository" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="4.312" Y="0.75" />
+        <Point X="4.312" Y="0.375" />
+        <Point X="9.062" Y="0.375" />
+        <Point X="9.062" Y="0.75" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAABIAIIAAAACAAAAAAAAAABRAAAAAAAIAAA=</HashCode>
+      <FileName>DbHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_dbContext" />
+      <Field Name="_tourLogRepository" />
+      <Field Name="_tourRepository" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TourPlanner.DataLayer.DLHandler">
+    <Position X="0.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAgAIAAEIAAAAAAABAAAAAAAAAAAAAAAAAgAAIAAAA=</HashCode>
+      <FileName>DLHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_dbHandler" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TourPlanner.DataLayer.LogInterceptor">
+    <Position X="3.5" Y="8.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAA=</HashCode>
+      <FileName>LogInterceptor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DataLayer.TourDbContext">
+    <Position X="3.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACQAAAAAAAAEAAAAAAAAAAAAAgAAAAAEAAAA=</HashCode>
+      <FileName>TourDbContext.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_interceptor" />
+      <Field Name="Configuration" />
+    </ShowAsAssociation>
+  </Class>
+  <Interface Name="TourPlanner.HelperLayer.Logger.ILoggerWrapper">
+    <Position X="11" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="Microsoft.Extensions.Configuration.IConfiguration">
+    <Position X="0.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

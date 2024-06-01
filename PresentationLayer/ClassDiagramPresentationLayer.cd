@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TourPlanner.PresentationLayer.Commands.RelayCommand">
+    <Position X="12" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQCAAACAAQAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Commands\RelayCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.Converters.BoolToVisibilityConverter">
+    <Position X="9.5" Y="5.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAIIAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\BoolToVisibilityConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.Converters.DistanceToStringConverter">
+    <Position X="9.5" Y="2.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\DistanceToStringConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.Converters.DurationToStringConverter">
+    <Position X="9.5" Y="4.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\DurationToStringConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.Converters.LinearFunctionConverter">
+    <Position X="9.5" Y="8" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIQAAAAAAAgAAAAAAAAAIBEAAAA=</HashCode>
+      <FileName>Converters\LinearFunctionConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.Converters.SelectedToVisibilityConverter">
+    <Position X="9.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAIIAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converters\SelectedToVisibilityConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.ViewModels.AddTourLogViewModel">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>HAAQCECEcABAgAAECIAIAEAIgQAEipAgIAAgACAAAQg=</HashCode>
+      <FileName>ViewModels\AddTourLogViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.ViewModels.AddTourViewModel">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EACCaQAAwEABAEIAAICAAMAAgFAAAoJAAgAAAIAQAgg=</HashCode>
+      <FileName>ViewModels\AddTourViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.ViewModels.BaseViewModel" Collapsed="true">
+    <Position X="4" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAIAIAAAAEAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\BaseViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.ViewModels.EditTourLogViewModel">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GQgACECEUABAQgIAAIICAEAKhAAICIAAOAAAAKkIAAg=</HashCode>
+      <FileName>ViewModels\EditTourLogViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.ViewModels.EditTourViewModel">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EACACVFAwQhAQAIIAIACAEAAoEAAMoIiAhAAAgAQAAg=</HashCode>
+      <FileName>ViewModels\EditTourViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.PresentationLayer.ViewModels.MainViewModel">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="TourPlanner.PresentationLayer.ViewModels.MainViewModel.ImageCaptureDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ViewModels\MainViewModel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Enum Name="TourPlanner.PresentationLayer.ViewModels.MainViewModel.FileType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ViewModels\MainViewModel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AgHQAAAASAAAgMwAWABSAAQBsAAVAEIEgAQEAYAUBgA=</HashCode>
+      <FileName>ViewModels\MainViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

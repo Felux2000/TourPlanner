@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TourPlanner.HelperLayer.Logger.LoggerFactory">
+    <Position X="3" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logger\LoggerFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.HelperLayer.Logger.LoggerWrapper">
+    <Position X="3" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAYACAAAAAAAAAAAAAAEAAAAAAAAEAAA=</HashCode>
+      <FileName>Logger\LoggerWrapper.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="logger" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.HelperLayer.Models.Tour">
+    <Position X="0.5" Y="0.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AgASAAAEIAAgAAQAIQAAAAQAgAAIAgBAAyAAAAAAAAA=</HashCode>
+      <FileName>Models\Tour.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TourPlanner.HelperLayer.Models.TourLog">
+    <Position X="0.5" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAACAQAAAAAAAAAAAAAAAAFBAAAAAAAAAAA=</HashCode>
+      <FileName>Models\TourLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="TourPlanner.HelperLayer.Logger.ILoggerWrapper">
+    <Position X="3" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAYAAAAAAAAAAAAAAAAEAAAAAAAAEAAA=</HashCode>
+      <FileName>Logger\ILoggerWrapper.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="log4net.ILog" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

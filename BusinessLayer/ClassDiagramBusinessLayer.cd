@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TourPlanner.BusinessLayer.API.Models.ResponseDirectionsModel">
+    <Position X="12" Y="4.25" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="TourPlanner.BusinessLayer.API.Models.ResponseDirectionsModel.Feature">
+        <TypeIdentifier>
+          <NewMemberFileName>API\Models\ResponseDirectionsModel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="TourPlanner.BusinessLayer.API.Models.ResponseDirectionsModel.Properties">
+        <TypeIdentifier>
+          <NewMemberFileName>API\Models\ResponseDirectionsModel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="TourPlanner.BusinessLayer.API.Models.ResponseDirectionsModel.Summary">
+        <TypeIdentifier>
+          <NewMemberFileName>API\Models\ResponseDirectionsModel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="TourPlanner.BusinessLayer.API.Models.ResponseDirectionsModel.Geometry">
+        <TypeIdentifier>
+          <NewMemberFileName>API\Models\ResponseDirectionsModel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>API\Models\ResponseDirectionsModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.BusinessLayer.API.Models.ResponseGeoCodeSearchModel">
+    <Position X="15.5" Y="2.25" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="TourPlanner.BusinessLayer.API.Models.ResponseGeoCodeSearchModel.GeocodeFeature">
+        <TypeIdentifier>
+          <NewMemberFileName>API\Models\ResponseGeoCodeSearchModel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="TourPlanner.BusinessLayer.API.Models.ResponseGeoCodeSearchModel.Geometry">
+        <TypeIdentifier>
+          <NewMemberFileName>API\Models\ResponseGeoCodeSearchModel.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>API\Models\ResponseGeoCodeSearchModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.BusinessLayer.API.APIRequestDirections">
+    <Position X="8.75" Y="3.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AEAAAACAAAAAAACCAAAAAAQEAAAAAAAAAAAABIAAAAA=</HashCode>
+      <FileName>API\APIRequestDirections.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.BusinessLayer.ImportExport.FileImporter_Exporter">
+    <Position X="9" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAABAACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ImportExport\FileImporter_Exporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.BusinessLayer.ReportGeneration.PdfGenerator">
+    <Position X="15.5" Y="6.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgEAAAAA=</HashCode>
+      <FileName>ReportGeneration\PdfGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.BusinessLayer.BLHandler">
+    <Position X="4" Y="2.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAIgACAAAGAAIwAAAAAAAEhBAAAAAAAEAEBAAABBA=</HashCode>
+      <FileName>BLHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_apiHandler" />
+      <Field Name="_dlHandler" />
+      <Field Name="_fileImportExport" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="TourPlanner.BusinessLayer.ModelConverter">
+    <Position X="12" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>ModelConverter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TourPlanner.DataLayer.DLHandler" Collapsed="true">
+    <Position X="9" Y="2.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

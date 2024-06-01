@@ -75,7 +75,19 @@
                         <RowDefinition Height="1*"/>
                         <RowDefinition Height="11*"/>
                     </Grid.RowDefinitions>
-                    <TextBox Grid.Row="0" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="0" x:Name="searchBox" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="Search..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=searchBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                     <ListBox Grid.Row="1"  x:Name="lstTours"  ItemsSource="{Binding TourList}" SelectedItem="{Binding SelectedTour}" SelectionMode="Single" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontSize="{Binding ActualWidth, ElementName=lstTours , Converter={StaticResource TourListWidthToFontSize}}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">

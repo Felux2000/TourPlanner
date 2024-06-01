@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 
 namespace TourPlanner.HelperLayer.Models
 {
-    public class Tour
+    public class Tour : INotifyPropertyChanged
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -19,16 +21,35 @@ namespace TourPlanner.HelperLayer.Models
         public float Distance { get; set; }
         public float Estimation { get; set; }
         public string MapJson { get; set; }
-        public ObservableCollection<TourLog> LogList { get; set; }
+        public ObservableCollection<TourLog> logList { get; set; }
         public double Popularity { get; private set; }
         public int ChildFriendliness { get; private set; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+        
+        public ObservableCollection<TourLog> LogList
+        {
+            get
+            {
+                return logList;
+            }
+
+            set
+            {
+                logList = value;
+                OnPropertyChanged();
+                ComputeAttributes();
+            }
+        }
         public Tour(string name, List<TourLog> logList, string mapJson)
         {
             Name = name;
             LogList = [.. logList];
             MapJson = mapJson;
-            InitializeAttributes();
         }
         //UpdateTour
         public Tour(Guid id, string name, string description, string from, string to, string transportType, float distance, float estimation, string mapJson)
@@ -43,7 +64,6 @@ namespace TourPlanner.HelperLayer.Models
             Estimation = estimation;
             MapJson = mapJson;
             LogList = new();
-            InitializeAttributes();
         }
         //NewTour
         public Tour(string name, string description, string from, string to, string transportType, float distance, float estimation, string mapJson)
@@ -58,18 +78,10 @@ namespace TourPlanner.HelperLayer.Models
             Estimation = estimation;
             MapJson = mapJson;
             LogList = new();
-            InitializeAttributes();
         }
         public Tour()
         {
             LogList = new();
-            InitializeAttributes();
-        }
-
-        private void InitializeAttributes()
-        {
-            LogList.CollectionChanged += (s, e) => ComputeAttributes();
-            ComputeAttributes();
         }
 
         private void ComputeAttributes()
@@ -105,7 +117,7 @@ namespace TourPlanner.HelperLayer.Models
             double invertedRating = 1 - averageRating / 10;
 
             double x = 0.001; //number needed to avoid division by 0
-            Popularity = logCount / (invertedRating + x);
+            Popularity = Math.Round((logCount / (invertedRating + x)), 2);
         }
     }
 }

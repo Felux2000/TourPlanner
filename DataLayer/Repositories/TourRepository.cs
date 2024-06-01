@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.DataLayer.Exceptions;
 using TourPlanner.DataLayer.Models;
 using TourPlanner.HelperLayer.Logger;
 
@@ -21,8 +23,16 @@ namespace TourPlanner.DataLayer.Repositories
 
         public void AddTour(TourDbModel tour)
         {
-            context.Add(tour);
-            context.SaveChanges();
+            try
+            {
+                context.Add(tour);
+                context.SaveChanges();
+            }
+            catch (DbUpdateException ex)
+            {
+                var dlEx = new DLInvalidEntityException("Invalid entity contents!", ex);
+                throw dlEx;
+            }
         }
 
         public ICollection<TourDbModel> GetAllTours()
@@ -31,15 +41,23 @@ namespace TourPlanner.DataLayer.Repositories
         }
         public void UpdateTour(TourDbModel tour)
         {
-            var entity = context.Tours.Find(tour.Id);
-            if (entity == null)
+            try
             {
-                logger.Fatal("Failed updating Tour in database. Tour with that specified Id does not exist in Database");
-                throw new ArgumentOutOfRangeException("tour", "No tour found with that id to update!");
+                var entity = context.Tours.Find(tour.Id);
+                if (entity == null)
+                {
+                    var ex = new DLEntityNotFoundException("Tour to update not found!");
+                    logger.Error($"{ex.Message} Tour with Id={tour.Id} does not exist in Database");
+                    throw ex;
+                }
+                context.Entry(entity).CurrentValues.SetValues(tour);
+                context.SaveChanges();
             }
-
-            context.Entry(entity).CurrentValues.SetValues(tour);
-            context.SaveChanges();
+            catch (DbUpdateException ex)
+            {
+                var dlEx = new DLInvalidEntityException("Invalid entity contents!", ex);
+                throw dlEx;
+            }
         }
 
         public void DeleteTour(TourDbModel tour)

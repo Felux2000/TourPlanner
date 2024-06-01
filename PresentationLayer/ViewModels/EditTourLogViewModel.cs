@@ -12,15 +12,19 @@ using System.Windows.Media;
 using TourPlanner.BusinessLayer;
 using TourPlanner.PresentationLayer.Commands;
 using TourPlanner.HelperLayer.Models;
+using TourPlanner.DataLayer.Exceptions;
+using TourPlanner.HelperLayer.Services;
+using System.Windows.Forms;
 
 namespace TourPlanner.PresentationLayer.ViewModels
 {
     public class EditTourLogViewModel : BaseViewModel
     {
-        public EditTourLogViewModel(BLHandler blHandler, MainViewModel mainViewModel)
+        public EditTourLogViewModel(BLHandler blHandler, MainViewModel mainViewModel, DialogService dialogService)
         {
             _blHandler = blHandler;
             _logToEdit = mainViewModel.SelectedLog;
+            _dialogService = dialogService;
             EditTourLogCommand = new RelayCommand(o => SaveChangedTourLog());
             CloseEditTourLogWindow = new RelayCommand(o => CloseWindow());
             rateColor = new();
@@ -32,7 +36,7 @@ namespace TourPlanner.PresentationLayer.ViewModels
         }
 
         private BLHandler _blHandler;
-        public event EventHandler OnRequestClose;
+        private DialogService _dialogService;
         private TourLog _logToEdit;
         public ICommand EditTourLogCommand { get; set; }
         public ICommand CloseEditTourLogWindow { get; set; }
@@ -246,15 +250,21 @@ namespace TourPlanner.PresentationLayer.ViewModels
             {
                 FormActive = false;
                 UpdateTourLogInformation();
-                if (!_blHandler.UpdateTourLogDb(_logToEdit))
+                try
+                {
+                    _blHandler.UpdateTourLogDb(_logToEdit);
+                    OnRequestClose(this, new EventArgs());
+                }
+                catch (Exception ex) when (ex is DLInvalidEntityException || ex is DLEntityNotFoundException)
                 {
                     LoadingMessageText = "Log could not be saved!";
-                    MessageBox.Show("Unable to save log, try again.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
                     TourLogValid = false;
+                    _dialogService.ShowMessageBox("Unable to save log, try again.", "Save error");
                 }
-                else
+                catch
                 {
-                    OnRequestClose(this, new EventArgs());
+                    if (_dialogService.ShowMessageBox("Unable to connect to server", "Fatal error", true) == DialogResult.OK)
+                        OnRequestClose(this, new EventArgs());
                 }
             }
             FormActive = true;

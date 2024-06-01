@@ -29,7 +29,8 @@ namespace TourPlanner.PresentationLayer.UserControls
 
         private void WebViewRefreshEvent(object? sender, EventArgs? args)
         {
-            webView.Reload();
+            if (webView.CoreWebView2 != null)
+                webView.Reload();
         }
 
         private async void InitializeAsync()

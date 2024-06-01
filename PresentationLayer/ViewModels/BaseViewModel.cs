@@ -10,7 +10,7 @@ namespace TourPlanner.PresentationLayer.ViewModels
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
-        public event EventHandler OnRequestClose;
+        public EventHandler OnRequestClose;
         public event PropertyChangedEventHandler PropertyChanged;
         public EventHandler WebViewRefreshEventHandler;
         protected void OnPropertyChanged([CallerMemberName] string name = null)

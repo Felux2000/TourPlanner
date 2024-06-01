@@ -11,6 +11,7 @@ using TourPlanner.BusinessLayer.API;
 using TourPlanner.DataLayer.Repositories;
 using TourPlanner.PresentationLayer.ViewModels;
 using TourPlanner.BusinessLayer.ImportExport;
+using TourPlanner.HelperLayer.Services;
 
 namespace TourPlanner.PresentationLayer
 {
@@ -23,7 +24,6 @@ namespace TourPlanner.PresentationLayer
         {
             var services = new ServiceCollection();
 
-            services.AddSingleton<LogInterceptor>();
             services.AddSingleton<TourRepository>();
             services.AddSingleton<TourLogRepository>();
             services.AddSingleton<FileImporter_Exporter>();
@@ -34,6 +34,7 @@ namespace TourPlanner.PresentationLayer
             services.AddSingleton<APIRequestDirections>();
             services.AddSingleton<BLHandler>();
 
+            services.AddTransient<DialogService>();
             services.AddSingleton<MainViewModel>();
             services.AddTransient<AddTourViewModel>();
             services.AddTransient<EditTourViewModel>();

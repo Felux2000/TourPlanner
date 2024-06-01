@@ -15,15 +15,20 @@ using TourPlanner.BusinessLayer;
 using TourPlanner.BusinessLayer.API.Models;
 using TourPlanner.PresentationLayer.Commands;
 using TourPlanner.HelperLayer.Models;
+using TourPlanner.HelperLayer.Services;
+using TourPlanner.HelperLayer.Logger;
+using TourPlanner.DataLayer.Exceptions;
+using System.Windows.Forms;
 
 namespace TourPlanner.PresentationLayer.ViewModels
 {
     public class EditTourViewModel : BaseViewModel
     {
-        public EditTourViewModel(BLHandler blHandler, MainViewModel mainViewModel)
+        public EditTourViewModel(BLHandler blHandler, MainViewModel mainViewModel, DialogService dialogService)
         {
             _blHandler = blHandler;
             _tourToEdit = mainViewModel.SelectedTour;
+            _dialogService = dialogService;
             SaveChangedTourCommand = new RelayCommand(o => SaveChangedTour());
             CloseEditTourWindow = new RelayCommand(o => CloseWindow());
             LoadTourInformation();
@@ -31,9 +36,9 @@ namespace TourPlanner.PresentationLayer.ViewModels
         }
 
         private BLHandler _blHandler;
+        private DialogService _dialogService;
         private Tour _tourToEdit;
-
-        public event EventHandler OnRequestClose;
+        private static readonly ILoggerWrapper _logger = LoggerFactory.GetLogger();
 
         public ICommand SaveChangedTourCommand { get; set; }
         public ICommand CloseEditTourWindow { get; set; }
@@ -222,15 +227,21 @@ namespace TourPlanner.PresentationLayer.ViewModels
             if (await tourLoadTask && TourLoadSuccessful)
             {
                 UpdateTourInformation();
-                if (!_blHandler.UpdateTourDb(_tourToEdit))
+                try
+                {
+                    _blHandler.UpdateTourDb(_tourToEdit);
+                    OnRequestClose(this, new EventArgs());
+                }
+                catch (Exception ex) when (ex is DLInvalidEntityException || ex is DLEntityNotFoundException)
                 {
                     LoadingMessageText = "Tour could not be saved!";
-                    MessageBox.Show("Unable to save tour, try again.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
                     TourLoadSuccessful = false;
+                    _dialogService.ShowMessageBox("Unable to save tour, try again.", "Save error");
                 }
-                else
+                catch
                 {
-                    OnRequestClose(this, new EventArgs());
+                    if (_dialogService.ShowMessageBox("Unable to connect to server.", "Fatal error", true) == DialogResult.OK)
+                        OnRequestClose(this, new EventArgs());
                 }
             }
             FormActive = true;
@@ -238,15 +249,24 @@ namespace TourPlanner.PresentationLayer.ViewModels
 
         private void WriteJs()
         {
-            string jsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/WebView/directions.js");
-            using (StreamWriter sw = new StreamWriter(jsPath, false))
+            try
             {
-                sw.Write($"var directions = ");
+                string jsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/WebView/directions.js");
+                using (StreamWriter sw = new StreamWriter(jsPath, false))
+                {
+                    sw.Write($"var directions = ");
+                }
+                using (StreamWriter sw = new StreamWriter(jsPath, true))
+                {
+                    sw.Write(lastResponse);
+                    sw.Write(";");
+                }
             }
-            using (StreamWriter sw = new StreamWriter(jsPath, true))
+            catch (Exception ex)
             {
-                sw.Write(lastResponse);
-                sw.Write(";");
+                _logger.Fatal($"Webview rewrite threw {ex}: {ex.Message}");
+                _dialogService.ShowMessageBox("Tour map could not be loaded.", "Fatal error", true);
+                OnRequestClose(this, new EventArgs());
             }
         }
 
@@ -298,8 +318,6 @@ namespace TourPlanner.PresentationLayer.ViewModels
                     LoadingMessageText = string.Empty;
                     WriteJs();
                     WebViewRefreshEventHandler.Invoke(this, null);
-                    //delay for webview loading
-                    await Task.Delay(50);
                     EditTourDist = (float)lastTourDirections.Features[0].Properties.Summary.Distance;
                     EditTourEst = (float)lastTourDirections.Features[0].Properties.Summary.Duration;
                     TourLoadSuccessful = true;

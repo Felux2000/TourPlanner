@@ -1,18 +1,24 @@
-﻿using System;
+﻿using log4net.Repository.Hierarchy;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.API;
 using TourPlanner.BusinessLayer.API.Models;
+using TourPlanner.BusinessLayer.Exceptions;
 using TourPlanner.BusinessLayer.ImportExport;
 using TourPlanner.BusinessLayer.ReportGeneration;
 using TourPlanner.DataLayer;
+using TourPlanner.DataLayer.Exceptions;
+using TourPlanner.HelperLayer.Logger;
 using TourPlanner.HelperLayer.Models;
 
 namespace TourPlanner.BusinessLayer
@@ -22,6 +28,7 @@ namespace TourPlanner.BusinessLayer
         private DLHandler _dlHandler;
         private APIRequestDirections _apiHandler;
         private FileImporter_Exporter _fileImportExport;
+        private static readonly ILoggerWrapper _logger = LoggerFactory.GetLogger();
         public BLHandler(DLHandler dlHandler, APIRequestDirections apiHandler, FileImporter_Exporter fileImportExport)
         {
             _dlHandler = dlHandler;
@@ -29,70 +36,224 @@ namespace TourPlanner.BusinessLayer
             _fileImportExport = fileImportExport;
         }
 
-        public async Task<(string,ResponseDirectionsModel)> GetTourDetails(string startAdress, string destinationAdress, string transportType)
+        public async Task<(string, ResponseDirectionsModel)> GetTourDetails(string startAdress, string destinationAdress, string transportType)
         {
-            return await _apiHandler.GetDirections(startAdress, destinationAdress, transportType);
+            try
+            {
+                return await _apiHandler.GetDirections(startAdress, destinationAdress, transportType);
+            }
+            catch (HttpRequestException ex)
+            {
+                Debug.WriteLine(ex.Message);
+                _logger.Fatal($"{ex.Message}");
+                ExceptionDispatchInfo.Capture(ex).Throw();
+                return (null, null);
+            }
         }
 
-        public bool SaveTourDb(Tour newTour)
+        public void SaveTourDb(Tour newTour)
         {
-            return _dlHandler.SaveTourToDb(ModelConverter.ConvertSingleTourToDbModelTour(newTour));
+            try
+            {
+                _dlHandler.SaveTourToDb(ModelConverter.ConvertSingleTourToDbModelTour(newTour));
+            }
+            catch (DLInvalidEntityException ex)
+            {
+                Debug.WriteLine(ex.Message);
+                _logger.Error($"{ex}: {ex.Message} {(ex.InnerException != null ? $"{ex.InnerException}:" : string.Empty)} {(ex.InnerException != null ? ex.InnerException.Message : string.Empty)}");
+                ExceptionDispatchInfo.Capture(ex).Throw();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                var blEx = new BLConnectionException("Data connection interrupted!", ex);
+                _logger.Fatal($"{blEx.Message} {ex.Message}");
+                throw blEx;
+            }
         }
 
-        public bool SaveTourLogDb(Tour relatedTour, TourLog newTourLog)
+        public void SaveTourLogDb(Tour relatedTour, TourLog newTourLog)
         {
-            return _dlHandler.SaveTourLogToDb(ModelConverter.ConvertSingleTourToDbModelTour(relatedTour), ModelConverter.ConvertTourLogToDbModelTour(newTourLog));
+            try
+            {
+                _dlHandler.SaveTourLogToDb(ModelConverter.ConvertSingleTourToDbModelTour(relatedTour), ModelConverter.ConvertTourLogToDbModelTour(newTourLog));
+            }
+            catch (Exception ex) when (ex is DLInvalidEntityException || ex is DLEntityNotFoundException)
+            {
+                Debug.WriteLine(ex.Message);
+                _logger.Error($"{ex}: {ex.Message} {(ex.InnerException != null ? $"{ex.InnerException}:" : string.Empty)} {(ex.InnerException != null ? ex.InnerException.Message : string.Empty)}");
+                ExceptionDispatchInfo.Capture(ex).Throw();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                var blEx = new BLConnectionException("Data connection interrupted!", ex);
+                _logger.Fatal($"{blEx.Message} {ex.Message}");
+                throw blEx;
+            }
         }
 
-        public bool UpdateTourDb(Tour updatedTour)
+        public void UpdateTourDb(Tour updatedTour)
         {
-            return _dlHandler.UpdateTourInDb(ModelConverter.ConvertSingleTourToDbModelTour(updatedTour));
+            try
+            {
+                _dlHandler.UpdateTourInDb(ModelConverter.ConvertSingleTourToDbModelTour(updatedTour));
+            }
+            catch (Exception ex) when (ex is DLInvalidEntityException || ex is DLEntityNotFoundException)
+            {
+                Debug.WriteLine(ex.Message);
+                _logger.Error($"{ex}: {ex.Message} {(ex.InnerException != null ? $"{ex.InnerException}:" : string.Empty)} {(ex.InnerException != null ? ex.InnerException.Message : string.Empty)}");
+                ExceptionDispatchInfo.Capture(ex).Throw();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                var blEx = new BLConnectionException("Data connection interrupted!", ex);
+                _logger.Fatal($"{blEx.Message} {ex.Message}");
+                throw blEx;
+            }
         }
 
-        public bool UpdateTourLogDb(TourLog updatedLog)
+        public void UpdateTourLogDb(TourLog updatedLog)
         {
-            return _dlHandler.UpdateTourLogInDb(ModelConverter.ConvertTourLogToDbModelTour(updatedLog));
+            try
+            {
+                _dlHandler.UpdateTourLogInDb(ModelConverter.ConvertTourLogToDbModelTour(updatedLog));
+            }
+            catch (Exception ex) when (ex is DLInvalidEntityException || ex is DLEntityNotFoundException)
+            {
+                Debug.WriteLine(ex.Message);
+                _logger.Error($"{ex}: {ex.Message} {(ex.InnerException != null ? $"{ex.InnerException}:" : string.Empty)} {(ex.InnerException != null ? ex.InnerException.Message : string.Empty)}");
+                ExceptionDispatchInfo.Capture(ex).Throw();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                var blEx = new BLConnectionException("Data connection interrupted!", ex);
+                _logger.Fatal($"{blEx.Message} {ex.Message}");
+                throw blEx;
+            }
         }
 
-        public bool DeleteTourDb(Tour removeableTour)
+        public void DeleteTourDb(Tour removeableTour)
         {
-            return _dlHandler.DeleteTourFromDb(ModelConverter.ConvertSingleTourToDbModelTour(removeableTour));
+            try
+            {
+                _dlHandler.DeleteTourFromDb(ModelConverter.ConvertSingleTourToDbModelTour(removeableTour));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                var blEx = new BLConnectionException("Data connection interrupted!", ex);
+                _logger.Fatal($"{blEx.Message} {ex.Message}");
+                throw blEx;
+            }
         }
-        public bool DeleteTourLogDb(TourLog removeableTourLog)
+        public void DeleteTourLogDb(TourLog removeableTourLog)
         {
-            return _dlHandler.DeleteTourLogFromDb(ModelConverter.ConvertTourLogToDbModelTour(removeableTourLog));
+            try
+            {
+                _dlHandler.DeleteTourLogFromDb(ModelConverter.ConvertTourLogToDbModelTour(removeableTourLog));
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                var blEx = new BLConnectionException("Data connection interrupted!", ex);
+                _logger.Fatal($"{blEx.Message} {ex.Message}");
+                throw blEx;
+            }
         }
 
         public List<Tour> LoadToursDb()
         {
-            return ModelConverter.ConvertListTourDbModelToTour(_dlHandler.LoadToursFromDb());
+            try
+            {
+                return ModelConverter.ConvertListTourDbModelToTour(_dlHandler.LoadToursFromDb());
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                var blEx = new BLConnectionException("Data connection interrupted!", ex);
+                _logger.Fatal($"{blEx.Message} {ex.Message}");
+                throw blEx;
+            }
         }
 
         public async void GenerateReport(Tour tour, string savePath, Task<byte[]> captureTask)
         {
-            PdfGenerator.TourReportGenerator(tour, savePath, await captureTask);
+            try
+            {
+                PdfGenerator.TourReportGenerator(tour, savePath, await captureTask);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                var blEx = new BLPdfGeneratorException("Report cannot be generated!", ex);
+                _logger.Error($"{blEx.Message} {ex.Message}");
+                throw blEx;
+            }
         }
 
         public void GenerateSummary(List<Tour> tourList, string savePath)
         {
-            PdfGenerator.TourSummaryGenerator(tourList, savePath);
+            try
+            {
+                PdfGenerator.TourSummaryGenerator(tourList, savePath);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                var blEx = new BLPdfGeneratorException("Report cannot be generated!", ex);
+                _logger.Error($"{blEx.Message} {ex.Message}");
+                throw blEx;
+            }
         }
 
-        public void ExportTour(Tour tour, string filePath)
+        public bool ExportTour(Tour tour, string filePath)
         {
-            _fileImportExport.SaveTourToFile(tour, filePath);
+            try
+            {
+                _fileImportExport.SaveTourToFile(tour, filePath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                _logger.Error($"Failed to export file with given filepath. Filepath: {filePath}. Exception: {ex.Message}");
+                return false;
+            }
         }
 
-        public void ExportExampleTour(string filePath)
+        public bool ExportExampleTour(string filePath)
         {
-            _fileImportExport.ExampleFile(filePath);
+            try
+            {
+                _fileImportExport.ExampleFile(filePath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return false;
+            }
         }
 
         public Tour ImportTour(string savePath)
         {
-            Tour importedTour = _fileImportExport.ImportTourFromFile(savePath);
-            SaveTourDb(importedTour);
-            return importedTour;
+            try
+            {
+                Tour importedTour;
+                importedTour = _fileImportExport.ImportTourFromFile(savePath);
+                SaveTourDb(importedTour);
+                return importedTour;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.WriteLine(ex.Message);
+                _logger.Error($"Failed to import file with given filepath. Filepath: {savePath}. Exception: {ex.Message}");
+                ExceptionDispatchInfo.Capture(ex).Throw();
+                return null;
+            }
         }
 
         public DLHandler DLHandler => _dlHandler;

@@ -21,6 +21,7 @@ namespace TourPlanner.PresentationLayer.Views
         {
             InitializeComponent();
             DataContext = IoCContainerConfig.Instance.MainViewModel;
+            ((BaseViewModel)DataContext).OnRequestClose += (s, e) => Application.Current.Shutdown();
         }
     }
 }

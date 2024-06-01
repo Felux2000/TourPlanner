@@ -21,20 +21,26 @@ using System.Windows.Input;
 using TourPlanner.BusinessLayer;
 using TourPlanner.PresentationLayer.Commands;
 using TourPlanner.HelperLayer.Models;
+using TourPlanner.HelperLayer.Logger;
+using TourPlanner.HelperLayer.Services;
+using TourPlanner.BusinessLayer.Exceptions;
 
 namespace TourPlanner.PresentationLayer.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private BLHandler _blHandler;
-        public MainViewModel(BLHandler blHandler)
+        public MainViewModel(BLHandler blHandler, DialogService dialogService)
         {
             _blHandler = blHandler;
+            _dialogService = dialogService;
             LoadTours();
             viewModel = this;
             SelectedTour = null;
         }
 
+        private BLHandler _blHandler;
+        private DialogService _dialogService;
+        private static readonly ILoggerWrapper _logger = LoggerFactory.GetLogger();
         private Tour selectedTour;
         private TourLog selectedLog;
         private BaseViewModel viewModel;
@@ -120,10 +126,20 @@ namespace TourPlanner.PresentationLayer.ViewModels
         private void LoadTours()
         {
             TourList = new();
-            UnfilteredTourList = [.. _blHandler.LoadToursDb()];
-            foreach (var tour in UnfilteredTourList)
+            try
             {
-                TourList.Add(tour);
+                UnfilteredTourList = [.. _blHandler.LoadToursDb()];
+                foreach (var tour in UnfilteredTourList)
+                {
+                    TourList.Add(tour);
+                }
+            }
+            catch
+            {
+                if (_dialogService.ShowMessageBox("Unable to connect to server.", "Fatal error", true) == DialogResult.OK)
+                {
+                    OnRequestClose(this, new EventArgs());
+                }
             }
         }
 
@@ -131,14 +147,18 @@ namespace TourPlanner.PresentationLayer.ViewModels
         {
             if (SelectedTour != null)
             {
-                if (!_blHandler.DeleteTourDb(SelectedTour))
+                try
                 {
-                    System.Windows.MessageBox.Show("Unable to delete tour, try again.", "Delete error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                else
-                {
+                    _blHandler.DeleteTourDb(SelectedTour);
                     TourList.Remove(SelectedTour);
                     SelectedTour = null;
+                }
+                catch
+                {
+                    if (_dialogService.ShowMessageBox("Unable to connect to server.", "Fatal error", true) == DialogResult.OK)
+                    {
+                        OnRequestClose(this, new EventArgs());
+                    }
                 }
             }
         }
@@ -146,50 +166,72 @@ namespace TourPlanner.PresentationLayer.ViewModels
         {
             if (SelectedTour != null && SelectedLog != null)
             {
-                if (!_blHandler.DeleteTourLogDb(SelectedLog))
+                try
                 {
-                    System.Windows.MessageBox.Show("Unable to delete log, try again.", "Delete error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-                else
-                {
+                    _blHandler.DeleteTourLogDb(SelectedLog);
                     SelectedTour.LogList.Remove(SelectedLog);
                     SelectedLog = null;
+                }
+                catch
+                {
+                    if (_dialogService.ShowMessageBox("Unable to connect to server.", "Fatal error", true) == DialogResult.OK)
+                    {
+                        OnRequestClose(this, new EventArgs());
+                    }
                 }
             }
         }
 
         private string GetSavePath(FileType type)
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            try
             {
-                saveFileDialog.InitialDirectory = "c:\\";
-                saveFileDialog.FileName = type == FileType.pdf ? "Report" : "TourExport";
-                saveFileDialog.DefaultExt = type == FileType.pdf ? ".pdf" : ".json";
-                saveFileDialog.Filter = type == FileType.pdf ? "Pdf documents (.pdf)|*.pdf" : "Json files (.json)|*.json";
-
-                saveFileDialog.FilterIndex = 2;
-                saveFileDialog.RestoreDirectory = true;
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                using (SaveFileDialog saveFileDialog = _dialogService.GetSaveDialog())
                 {
-                    return saveFileDialog.FileName;
+                    saveFileDialog.InitialDirectory = "c:\\";
+                    saveFileDialog.FileName = type == FileType.pdf ? "Report" : "TourExport";
+                    saveFileDialog.DefaultExt = type == FileType.pdf ? ".pdf" : ".json";
+                    saveFileDialog.Filter = type == FileType.pdf ? "Pdf documents (.pdf)|*.pdf" : "Json files (.json)|*.json";
+
+                    saveFileDialog.FilterIndex = 2;
+                    saveFileDialog.RestoreDirectory = true;
+
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        return saveFileDialog.FileName;
+                    }
+                    return string.Empty;
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"File path selection threw {ex}: {ex.Message}");
+                _dialogService.ShowMessageBox("Unable to use specified file path.", "Save error");
                 return string.Empty;
             }
         }
 
         private string GetOpenFilePath()
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            try
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.DefaultExt = ".json";
-                openFileDialog.Filter = "Json files (.json)|*.json";
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                using (OpenFileDialog openFileDialog = _dialogService.GetOpenDialog())
                 {
-                    return openFileDialog.FileName;
+                    openFileDialog.InitialDirectory = "c:\\";
+                    openFileDialog.DefaultExt = ".json";
+                    openFileDialog.Filter = "Json files (.json)|*.json";
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        return openFileDialog.FileName;
+                    }
+                    return string.Empty;
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"File path selection threw {ex}: {ex.Message}");
+                _dialogService.ShowMessageBox("Unable to use specified file path.", "Save error");
                 return string.Empty;
             }
         }
@@ -207,7 +249,16 @@ namespace TourPlanner.PresentationLayer.ViewModels
                 SelectedTour = SelectedTour;
                 string path = GetSavePath(FileType.pdf);
                 if (path != string.Empty)
-                    _blHandler.GenerateReport(SelectedTour, path, CaptureTourImage());
+                {
+                    try
+                    {
+                        _blHandler.GenerateReport(SelectedTour, path, CaptureTourImage());
+                    }
+                    catch (BLPdfGeneratorException)
+                    {
+                        _dialogService.ShowMessageBox("Unable to generate report.", "Report error");
+                    }
+                }
             }
         }
 
@@ -217,7 +268,16 @@ namespace TourPlanner.PresentationLayer.ViewModels
             {
                 string path = GetSavePath(FileType.pdf);
                 if (path != string.Empty)
-                    _blHandler.GenerateSummary(TourList.ToList(), path);
+                {
+                    try
+                    {
+                        _blHandler.GenerateSummary(TourList.ToList(), path);
+                    }
+                    catch (BLPdfGeneratorException)
+                    {
+                        _dialogService.ShowMessageBox("Unable to generate report.", "Report error");
+                    }
+                }
             }
         }
 
@@ -226,7 +286,8 @@ namespace TourPlanner.PresentationLayer.ViewModels
             string savePath = GetSavePath(FileType.json);
             if (savePath != string.Empty)
             {
-                _blHandler.ExportTour(selectedTour, savePath);
+                if (!_blHandler.ExportTour(selectedTour, savePath))
+                    _dialogService.ShowMessageBox("Unable to export file.", "Export error");
             }
         }
 
@@ -235,10 +296,17 @@ namespace TourPlanner.PresentationLayer.ViewModels
             string importFilePath = GetOpenFilePath();
             if (importFilePath != string.Empty)
             {
-                Tour importedTour = _blHandler.ImportTour(importFilePath);
-                if (importedTour != null)
+                try
                 {
-                    TourList.Add(importedTour);
+                    Tour importedTour = _blHandler.ImportTour(importFilePath);
+                    if (importedTour != null)
+                    {
+                        TourList.Add(importedTour);
+                    }
+                }
+                catch (Exception)
+                {
+                    _dialogService.ShowMessageBox("Unable to import tour.", "Import error");
                 }
             }
         }
@@ -247,7 +315,8 @@ namespace TourPlanner.PresentationLayer.ViewModels
             string savePath = GetSavePath(FileType.json);
             if (savePath != string.Empty)
             {
-                _blHandler.ExportExampleTour(savePath);
+                if (!_blHandler.ExportExampleTour(savePath))
+                    _dialogService.ShowMessageBox("Unable to export file.", "Export error");
             }
         }
 
@@ -280,12 +349,12 @@ namespace TourPlanner.PresentationLayer.ViewModels
                     for (int a = 0; a < tour.LogList.Count; a++)
                     {
                         var log = tour.LogList[a];
-                        if (log != null && log.Date.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
-                        if (log != null && log.Duration.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
-                        if (log != null && log.Distance.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
-                        if (log != null && log.Comment.Contains(SearchText)) { TourList.Add(tour); break; }
-                        if (log != null && log.Difficulty.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
-                        if (log != null && log.Rating.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (log.Date != null && log.Date.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (log.Duration != null && log.Duration.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (log.Distance != null && log.Distance.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (log.Comment != null && log.Comment.Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (log.Difficulty != null && log.Difficulty.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
+                        if (log.Rating != null && log.Rating.ToString().Contains(SearchText)) { TourList.Add(tour); break; }
                     }
                 }
             }
@@ -304,15 +373,24 @@ namespace TourPlanner.PresentationLayer.ViewModels
 
         private void WriteJs()
         {
-            string jsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/WebView/directions.js");
-            using (StreamWriter sw = new StreamWriter(jsPath, false))
+            try
             {
-                sw.Write($"var directions = ");
+                string jsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/WebView/directions.js");
+                using (StreamWriter sw = new StreamWriter(jsPath, false))
+                {
+                    sw.Write($"var directions = ");
+                }
+                using (StreamWriter sw = new StreamWriter(jsPath, true))
+                {
+                    sw.Write(SelectedTour.MapJson);
+                    sw.Write(";");
+                }
             }
-            using (StreamWriter sw = new StreamWriter(jsPath, true))
+            catch (Exception ex)
             {
-                sw.Write(SelectedTour.MapJson);
-                sw.Write(";");
+                _logger.Fatal($"Webview rewrite threw {ex}: {ex.Message}");
+                _dialogService.ShowMessageBox("Tour map could not be loaded.", "Fatal error", true);
+                OnRequestClose(this, new EventArgs());
             }
         }
 

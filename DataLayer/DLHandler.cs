@@ -16,28 +16,28 @@ namespace TourPlanner.DataLayer
             _dbHandler = dbHandler;
         }
 
-        public bool SaveTourToDb(TourDbModel newTour)
+        public void SaveTourToDb(TourDbModel newTour)
         {
-            return _dbHandler.AddTour(newTour);
+            _dbHandler.AddTour(newTour);
         }
 
-        public bool UpdateTourInDb(TourDbModel updatedTour)
+        public void UpdateTourInDb(TourDbModel updatedTour)
         {
-            return _dbHandler.UpdateTour(updatedTour);
+            _dbHandler.UpdateTour(updatedTour);
         }
 
-        public bool UpdateTourLogInDb(TourLogDbModel updatedLog)
+        public void UpdateTourLogInDb(TourLogDbModel updatedLog)
         {
-            return _dbHandler.UpdateTourLog(updatedLog);
+            _dbHandler.UpdateTourLog(updatedLog);
         }
 
-        public bool DeleteTourFromDb(TourDbModel removeableTour)
+        public void DeleteTourFromDb(TourDbModel removeableTour)
         {
-            return _dbHandler.DeleteTour(removeableTour);
+            _dbHandler.DeleteTour(removeableTour);
         }
-        public bool DeleteTourLogFromDb(TourLogDbModel removeableLog)
+        public void DeleteTourLogFromDb(TourLogDbModel removeableLog)
         {
-            return _dbHandler.DeleteLog(removeableLog);
+            _dbHandler.DeleteLog(removeableLog);
         }
 
         public ICollection<TourDbModel> LoadToursFromDb()
@@ -45,9 +45,9 @@ namespace TourPlanner.DataLayer
             return _dbHandler.GetAllTours();
         }
 
-        public bool SaveTourLogToDb(TourDbModel relatedTour, TourLogDbModel newTourLog)
+        public void SaveTourLogToDb(TourDbModel relatedTour, TourLogDbModel newTourLog)
         {
-            return _dbHandler.AddTourLog(relatedTour, newTourLog);
+            _dbHandler.AddTourLog(relatedTour, newTourLog);
         }
     }
 }

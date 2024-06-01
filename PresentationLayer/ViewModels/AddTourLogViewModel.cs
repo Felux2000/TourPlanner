@@ -12,15 +12,22 @@ using System.Windows.Media;
 using TourPlanner.BusinessLayer;
 using TourPlanner.PresentationLayer.Commands;
 using TourPlanner.HelperLayer.Models;
+using TourPlanner.HelperLayer.Services;
+using System.Diagnostics;
+using System.Runtime.ExceptionServices;
+using TourPlanner.BusinessLayer.Exceptions;
+using TourPlanner.DataLayer.Exceptions;
+using System.Windows.Forms;
 
 namespace TourPlanner.PresentationLayer.ViewModels
 {
     public class AddTourLogViewModel : BaseViewModel
     {
-        public AddTourLogViewModel(BLHandler blHandler, MainViewModel mainViewModel)
+        public AddTourLogViewModel(BLHandler blHandler, MainViewModel mainViewModel, DialogService dialogService)
         {
             _blHandler = blHandler;
             _tourToEdit = mainViewModel.SelectedTour;
+            _dialogService = dialogService;
             CreateLogDate = DateTime.Now;
             createLogDiff = 1;
             createLogRate = 1;
@@ -38,7 +45,7 @@ namespace TourPlanner.PresentationLayer.ViewModels
 
         private BLHandler _blHandler;
         private Tour _tourToEdit;
-        public event EventHandler OnRequestClose;
+        private DialogService _dialogService;
         public ICommand CreateTourLogCommand { get; set; }
         public ICommand CloseCreateTourLogWindow { get; set; }
         private DateTime createLogDate { get; set; }
@@ -240,15 +247,21 @@ namespace TourPlanner.PresentationLayer.ViewModels
             if (ValidForm())
             {
                 FormActive = false;
-                if (!_blHandler.SaveTourLogDb(_tourToEdit, new TourLog(CreateLogDate, CreateLogDuration, (float)CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate)))
+                try
+                {
+                    _blHandler.SaveTourLogDb(_tourToEdit, new TourLog(CreateLogDate, CreateLogDuration, (float)CreateLogDist, CreateLogComment, CreateLogDiff, CreateLogRate));
+                    OnRequestClose(this, new EventArgs());
+                }
+                catch (Exception ex) when (ex is DLInvalidEntityException || ex is DLEntityNotFoundException)
                 {
                     LoadingMessageText = "Log could not be saved!";
-                    MessageBox.Show("Unable to save log, try again.", "Save error", MessageBoxButton.OK, MessageBoxImage.Error);
                     TourLogValid = false;
+                    _dialogService.ShowMessageBox("Unable to save log, try again.", "Save error");
                 }
-                else
+                catch
                 {
-                    OnRequestClose(this, new EventArgs());
+                    if (_dialogService.ShowMessageBox("Unable to connect to server", "Fatal error", true) == DialogResult.OK)
+                        OnRequestClose(this, new EventArgs());
                 }
             }
             FormActive = true;

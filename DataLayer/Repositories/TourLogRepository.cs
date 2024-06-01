@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
+using TourPlanner.DataLayer.Exceptions;
 using TourPlanner.DataLayer.Models;
 using TourPlanner.HelperLayer.Logger;
+using TourPlanner.HelperLayer.Models;
 
 namespace TourPlanner.DataLayer.Repositories
 {
@@ -20,30 +23,51 @@ namespace TourPlanner.DataLayer.Repositories
 
         public void AddTourLogToTour(TourDbModel tour, TourLogDbModel newLog)
         {
-            var entity = context.Tours
-                .Include(p => p.Logs)
-                .FirstOrDefault(p => p.Id == tour.Id);
-            if (entity == null)
+            try
             {
-                logger.Fatal("Failed to add new TourLog to tour in Database. Tour with specified Id does not exist in Database");
-                throw new ArgumentOutOfRangeException("company", "No company found with that id to update!");
+                var entity = context.Tours
+                    .Include(p => p.Logs)
+                    .FirstOrDefault(p => p.Id == tour.Id);
+                if (entity == null)
+                {
+                    var ex = new DLEntityNotFoundException("Tour to add log not found!");
+                    logger.Error($"{ex.Message} Tour with Id={tour.Id} does not exist in Database");
+                    throw ex;
+                }
+                context.Add(newLog);
+                entity.Logs.Add(newLog);
+                context.SaveChanges();
             }
-            context.Add(newLog);
-            entity.Logs.Add(newLog);
-            context.SaveChanges();
+            catch (DbUpdateException ex)
+            {
+                var dlEx = new DLInvalidEntityException("Invalid entity contents!", ex);
+                throw dlEx;
+            }
         }
 
         public void UpdateTourLog(TourLogDbModel log)
         {
-            var entity = context.TourLogs.Find(log.Id);
-            if (entity == null)
+            try
             {
-                logger.Fatal("Failed to update new TourLog in Database. TourLog with specified Id does not exist in Database");
-                throw new ArgumentOutOfRangeException("log", "No log found with that id to update!");
+                var entity = context.TourLogs.Find(log.Id);
+                if (entity == null)
+                {
+                    var ex = new DLEntityNotFoundException("Tourlog to update not found!");
+                    logger.Error($"{ex.Message} Tourlog with Id={log.Id} does not exist in Database");
+                    throw ex;
+                }
+                context.Entry(entity).CurrentValues.SetValues(log);
+                context.SaveChanges();
             }
-
-            context.Entry(entity).CurrentValues.SetValues(log);
-            context.SaveChanges();
+            catch (DbUpdateException ex)
+            {
+                var dlEx = new DLInvalidEntityException("Invalid entity contents!", ex);
+                throw dlEx;
+            }
+            catch (Exception ex)
+            {
+                ExceptionDispatchInfo.Capture(ex).Throw();
+            }
         }
 
         public void DeleteTourLog(TourLogDbModel log)

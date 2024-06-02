@@ -30,7 +30,7 @@
         };
         function distanceToStr(meter) {
             meter = Number(meter)
-            return meter > 1000 ? Math.round(meter / 10)/100 + "km" : meter + "m";
+            return meter > 1000 ? Math.round(meter / 10) / 100 + "km" : meter + "m";
         };
         const myIcon = L.icon({
             iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
@@ -47,9 +47,9 @@
             attribution: '2024 © FH Technikum Wien'
         }).addTo(map);
         var route = L.geoJSON(directions, { renderer: myRenderer }).addTo(map).bindPopup(`<b>Duration:</b> ${duration}<br><b>Distance:</b> ${distance}`);
-        var coords = directions.features[0].geometry.coordinates;
+        var coords = directions.metadata.query.coordinates;
         L.marker([coords[0][1], coords[0][0]], { icon: myIcon }).addTo(map);
-        L.marker([coords[coords.length - 1][1], coords[coords.length - 1][0]], { icon: myIcon }).addTo(map);
+        L.marker([coords[1][1], coords[1][0]], { icon: myIcon }).addTo(map);
     </script>
 </body>
 </html>

@@ -1,23 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TourPlanner.PresentationLayer.ViewModels;
 
 namespace TourPlanner.PresentationLayer.UserControls
 {
@@ -42,7 +26,7 @@ namespace TourPlanner.PresentationLayer.UserControls
 
         private async Task<byte[]> CaptureWebView(object? sender, EventArgs? args)
         {
-           try
+            try
             {
                 dynamic clip = new JObject();
                 clip.x = 0;
@@ -59,11 +43,11 @@ namespace TourPlanner.PresentationLayer.UserControls
 
                 string p = settings.ToString(Formatting.None);
 
-            var devData = await webView.CoreWebView2.CallDevToolsProtocolMethodAsync("Page.captureScreenshot", p);
+                var devData = await webView.CoreWebView2.CallDevToolsProtocolMethodAsync("Page.captureScreenshot", p);
 
                 var imgData = (string)((dynamic)JObject.Parse(devData)).data;
                 return Convert.FromBase64String(imgData);
-           }
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);

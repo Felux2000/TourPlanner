@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 
 namespace TourPlanner.HelperLayer.Models
@@ -21,8 +17,8 @@ namespace TourPlanner.HelperLayer.Models
         public float Distance { get; set; }
         public float Estimation { get; set; }
         public string MapJson { get; set; }
-        public ObservableCollection<TourLog> logList { get; set; }
-        public double Popularity { get; private set; }
+        private ObservableCollection<TourLog> logList { get; set; }
+        public float Popularity { get; private set; }
         public int ChildFriendliness { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -30,7 +26,7 @@ namespace TourPlanner.HelperLayer.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-        
+
         public ObservableCollection<TourLog> LogList
         {
             get
@@ -79,6 +75,21 @@ namespace TourPlanner.HelperLayer.Models
             MapJson = mapJson;
             LogList = new();
         }
+
+        [JsonConstructor]
+        public Tour(Guid id, string name, string description, string from, string to, string transportType, float distance, float estimation, string mapJson, List<TourLog> logList)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            From = from;
+            To = to;
+            TransportType = transportType;
+            Distance = distance;
+            Estimation = estimation;
+            MapJson = mapJson;
+            LogList = [.. logList];
+        }
         public Tour()
         {
             LogList = new();
@@ -117,7 +128,7 @@ namespace TourPlanner.HelperLayer.Models
             double invertedRating = 1 - averageRating / 10;
 
             double x = 0.001; //number needed to avoid division by 0
-            Popularity = Math.Round((logCount / (invertedRating + x)), 2);
+            Popularity = (float)Math.Round((logCount / (invertedRating + x)), 2);
         }
     }
 }

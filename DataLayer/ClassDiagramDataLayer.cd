@@ -21,8 +21,8 @@
       <FileName>Repositories\TourLogRepository.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="context" />
       <Field Name="logger" />
+      <Field Name="context" />
     </ShowAsAssociation>
   </Class>
   <Class Name="TourPlanner.DataLayer.Repositories.TourRepository">
@@ -52,8 +52,8 @@
     </TypeIdentifier>
     <ShowAsAssociation>
       <Field Name="_dbContext" />
-      <Field Name="_tourLogRepository" />
       <Field Name="_tourRepository" />
+      <Field Name="_tourLogRepository" />
     </ShowAsAssociation>
   </Class>
   <Class Name="TourPlanner.DataLayer.DLHandler">
@@ -66,21 +66,13 @@
       <Field Name="_dbHandler" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="TourPlanner.DataLayer.LogInterceptor">
-    <Position X="3.5" Y="8.25" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAA=</HashCode>
-      <FileName>LogInterceptor.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="TourPlanner.DataLayer.TourDbContext">
     <Position X="3.75" Y="5.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAACQAAAAAAAAEAAAAAAAAAAAAAgAAAAAEAAAA=</HashCode>
+      <HashCode>AAAAAAAACQAAAAAAAAAAAAAAAAAAAAAAgAAAAAEAAAA=</HashCode>
       <FileName>TourDbContext.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Field Name="_interceptor" />
       <Field Name="Configuration" />
     </ShowAsAssociation>
   </Class>

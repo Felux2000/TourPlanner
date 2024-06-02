@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Data;
-using System.Windows;
 
 namespace TourPlanner.PresentationLayer.Converters
 {
@@ -19,7 +13,7 @@ namespace TourPlanner.PresentationLayer.Converters
             if (distance > 1000)
             {
                 suffix = "km";
-                distance = (float) Math.Round(distance/1000,2);
+                distance = (float)Math.Round(distance / 1000, 2);
             }
             return $"{distance} {suffix}";
         }

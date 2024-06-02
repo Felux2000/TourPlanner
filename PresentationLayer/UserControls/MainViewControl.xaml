@@ -13,7 +13,8 @@
         <converters:SelectedToVisibilityConverter x:Key="SelectedToVisibilityInverse" Inverse="True"/>
         <converters:DistanceToStringConverter x:Key="DistanceToString"/>
         <converters:DurationToStringConverter x:Key="DurationToString"/>
-        <converters:LinearFunctionConverter x:Key="TourListWidthToFontSize" A="0.05" B="0" NotNull="True"/>
+        <converters:LinearFunctionConverter x:Key="TourListWidthToFontSize" A="0.03" B="6" NotNull="True"/>
+        <converters:LinearFunctionConverter x:Key="LogDetailsFSizeToWidth" A="1" B="12" NotNull="True"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -72,11 +73,11 @@
             <Grid Grid.Column="0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="11*"/>
                     </Grid.RowDefinitions>
-                    <TextBox Grid.Row="0" x:Name="searchBox" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="Search..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                    <TextBox Grid.Row="0" x:Name="searchBox" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding SearchText,UpdateSourceTrigger=PropertyChanged}" FontSize="{Binding ActualWidth, ElementName=lstTours , Converter={StaticResource TourListWidthToFontSize}}"/>
+                    <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="Search..." VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray" FontSize="{Binding ActualWidth, ElementName=lstTours , Converter={StaticResource TourListWidthToFontSize}}">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -88,7 +89,7 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <ListBox Grid.Row="1"  x:Name="lstTours"  ItemsSource="{Binding TourList}" SelectedItem="{Binding SelectedTour}" SelectionMode="Single" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontSize="{Binding ActualWidth, ElementName=lstTours , Converter={StaticResource TourListWidthToFontSize}}">
+                    <ListBox Grid.Row="1" Margin="0,0,-1,0" x:Name="lstTours"  ItemsSource="{Binding TourList}" SelectedItem="{Binding SelectedTour}" SelectionMode="Single" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" FontSize="{Binding ActualWidth, ElementName=lstTours , Converter={StaticResource TourListWidthToFontSize}}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="{x:Type ListBoxItem}">
                                 <Setter Property="Margin" Value="3"/>
@@ -121,7 +122,7 @@
                             </Style.Triggers>
                         </Style>
                     </TabControl.Style>
-                    <TabItem Header="Preview">
+                    <TabItem Header="Preview" FontSize="{Binding ActualWidth, ElementName=lstTours , Converter={StaticResource TourListWidthToFontSize}}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="9*"/>
@@ -151,7 +152,7 @@
                             </Border>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Details">
+                    <TabItem Header="Details" FontSize="{Binding ActualWidth, ElementName=lstTours , Converter={StaticResource TourListWidthToFontSize}}">
                         <TabItem.Style>
                             <Style TargetType="{x:Type TabItem}">
                                 <Style.Triggers>
@@ -192,15 +193,15 @@
                             </StackPanel>
                             <StackPanel Grid.Row="6" Orientation="Horizontal">
                                 <Label VerticalContentAlignment="Center" FontWeight="Bold" Content="Popularity:"/>
-                                <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.Popularity}"/>
+                                <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.Popularity}" Language="de-AT"/>
                             </StackPanel>
                             <StackPanel Grid.Row="7" Orientation="Horizontal">
                                 <Label VerticalContentAlignment="Center" FontWeight="Bold" Content="ChildFriendliness:"/>
-                                <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.ChildFriendliness}"/>
+                                <Label VerticalContentAlignment="Center" Content="{Binding SelectedTour.ChildFriendliness}" ContentStringFormat="{}{0}%"/>
                             </StackPanel>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Logs">
+                    <TabItem Header="Logs" FontSize="{Binding ActualWidth, ElementName=lstTours , Converter={StaticResource TourListWidthToFontSize}}">
                         <TabItem.Style>
                             <Style TargetType="{x:Type TabItem}">
                                 <Style.Triggers>
@@ -215,7 +216,7 @@
                                 <RowDefinition Height="1*"/>
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
-                            <DataGrid x:Name="lstLogs" Grid.Row="0" ItemsSource="{Binding SelectedTour.LogList, Mode=OneWay}" Margin="1,0" AutoGenerateColumns="False" ColumnWidth="*" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" IsReadOnly="True" HeadersVisibility="Column" SelectionMode="Single" Focusable="False" SelectedItem="{Binding SelectedLog}">
+                            <DataGrid x:Name="lstLogs" Grid.Row="0" ItemsSource="{Binding SelectedTour.LogList, Mode=OneWay}" Margin="1,0" AutoGenerateColumns="False" ColumnWidth="*" CanUserResizeColumns="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False" IsReadOnly="True" HeadersVisibility="Column" SelectionMode="Single" Focusable="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectedItem="{Binding SelectedLog}">
                                 <DataGrid.Resources>
                                     <Style TargetType="{x:Type DataGridCell}">
                                         <Setter Property="BorderBrush" Value="Transparent" />
@@ -238,9 +239,9 @@
                                 </Grid.RowDefinitions>
                                 <Grid Margin="0,2" Grid.Row="0">
                                     <DockPanel>
-                                        <Label VerticalContentAlignment="Center" Name="addLogBtn" FontSize="20" FontStyle="Italic" Padding="3,0" FontWeight="Bold" Content="Details"/>
+                                        <Label VerticalContentAlignment="Center" Height="Auto" Name="lblLogDetails" FontStyle="Italic" Padding="3,0" FontWeight="Bold" Content="Details"/>
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <Button Margin="1,0"  Width="{Binding ActualHeight, ElementName=addLogBtn}" Command="{Binding DisplayAddTourLogViewCommand}" IsEnabled="{Binding SelectedItems.Count, ElementName=lstTours}">
+                                            <Button Margin="1,0"  Width="{Binding FontSize, ElementName=lblLogDetails,Converter={StaticResource LogDetailsFSizeToWidth}}" Command="{Binding DisplayAddTourLogViewCommand}" IsEnabled="{Binding SelectedItems.Count, ElementName=lstTours}">
                                                 <Button.Resources>
                                                     <Style TargetType="{x:Type Border}">
                                                         <Setter Property="CornerRadius" Value="5"/>
@@ -258,7 +259,7 @@
                                                     </Image.Style>
                                                 </Image>
                                             </Button>
-                                            <Button Margin="1,0" Width="{Binding ActualHeight, ElementName=addLogBtn}" IsEnabled="{Binding SelectedItems.Count, ElementName=lstLogs}" Command="{Binding DeleteLogCommand}">
+                                            <Button Margin="1,0" Width="{Binding FontSize, ElementName=lblLogDetails,Converter={StaticResource LogDetailsFSizeToWidth}}" IsEnabled="{Binding SelectedItems.Count, ElementName=lstLogs}" Command="{Binding DeleteLogCommand}">
                                                 <Button.Resources>
                                                     <Style TargetType="{x:Type Border}">
                                                         <Setter Property="CornerRadius" Value="5"/>
@@ -276,7 +277,7 @@
                                                     </Image.Style>
                                                 </Image>
                                             </Button>
-                                            <Button Margin="1,0" Width="{Binding ActualHeight, ElementName=addLogBtn}" Command="{Binding DisplayEditTourLogViewCommand}" IsEnabled="{Binding SelectedItems.Count, ElementName=lstLogs}" HorizontalContentAlignment="Center">
+                                            <Button Margin="1,0" Width="{Binding FontSize, ElementName=lblLogDetails,Converter={StaticResource LogDetailsFSizeToWidth}}" Command="{Binding DisplayEditTourLogViewCommand}" IsEnabled="{Binding SelectedItems.Count, ElementName=lstLogs}" HorizontalContentAlignment="Center">
                                                 <Button.Resources>
                                                     <Style TargetType="{x:Type Border}">
                                                         <Setter Property="CornerRadius" Value="5"/>

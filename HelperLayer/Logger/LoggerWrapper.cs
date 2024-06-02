@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using log4net;
+﻿using log4net;
 
 namespace TourPlanner.HelperLayer.Logger
 {
@@ -14,13 +8,8 @@ namespace TourPlanner.HelperLayer.Logger
 
         public static LoggerWrapper CreateLogger(string configPath, string caller)
         {
-            if (!File.Exists(configPath))
-            {
-                //throw new ArgumentException("Does not exist.", nameof(configPath));
-            }
-
             log4net.Config.XmlConfigurator.Configure(new FileInfo(configPath));
-            var logger = LogManager.GetLogger(caller);  // System.Reflection.MethodBase.GetCurrentMethod().DeclaringType
+            var logger = LogManager.GetLogger(caller);
             return new LoggerWrapper(logger);
         }
 

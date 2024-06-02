@@ -1,23 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using TourPlanner.BusinessLayer;
-using TourPlanner.PresentationLayer.Commands;
+using TourPlanner.DataLayer.Exceptions;
 using TourPlanner.HelperLayer.Models;
 using TourPlanner.HelperLayer.Services;
-using System.Diagnostics;
-using System.Runtime.ExceptionServices;
-using TourPlanner.BusinessLayer.Exceptions;
-using TourPlanner.DataLayer.Exceptions;
-using System.Windows.Forms;
+using TourPlanner.PresentationLayer.Commands;
 
 namespace TourPlanner.PresentationLayer.ViewModels
 {

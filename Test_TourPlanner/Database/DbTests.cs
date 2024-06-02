@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Test_TourPlanner.Database;
+﻿using TourPlanner.DataLayer;
 using TourPlanner.DataLayer.Models;
 using TourPlanner.DataLayer.Repositories;
-using TourPlanner.DataLayer;
-using System.Runtime.CompilerServices;
 
 namespace Test_TourPlanner.Database
 {
@@ -16,26 +9,24 @@ namespace Test_TourPlanner.Database
     {
         private TourDbContext _dbContext;
         private DbHandler _dbHandler;
-        private LogInterceptor _interceptor;
         private TourRepository _tourRepository;
         private TourLogRepository _tourLogRepository;
 
         [SetUp]
         public void SetUp()
         {
-            _interceptor = new LogInterceptor();
-            _dbContext= new TourDbContext(_interceptor ,$"{Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName }\\Test_TourPlanner\\DataLayer\\dbSettings.json");
+            _dbContext = new TourDbContext($"{Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName}\\Test_TourPlanner\\DataLayer\\dbSettings.json");
             _tourRepository = new TourRepository(_dbContext);
             _tourLogRepository = new TourLogRepository(_dbContext);
-            _dbHandler = new DbHandler(_interceptor, _dbContext, _tourRepository, _tourLogRepository);
+            _dbHandler = new DbHandler(_dbContext, _tourRepository, _tourLogRepository);
             _dbContext.Database.EnsureDeleted();
             _dbContext.Database.EnsureCreated();
         }
-        
+
         [Test]
         public void AddTourTest()
         {
-            TourLogDbModel log1 = new TourLogDbModel(new Guid(),DateTime.Now, new TimeSpan(12, 23, 46), 12, "Lorem Ipsum bla bla bla", 5, 10);
+            TourLogDbModel log1 = new TourLogDbModel(new Guid(), DateTime.Now, new TimeSpan(12, 23, 46), 12, "Lorem Ipsum bla bla bla", 5, 10);
             TourDbModel tour = new TourDbModel(new Guid(), "testingTour", "Lorem Description", "bla", "bla bla", "Walk", 4, 8, "this is a json");
             tour.Logs?.Add(log1);
             _dbHandler.AddTour(tour);

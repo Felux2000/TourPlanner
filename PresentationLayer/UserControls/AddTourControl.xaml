@@ -12,16 +12,18 @@
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibility" Inverse="False"/>
         <converters:LinearFunctionConverter x:Key="CbHeightToItems" A="0.8" B="-5" NotNull="True"/>
         <converters:LinearFunctionConverter x:Key="HeightToFontSize" A="0.4" B="-8" NotNull="True"/>
+        <converters:LinearFunctionConverter x:Key="NameWidthToFontSize" A="0.03" B="6" NotNull="True"/>
+        <converters:LinearFunctionConverter x:Key="TitleWidthToFontSize" A="0.02" B="3" NotNull="True"/>
         <converters:DistanceToStringConverter x:Key="DistanceToString"/>
         <converters:DurationToStringConverter x:Key="DurationToString"/>
     </UserControl.Resources>
     <Grid Margin="2,2,2,2">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*" MinHeight="30"/>
+            <RowDefinition Height="Auto" MinHeight="32"/>
             <RowDefinition Height="12*" MinHeight="180"/>
             <RowDefinition Height="1*" MinHeight="30"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" FontSize="18" MinHeight="32" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">Add new tour!</Label>
+        <Label Grid.Row="0" x:Name="lblAddTitle" MinHeight="32" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="{Binding ActualWidth, ElementName=lblAddTitle , Converter={StaticResource TitleWidthToFontSize}}" >Add new tour!</Label>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
@@ -35,8 +37,8 @@
                     <RowDefinition Height="1*" MinHeight="30"/>
                     <RowDefinition Height="2*" MinHeight="30"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" x:Name="tbAddTourName" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourName, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="Name*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                <TextBox Grid.Row="0" x:Name="tbAddTourName" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" Text="{Binding CreateTourName, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Row="0" IsHitTestVisible="False" Text="Name*" VerticalAlignment="Center" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -48,8 +50,8 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="1" x:Name="tbAddTourTo" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourTo, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Row="1" IsHitTestVisible="False" Text="Destination*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                <TextBox Grid.Row="1" x:Name="tbAddTourTo" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" Text="{Binding CreateTourTo, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Row="1" IsHitTestVisible="False" Text="Destination*" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -61,8 +63,8 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="2" x:Name="tbAddTourFrom" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" Text="{Binding CreateTourFrom, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Row="2" IsHitTestVisible="False" Text="Start*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
+                <TextBox Grid.Row="2" x:Name="tbAddTourFrom" TextWrapping="Wrap" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" Text="{Binding CreateTourFrom, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Row="2" IsHitTestVisible="False" Text="Start*" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -74,27 +76,27 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <ComboBox Grid.Row="3" x:Name="cbAddTourTransportType" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" SelectedValuePath="Tag" SelectedValue="{Binding CreateTourTransportType}">
+                <ComboBox Grid.Row="3" x:Name="cbAddTourTransportType" VerticalContentAlignment="Center" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" HorizontalContentAlignment="Left" Margin="2,4" Padding="3" SelectedValuePath="Tag" SelectedValue="{Binding CreateTourTransportType}">
                     <ComboBoxItem Tag="Walk">
                         <StackPanel Orientation="Horizontal">
                             <Image Height="{Binding ActualHeight, ElementName=cbAddTourTransportType , Converter={StaticResource CbHeightToItems}}" Stretch="Fill" VerticalAlignment="Center" HorizontalAlignment="Center" Source="/Resources/walk.png" />
-                            <TextBlock Padding="20,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{Binding ActualHeight, ElementName=cbAddTourTransportType , Converter={StaticResource HeightToFontSize}}">Walk</TextBlock>
+                            <TextBlock Padding="20,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}">Walk</TextBlock>
                         </StackPanel>
                     </ComboBoxItem>
                     <ComboBoxItem Tag="Bike">
                         <StackPanel Orientation="Horizontal">
                             <Image Height="{Binding ActualHeight, ElementName=cbAddTourTransportType , Converter={StaticResource CbHeightToItems}}" Stretch="Fill" VerticalAlignment="Center" HorizontalAlignment="Center" Source="/Resources/bycicle.png" />
-                            <TextBlock Padding="20,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{Binding ActualHeight, ElementName=cbAddTourTransportType , Converter={StaticResource HeightToFontSize}}">Bike</TextBlock>
+                            <TextBlock Padding="20,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}">Bike</TextBlock>
                         </StackPanel>
                     </ComboBoxItem>
                     <ComboBoxItem Tag="Car">
                         <StackPanel Orientation="Horizontal">
                             <Image Height="{Binding ActualHeight, ElementName=cbAddTourTransportType , Converter={StaticResource CbHeightToItems}}" Stretch="Fill" VerticalAlignment="Center" HorizontalAlignment="Center" Source="/Resources/car.png" />
-                            <TextBlock Padding="20,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{Binding ActualHeight, ElementName=cbAddTourTransportType , Converter={StaticResource HeightToFontSize}}">Car</TextBlock>
+                            <TextBlock Padding="20,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}">Car</TextBlock>
                         </StackPanel>
                     </ComboBoxItem>
                 </ComboBox>
-                <TextBlock Grid.Row="3" IsHitTestVisible="False" Text="Transport type*" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray" >
+                <TextBlock Grid.Row="3" IsHitTestVisible="False" Text="Transport type*" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" Foreground="DarkGray" >
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -106,8 +108,8 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Grid.Row="4" x:Name="tbAddTourDescription" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Margin="2,4,2,0" Padding="3" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding CreateTourDescr,UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBlock Grid.Row="4" IsHitTestVisible="False" Text="Description" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7,8,0,0" Foreground="DarkGray">
+                <TextBox Grid.Row="4" x:Name="tbAddTourDescription" VerticalContentAlignment="Top" HorizontalContentAlignment="Left" Margin="2,4,2,0" Padding="3" TextWrapping="Wrap" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Auto" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" Text="{Binding CreateTourDescr,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Grid.Row="4" IsHitTestVisible="False" Text="Description" FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="7,8,0,0" Foreground="DarkGray">
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -138,12 +140,12 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="2,0">
-                            <Label HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Distance:</Label>
-                            <TextBlock Text="{Binding CreateTourDist, Mode=OneWay, Converter={StaticResource DistanceToString}}" VerticalAlignment="Center"/>
+                            <Label FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Distance:</Label>
+                            <TextBlock FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" Text="{Binding CreateTourDist, Mode=OneWay, Converter={StaticResource DistanceToString}}" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="2,0">
-                            <Label HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Estimation:</Label>
-                            <TextBlock Text="{Binding CreateTourEst, Mode=OneWay, Converter={StaticResource DurationToString}}" VerticalAlignment="Center"/>
+                            <Label FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="3,0">Estimation:</Label>
+                            <TextBlock FontSize="{Binding ActualWidth, ElementName=tbAddTourName , Converter={StaticResource NameWidthToFontSize}}" Text="{Binding CreateTourEst, Mode=OneWay, Converter={StaticResource DurationToString}}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
                 </Border>

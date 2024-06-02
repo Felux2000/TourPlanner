@@ -1,11 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-using System.Text;
-using System.Threading.Tasks;
 using TourPlanner.DataLayer.Exceptions;
 using TourPlanner.DataLayer.Models;
 using TourPlanner.HelperLayer.Logger;

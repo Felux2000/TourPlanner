@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using TourPlanner.DataLayer.Models;
 using TourPlanner.HelperLayer.Models;
-using System.Collections.ObjectModel;
 
 namespace TourPlanner.BusinessLayer
 {
@@ -30,7 +25,7 @@ namespace TourPlanner.BusinessLayer
                     );
 
                 List<TourLog> convertedLogList = new List<TourLog>();
-                List<TourLogDbModel> logDbList = dbTour.Logs.OrderByDescending(l=>l.Date).ToList();
+                List<TourLogDbModel> logDbList = dbTour.Logs.OrderByDescending(l => l.Date).ToList();
                 foreach (TourLogDbModel dbLog in logDbList)
                 {
                     convertedLogList.Add(new TourLog(

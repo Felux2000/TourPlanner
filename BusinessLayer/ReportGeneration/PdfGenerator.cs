@@ -6,12 +6,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
 using TourPlanner.HelperLayer.Models;
 
 namespace TourPlanner.BusinessLayer.ReportGeneration
@@ -21,6 +16,8 @@ namespace TourPlanner.BusinessLayer.ReportGeneration
         public static void TourReportGenerator(Tour tour, string savePath, byte[] image)
         {
             string TARGET_PDF = savePath;
+            if (File.Exists(savePath))
+                File.Delete(savePath);
             PdfWriter writer = new PdfWriter(TARGET_PDF);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
@@ -76,8 +73,13 @@ namespace TourPlanner.BusinessLayer.ReportGeneration
 
             Paragraph tourEstimationParagraph = new Paragraph();
             tourEstimationParagraph.Add(new Text("Estimated time: ").SetFont(boldFont));
-            tourEstimationParagraph.Add(TimeSpan.FromSeconds(tour.Estimation).ToString(@"hh\:mm")).SetFont(normalFont);
-            tourEstimationParagraph.Add("h").SetFont(normalFont);
+            TimeSpan tourSpan = TimeSpan.FromSeconds(tour.Estimation);
+            string tourDuration;
+            if (tourSpan.Days > 0)
+                tourDuration = $"{tourSpan.Days} d {tourSpan.Subtract(TimeSpan.FromDays(tourSpan.Days)).ToString(@"hh\:mm")} h";
+            else
+                tourDuration = $"{tourSpan.Subtract(TimeSpan.FromDays(tourSpan.Days)).ToString(@"hh\:mm")} h";
+            tourEstimationParagraph.Add(tourDuration).SetFont(normalFont);
             document.Add(tourEstimationParagraph);
             Paragraph LogTableHeader = new Paragraph();
             LogTableHeader.Add(new Text("Logs: ").SetFont(boldFont));
@@ -95,8 +97,13 @@ namespace TourPlanner.BusinessLayer.ReportGeneration
                 foreach (TourLog log in tour.LogList)
                 {
                     table.AddCell(log.Date.ToString());
-                    table.AddCell(log.Duration.ToString());
-                    table.AddCell(log.Distance.ToString());
+                    string duration;
+                    if (log.Duration.Days > 0)
+                        duration = $"{log.Duration.Days} d {log.Duration.Subtract(TimeSpan.FromDays(log.Duration.Days)).ToString(@"hh\:mm")} h";
+                    else
+                        duration = $"{log.Duration.Subtract(TimeSpan.FromDays(log.Duration.Days)).ToString(@"hh\:mm")} h";
+                    table.AddCell(duration);
+                    table.AddCell($"{(log.Distance > 1000 ? (Math.Round(log.Distance / 1000, 2) + "km") : (log.Distance + "m"))}");
                     table.AddCell(log.Comment ?? string.Empty);
                     table.AddCell(log.Difficulty.ToString());
                     table.AddCell(log.Rating.ToString());
@@ -135,6 +142,8 @@ namespace TourPlanner.BusinessLayer.ReportGeneration
         public static void TourSummaryGenerator(List<Tour> tourList, string savePath)
         {
             string TARGET_PDF = savePath;
+            if (File.Exists(savePath))
+                File.Delete(savePath);
             PdfWriter writer = new PdfWriter(TARGET_PDF);
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
@@ -165,12 +174,18 @@ namespace TourPlanner.BusinessLayer.ReportGeneration
                     averageRating += log.Rating;
                     counter++;
                 }
-                averageDistance = counter == 0 ? 0 : Math.Round(averageDistance / counter, 2);
+                averageDistance = counter == 0 ? 0 : Math.Round(averageDistance / 1000 * counter, 2);
                 averageTime = counter == 0 ? 0 : averageTime / counter;
                 averageRating = counter == 0 ? 0 : Math.Round(averageRating / counter, 2);
-                TimeSpan averageDuration = TimeSpan.FromSeconds(averageTime);
+                TimeSpan averageDurationSpan = TimeSpan.FromSeconds(averageTime);
+                string averageDuration;
+                var days = averageDurationSpan.Days;
+                if (days > 0)
+                    averageDuration = $"{days} d {averageDurationSpan.Subtract(TimeSpan.FromDays(days)).ToString(@"hh\:mm")} h";
+                else
+                    averageDuration = $"{averageDurationSpan.Subtract(TimeSpan.FromDays(days)).ToString(@"hh\:mm")} h";
                 table.AddCell(tour.Name);
-                table.AddCell(averageDuration.ToString());
+                table.AddCell(averageDuration);
                 table.AddCell(averageDistance.ToString());
                 table.AddCell(averageRating.ToString());
             }

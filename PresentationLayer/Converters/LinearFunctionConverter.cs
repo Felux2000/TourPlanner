@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows.Data;
 
 namespace TourPlanner.PresentationLayer.Converters
@@ -21,7 +16,7 @@ namespace TourPlanner.PresentationLayer.Converters
             double x = GetDoubleValue(value, 0.0);
 
             double result = (a * x) + B;
-            return result > 0 ? result : (NotNull?1:0);
+            return result > 0 ? result : (NotNull ? 1 : 0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

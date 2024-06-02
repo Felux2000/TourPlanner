@@ -1,24 +1,13 @@
-﻿using Azure;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.IO;
+using System.Windows.Forms;
 using System.Windows.Input;
 using TourPlanner.BusinessLayer;
 using TourPlanner.BusinessLayer.API.Models;
-using TourPlanner.PresentationLayer.Commands;
+using TourPlanner.DataLayer.Exceptions;
+using TourPlanner.HelperLayer.Logger;
 using TourPlanner.HelperLayer.Models;
 using TourPlanner.HelperLayer.Services;
-using TourPlanner.HelperLayer.Logger;
-using TourPlanner.DataLayer.Exceptions;
-using System.Windows.Forms;
+using TourPlanner.PresentationLayer.Commands;
 
 namespace TourPlanner.PresentationLayer.ViewModels
 {

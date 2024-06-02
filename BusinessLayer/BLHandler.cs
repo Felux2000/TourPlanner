@@ -1,16 +1,5 @@
-﻿using log4net.Repository.Hierarchy;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Runtime.ExceptionServices;
-using System.Text;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using TourPlanner.BusinessLayer.API;
 using TourPlanner.BusinessLayer.API.Models;
 using TourPlanner.BusinessLayer.Exceptions;
@@ -46,7 +35,6 @@ namespace TourPlanner.BusinessLayer
             {
                 Debug.WriteLine(ex.Message);
                 _logger.Fatal($"{ex.Message}");
-                ExceptionDispatchInfo.Capture(ex).Throw();
                 return (null, null);
             }
         }

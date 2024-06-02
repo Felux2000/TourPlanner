@@ -1,9 +1,4 @@
-﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using TourPlanner.BusinessLayer;
+﻿using TourPlanner.BusinessLayer;
 using TourPlanner.DataLayer.Models;
 using TourPlanner.HelperLayer.Models;
 

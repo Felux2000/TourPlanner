@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 
 namespace TourPlanner.HelperLayer.Logger
 {
@@ -14,7 +8,7 @@ namespace TourPlanner.HelperLayer.Logger
         {
             StackTrace stackTrace = new(1, false); //Captures 1 frame, false for not collecting information about the file
             var type = stackTrace.GetFrame(1).GetMethod().DeclaringType;
-            return LoggerWrapper.CreateLogger(Path.GetFullPath("./log4net.config"), type.FullName);
+            return LoggerWrapper.CreateLogger(Path.GetFullPath("../../../../HelperLayer/Logger/log4net.config"), type.FullName);
         }
     }
 }

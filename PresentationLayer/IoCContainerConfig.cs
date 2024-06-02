@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using TourPlanner.DataLayer;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
 using TourPlanner.BusinessLayer;
 using TourPlanner.BusinessLayer.API;
-using TourPlanner.DataLayer.Repositories;
-using TourPlanner.PresentationLayer.ViewModels;
 using TourPlanner.BusinessLayer.ImportExport;
+using TourPlanner.DataLayer;
+using TourPlanner.DataLayer.Repositories;
 using TourPlanner.HelperLayer.Services;
+using TourPlanner.PresentationLayer.ViewModels;
 
 namespace TourPlanner.PresentationLayer
 {

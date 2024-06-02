@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace TourPlanner.HelperLayer.Models
 {
@@ -17,6 +13,7 @@ namespace TourPlanner.HelperLayer.Models
         public int Rating { get; set; }
 
         //UpdateLog
+        [JsonConstructor]
         public TourLog(Guid id, DateTime date, TimeSpan duration, float distance, string comment, int difficulty, int rating)
         {
             Id = id;

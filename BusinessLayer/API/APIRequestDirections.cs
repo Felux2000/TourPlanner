@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 using System.Globalization;
-using System.Net.Http;
-using System.Runtime.ExceptionServices;
-using System.Runtime.Loader;
-using System.Text.Json.Nodes;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
 using TourPlanner.BusinessLayer.API.Models;
 using TourPlanner.HelperLayer.Logger;
 
@@ -27,30 +20,30 @@ namespace TourPlanner.BusinessLayer.API
 
         public async Task<(string, ResponseDirectionsModel)> GetDirections(string address1, string address2, string transportation)
         {
-                // Geocode location A
-                var coordinatesA = await GeocodeAddress(geoCodeBaseUrl, apiKey, address1);
-                // Geocode location B
-                var coordinatesB = await GeocodeAddress(geoCodeBaseUrl, apiKey, address2);
+            // Geocode location A
+            var coordinatesA = await GeocodeAddress(geoCodeBaseUrl, apiKey, address1);
+            // Geocode location B
+            var coordinatesB = await GeocodeAddress(geoCodeBaseUrl, apiKey, address2);
 
-                var transportType = TransportDic.ContainsKey(transportation) ? TransportDic[transportation] : TransportDic["Car"];
+            var transportType = TransportDic.ContainsKey(transportation) ? TransportDic[transportation] : TransportDic["Car"];
 
-                if (coordinatesA != null && coordinatesB != null)
-                {
-                    string formattedStart = $"{coordinatesA[0].ToString(CultureInfo.InvariantCulture)},{coordinatesA[1].ToString(CultureInfo.InvariantCulture)}";
-                    string formattedEnd = $"{coordinatesB[0].ToString(CultureInfo.InvariantCulture)},{coordinatesB[1].ToString(CultureInfo.InvariantCulture)}";
-                    string requestUrl = $"{directionsBaseUrl}{transportType}?api_key={apiKey}&start={formattedStart}&end={formattedEnd}";
-                    Console.WriteLine($"Requesting directions with URL: {requestUrl}");
-                    HttpResponseMessage response = await client.GetAsync(requestUrl);
-                    response.EnsureSuccessStatusCode();
-                    string responseBody = await response.Content.ReadAsStringAsync();
+            if (coordinatesA != null && coordinatesB != null)
+            {
+                string formattedStart = $"{coordinatesA[0].ToString(CultureInfo.InvariantCulture)},{coordinatesA[1].ToString(CultureInfo.InvariantCulture)}";
+                string formattedEnd = $"{coordinatesB[0].ToString(CultureInfo.InvariantCulture)},{coordinatesB[1].ToString(CultureInfo.InvariantCulture)}";
+                string requestUrl = $"{directionsBaseUrl}{transportType}?api_key={apiKey}&start={formattedStart}&end={formattedEnd}";
+                Console.WriteLine($"Requesting directions with URL: {requestUrl}");
+                HttpResponseMessage response = await client.GetAsync(requestUrl);
+                response.EnsureSuccessStatusCode();
+                string responseBody = await response.Content.ReadAsStringAsync();
 
-                    return (responseBody, JsonConvert.DeserializeObject<ResponseDirectionsModel>(responseBody));
-                }
-                else
-                {
-                    logger.Error("Api could not generate directions. One or both adresses may be incorrect");
-                    return (null, null);
-                }
+                return (responseBody, JsonConvert.DeserializeObject<ResponseDirectionsModel>(responseBody));
+            }
+            else
+            {
+                logger.Error("Api could not generate directions. One or both adresses may be incorrect");
+                return (null, null);
+            }
         }
 
         private static async Task<List<double>> GeocodeAddress(string baseUrl, string apiKey, string address)

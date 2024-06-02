@@ -47,13 +47,11 @@ namespace TourPlanner.BusinessLayer.ImportExport
 
         public void ExampleFile(string filePath)
         {
-            const string examplePath = "./Resources/ExampleTour.json";
+            const string examplePath = "../../../../BusinessLayer/Resources/ExampleTour.json";
             if (File.Exists(examplePath))
             {
                 if (File.Exists(filePath))
-                {
                     File.Delete(filePath);
-                }
                 File.Copy(examplePath, filePath);
                 return;
             }

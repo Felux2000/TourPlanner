@@ -13,15 +13,43 @@
             crossorigin=""></script>
 </head>
 <body style="margin: 0; padding: 0;">
-<div id="map" style="height: 100vh"></div>
-<script>
-    var map = L.map('map');
-    var bbox = directions.bbox;
-    map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '2024 © FH Technikum Wien'
-    }).addTo(map);
-    L.geoJSON(directions).addTo(map);
-</script>
+    <div id="map" style="height: 100vh"></div>
+    <script>
+        function secondsToDhm(seconds) {
+            seconds = Number(seconds);
+            var d = Math.floor(seconds / (3600 * 24));
+            seconds -= d * 3600 * 24;
+            var h = Math.floor(seconds / 3600);
+            seconds -= h * 3600;
+            var m = Math.floor(seconds / 60);
+
+            var dDisplay = d > 0 ? d + "d " : "";
+            var hDisplay = h > 0 ? h + "h " : "";
+            var mDisplay = m > 0 ? m + "m" : "";
+            return dDisplay + hDisplay + mDisplay;
+        };
+        function distanceToStr(meter) {
+            meter = Number(meter)
+            return meter > 1000 ? Math.round(meter / 10)/100 + "km" : meter + "m";
+        };
+        const myIcon = L.icon({
+            iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+            iconAnchor: [14, 38],//changed marker icon position
+            popupAnchor: [0, -36]//changed popup position
+        });
+        var myRenderer = L.canvas({ padding: 0.5, tolerance: 10 });
+        var map = L.map('map');
+        var bbox = directions.bbox;
+        var duration = secondsToDhm(directions.features[0].properties.summary.duration);
+        var distance = distanceToStr(directions.features[0].properties.summary.distance);
+        map.fitBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '2024 © FH Technikum Wien'
+        }).addTo(map);
+        var route = L.geoJSON(directions, { renderer: myRenderer }).addTo(map).bindPopup(`<b>Duration:</b> ${duration}<br><b>Distance:</b> ${distance}`);
+        var coords = directions.features[0].geometry.coordinates;
+        L.marker([coords[0][1], coords[0][0]], { icon: myIcon }).addTo(map);
+        L.marker([coords[coords.length - 1][1], coords[coords.length - 1][0]], { icon: myIcon }).addTo(map);
+    </script>
 </body>
 </html>

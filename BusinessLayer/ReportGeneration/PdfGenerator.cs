@@ -36,7 +36,7 @@ namespace TourPlanner.BusinessLayer.ReportGeneration
 
             Paragraph tourDescriptionParagraph = new Paragraph();
             tourDescriptionParagraph.Add(new Text("Description: ").SetFont(boldFont));
-            tourDescriptionParagraph.Add(tour.Description ?? "No Desciption").SetFont(normalFont);
+            tourDescriptionParagraph.Add(tour.Description == null ? "No Desciption" : (tour.Description == string.Empty ? "No Desciption" : tour.Description)).SetFont(normalFont);
             document.Add(tourDescriptionParagraph);
 
             Paragraph tourFromParagraph = new Paragraph();

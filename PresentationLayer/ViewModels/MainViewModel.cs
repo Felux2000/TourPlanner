@@ -155,7 +155,7 @@ namespace TourPlanner.PresentationLayer.ViewModels
                 {
                     _blHandler.DeleteTourLogDb(SelectedLog);
                     SelectedTour.LogList.Remove(SelectedLog);
-                    SelectedLog = null;
+                    LoadTours();
                 }
                 catch
                 {

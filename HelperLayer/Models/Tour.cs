@@ -37,8 +37,8 @@ namespace TourPlanner.HelperLayer.Models
             set
             {
                 logList = value;
-                OnPropertyChanged();
                 ComputeAttributes();
+                OnPropertyChanged();
             }
         }
         public Tour(string name, List<TourLog> logList, string mapJson)
@@ -127,8 +127,7 @@ namespace TourPlanner.HelperLayer.Models
             double averageRating = LogList.Average(log => log.Rating);
             double invertedRating = 1 - averageRating / 10;
 
-            double x = 0.001; //number needed to avoid division by 0
-            Popularity = (float)Math.Round((logCount / (invertedRating + x)), 2);
+            Popularity = (float)Math.Round((logCount / (invertedRating == 0 ? 1 : invertedRating)), 2);
         }
     }
 }
